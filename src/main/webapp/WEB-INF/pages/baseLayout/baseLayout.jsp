@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,29 +93,52 @@
     }
   </style>
 </head>
-<body>
 
+<body>
   <header>
     <h1>News manager</h1>
-    <form id="loginForm">
-      <label for="username"></label>
-      <input type="text" id="username" name="username" placeholder="Enter username" required>
-      <label for="password"></label>
-      <input type="password" id="password" name="password" placeholder="Enter password" required>
-      <button type="submit">Login</button>
-    </form>
+    <c:if test="${sessionScope.active eq 'true'}">
+    	<form action="news/doSignOut" id="signOutButton">
+    		<button type="submit">Sign Out</button>
+    	</form>
+    </c:if>
+    
+    <c:if test="${not (sessionScope.active eq 'true')}"> 
+	    <form id="loginForm" action="news/doSignIn" method="post">
+	      <input type="text" name="username" placeholder="Enter username" required>
+	      <input type="password" name="password" placeholder="Enter password" required>
+	      <button type="submit">Sign In</button>
+	      <a href="news/goToRegistrationPage">If you not registered click here</a>
+	    </form>
+    </c:if>
+    
     <div id="languageButtons">
-      <button id="changeLocaleEN">EN</button>
-      <button id="changeLocaleRU">RU</button>
+		<form id = "changeLocaleEn" action="#" method="get">
+			<button id="changeLocaleEN" >EN</button>
+		</form>    
+		<form id = "changeLocaleEn" action="#" method="get">
+			 <button id="changeLocaleRU">RU</button>
+		</form>    
     </div>
+    
   </header>
 
   <main>
+    
     <div id="newsManagementMenu">
-      <h2>News Management Menu</h2>
-      <button id="addNewsButton">Add News</button>
-      <button id="deleteNewsButton">Delete News</button>
-      <button id="listAllUsersButton">List All Users</button>
+      	<c:if test="${not (sessionScope.action eq 'true')}"> 
+      		<h2>Guest! Welcome in news manager!</h2>
+      	</c:if>
+      	
+      	<c:if test="${sessionScope.action eq 'true'}">
+      	  <h2>News Management Menu</h2>
+	      <button id="allNewsListButton">Go to news list</button>
+	      <c:if test="${sessionScope.role eq 'admin'}"> 
+		      <button id="addNewsButton">Add News</button>
+		      <button id="deleteNewsButton">Delete News</button>
+		      <button id="listAllUsersButton">List All Users</button>
+	      </c:if>
+      	</c:if>
     </div>
 
     <div id="newsList">
@@ -123,53 +147,75 @@
         <h3>News Title 1</h3>
         <p>Published on: August 2, 2023</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <c:if test="${sessionScope.role eq 'admin'}">
+	        <a href="news/doEditNews">
+	        	<button type="submit">Edit</button>
+	        </a>
+	        <a href="news/viewNews">
+	        	<button type="submit">View news</button>
+	        </a>
+        </c:if>
       </div>
       <div class="news-item">
         <h3>News Title 2</h3>
         <p>Published on: August 1, 2023</p>
         <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
+        <a href="news/doEditNews">
+        	<button type="submit">Edit</button>
+        </a>
+        <a href="news/viewNews">
+        	<button type="submit">View news</button>
+        </a>
       </div>
       <div class="news-item">
         <h3>News Title 2</h3>
         <p>Published on: August 1, 2023</p>
         <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
+        <a href="news/doEditNews">
+        	<button type="submit">Edit</button>
+        </a>
+        <a href="news/viewNews">
+        	<button type="submit">View news</button>
+        </a>
       </div>
       <div class="news-item">
         <h3>News Title 2</h3>
         <p>Published on: August 1, 2023</p>
         <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
+        <a href="news/doEditNews">
+        	<button type="submit">Edit</button>
+        </a>
+        <a href="news/viewNews">
+        	<button type="submit">View news</button>
+        </a>
       </div>
       <div class="news-item">
         <h3>News Title 2</h3>
         <p>Published on: August 1, 2023</p>
         <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
+        <a href="news/doEditNews">
+        	<button type="submit">Edit</button>
+        </a>
+        <a href="news/viewNews">
+        	<button type="submit">View news</button>
+        </a>
       </div>
       <div class="news-item">
         <h3>News Title 2</h3>
         <p>Published on: August 1, 2023</p>
         <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
+        <a href="news/doEditNews">
+        	<button type="submit">Edit</button>
+        </a>
+        <a href="news/viewNews">
+        	<button type="submit">View news</button>
+        </a>
       </div>
     </div>
   </main>
   
   <footer>
-    <p>All privileges reserved</p>
+    <p>All privileges reserved@</p>
   </footer>
-
 </body>
 </html>
