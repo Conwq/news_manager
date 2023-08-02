@@ -126,6 +126,7 @@ public class FrontController {
 			session.setAttribute("active", "true");
 			session.setAttribute("role", user.getRoleName());
 			return "redirect:/news/goToNewsList";
+
 		}
 		catch(ServiceException e) {
 			return "";
