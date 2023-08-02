@@ -102,7 +102,9 @@
       <label for="password"></label>
       <input type="password" id="password" name="password" placeholder="Enter password" required>
       <button type="submit">Login</button>
+      <a href="#" id="">If you not registered click here</a>
     </form>
+    
     <div id="languageButtons">
       <button id="changeLocaleEN">EN</button>
       <button id="changeLocaleRU">RU</button>
@@ -149,26 +151,11 @@
         <p>Published on: August 1, 2023</p>
         <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
       </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-      </div>
     </div>
   </main>
   
   <footer>
-    <p>All privileges reserved</p>
+    <p>All privileges reserved@</p>
   </footer>
 
 </body>
