@@ -11,8 +11,8 @@ import org.example.dao.exception.DAOException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
-import bean.Role;
-import bean.User;
+import org.example.bean.Role;
+import org.example.bean.User;
 
 @Repository
 public class UserDAOImpl implements UserDAO{
@@ -21,7 +21,7 @@ public class UserDAOImpl implements UserDAO{
 	{
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/news");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/news_manager", "root", "1");
 		}
 		catch(ClassNotFoundException e) {
 			e.printStackTrace();

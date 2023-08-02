@@ -10,7 +10,7 @@ import org.example.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import bean.News;
+import org.example.bean.News;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -73,6 +73,4 @@ public class NewsServiceImpl implements NewsService {
 			throw new ServiceException(e);
 		}
 	}
-	
-	
 }

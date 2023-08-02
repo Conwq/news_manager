@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
+    pageEncoding="utf-8" isELIgnored="false" %>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
+
+<c:set value="${requestScope.action}" var="action"/>
+<c:set value="${sessionScope.active}" var="active"/>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,124 +100,37 @@
 
 <body>
   <header>
-    <h1>News manager</h1>
-    <c:if test="${sessionScope.active eq 'true'}">
-    	<form action="news/doSignOut" id="signOutButton">
-    		<button type="submit">Sign Out</button>
-    	</form>
-    </c:if>
-    
-    <c:if test="${not (sessionScope.active eq 'true')}"> 
-	    <form id="loginForm" action="news/doSignIn" method="post">
-	      <input type="text" name="username" placeholder="Enter username" required>
-	      <input type="password" name="password" placeholder="Enter password" required>
-	      <button type="submit">Sign In</button>
-	      <a href="news/goToRegistrationPage">If you not registered click here</a>
-	    </form>
-    </c:if>
-    
-    <div id="languageButtons">
-		<form id = "changeLocaleEn" action="#" method="get">
-			<button id="changeLocaleEN" >EN</button>
-		</form>    
-		<form id = "changeLocaleEn" action="#" method="get">
-			 <button id="changeLocaleRU">RU</button>
-		</form>    
-    </div>
-    
+      <c:import url="/WEB-INF/pages/tiles/header.jsp" charEncoding="utf-8"/>
   </header>
 
   <main>
-    
     <div id="newsManagementMenu">
-      	<c:if test="${not (sessionScope.action eq 'true')}"> 
+      	<c:if test="${not (active eq 'true')}">
       		<h2>Guest! Welcome in news manager!</h2>
       	</c:if>
-      	
-      	<c:if test="${sessionScope.action eq 'true'}">
-      	  <h2>News Management Menu</h2>
-	      <button id="allNewsListButton">Go to news list</button>
-	      <c:if test="${sessionScope.role eq 'admin'}"> 
-		      <button id="addNewsButton">Add News</button>
-		      <button id="deleteNewsButton">Delete News</button>
-		      <button id="listAllUsersButton">List All Users</button>
-	      </c:if>
+
+      	<c:if test="${active eq 'true'}">
+      	     <c:import url="/WEB-INF/pages/tiles/newsManagerMenu.jsp" charEncoding="utf-8"/>
       	</c:if>
     </div>
 
     <div id="newsList">
       <h2>Latest News</h2> <hr>
-      <div class="news-item">
-        <h3>News Title 1</h3>
-        <p>Published on: August 2, 2023</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <c:if test="${sessionScope.role eq 'admin'}">
-	        <a href="news/doEditNews">
-	        	<button type="submit">Edit</button>
-	        </a>
-	        <a href="news/viewNews">
-	        	<button type="submit">View news</button>
-	        </a>
+        <c:if test="${action eq 'newsList'}">
+            <c:import url="/WEB-INF/pages/tiles/newsList.jsp" charEncoding="utf-8"/>
         </c:if>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-        <a href="news/doEditNews">
-        	<button type="submit">Edit</button>
-        </a>
-        <a href="news/viewNews">
-        	<button type="submit">View news</button>
-        </a>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-        <a href="news/doEditNews">
-        	<button type="submit">Edit</button>
-        </a>
-        <a href="news/viewNews">
-        	<button type="submit">View news</button>
-        </a>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-        <a href="news/doEditNews">
-        	<button type="submit">Edit</button>
-        </a>
-        <a href="news/viewNews">
-        	<button type="submit">View news</button>
-        </a>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-        <a href="news/doEditNews">
-        	<button type="submit">Edit</button>
-        </a>
-        <a href="news/viewNews">
-        	<button type="submit">View news</button>
-        </a>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-        <a href="news/doEditNews">
-        	<button type="submit">Edit</button>
-        </a>
-        <a href="news/viewNews">
-        	<button type="submit">View news</button>
-        </a>
-      </div>
+
+        <c:if test="${action eq 'registrationPage'}">
+            <c:import url="/WEB-INF/pages/tiles/registrationPage.jsp" charEncoding="utf-8"/>
+        </c:if>
+
+        <c:if test="${action eq 'viewNews'}">
+            <c:import url="/WEB-INF/pages/tiles/viewNews.jsp" charEncoding="utf-8"/>
+        </c:if>
+
     </div>
   </main>
-  
+
   <footer>
     <p>All privileges reserved@</p>
   </footer>

@@ -1,14 +1,28 @@
-package bean;
+package org.example.bean;
+
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 
+@Entity
+@Table(name = "news")
 public class News implements Serializable{
-	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "news_id")
 	private int id;
+
+	@Column(name = "title")
 	private String title;
+
+	@Column(name = "brief")
 	private String brief;
+
+	@Column(name = "content")
 	private String content;
-	private String datePublisher;
+
+	@Column(name = "publication_date")
+	private String publicationDate;
 
 	public News() {
 	}
@@ -45,12 +59,12 @@ public class News implements Serializable{
 		this.content = content;
 	}
 
-	public String getDatePublisher() {
-		return datePublisher;
+	public String getPublicationDate() {
+		return publicationDate;
 	}
 
-	public void setDatePublisher(String datePublisher) {
-		this.datePublisher = datePublisher;
+	public void setPublicationDate(String publicationDate) {
+		this.publicationDate = publicationDate;
 	}
 
 	@Override
@@ -59,7 +73,7 @@ public class News implements Serializable{
 		int result = 1;
 		result = prime * result + ((brief == null) ? 0 : brief.hashCode());
 		result = prime * result + ((content == null) ? 0 : content.hashCode());
-		result = prime * result + ((datePublisher == null) ? 0 : datePublisher.hashCode());
+		result = prime * result + ((publicationDate == null) ? 0 : publicationDate.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
@@ -84,10 +98,10 @@ public class News implements Serializable{
 				return false;
 		} else if (!content.equals(other.content))
 			return false;
-		if (datePublisher == null) {
-			if (other.datePublisher != null)
+		if (publicationDate == null) {
+			if (other.publicationDate != null)
 				return false;
-		} else if (!datePublisher.equals(other.datePublisher))
+		} else if (!publicationDate.equals(other.publicationDate))
 			return false;
 		if (id != other.id)
 			return false;
@@ -102,6 +116,6 @@ public class News implements Serializable{
 	@Override
 	public String toString() {
 		return getClass().getName() + " [id=" + id + ", title=" + title + ", brief=" + brief + ", content=" + content + ", datePublisher="
-				+ datePublisher + "]";
+				+ publicationDate + "]";
 	}
 }

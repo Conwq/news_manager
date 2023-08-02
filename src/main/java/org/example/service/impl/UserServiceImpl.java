@@ -4,10 +4,11 @@ import org.example.dao.UserDAO;
 import org.example.dao.exception.DAOException;
 import org.example.service.UserService;
 import org.example.service.exception.ServiceException;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import bean.User;
+import org.example.bean.User;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -32,6 +33,9 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void registration(User user) throws ServiceException {
 		try {
+			String password = user.getPassword();
+			String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+			user.setPassword(hashedPassword);
 			userDAO.registration(user);
 		}
 		catch(DAOException e) {

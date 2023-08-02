@@ -1,5 +1,5 @@
 <html>
 <body>
-	<% response.sendRedirect("news"); %>
+	<% response.sendRedirect("/news"); %>
 </body>
 </html>

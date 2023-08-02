@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.example.dao.exception.DAOException;
 
-import bean.News;
+import org.example.bean.News;
 
 public interface NewsDAO {
 	List<News> getNewses() throws DAOException;

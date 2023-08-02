@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import bean.News;
-import bean.User;
+import org.example.bean.News;
+import org.example.bean.User;
 
 @Controller
 @RequestMapping("/news")
 public class FrontController {
-	private NewsService newsService;
-	private UserService userService;
+	private final NewsService newsService;
+	private final UserService userService;
 	
 	@Autowired
 	public FrontController(NewsService newsService, UserService userService) {
@@ -32,81 +32,92 @@ public class FrontController {
 	
 	@RequestMapping
 	public String goToBasePage(Model model) {
-//		List<News> newses = newsService.getNewses("5");
-//		model.addAttribute("news", newses);
-//		model.addAttribute("action", "newsList");
-		return "baseLayout/baseLayout";
+		try {
+			List<News> news = newsService.getNewses("5");
+			model.addAttribute("news", news);
+			model.addAttribute("action", "newsList");
+			return "baseLayout/baseLayout";
+		}
+		catch(ServiceException e){
+			e.printStackTrace();
+			return "";
+		}
 	}
 	
 	@RequestMapping("/goToNewsList")
 	public String goToNewsList(Model model) {
 		try {
-			List<News> newses = newsService.getNewses();
-			model.addAttribute("news", newses);
+			List<News> news = newsService.getNewses();
+			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
 		}
 		catch(ServiceException e) {
+			e.printStackTrace();
 			return "";
 		}
 	}
-	
-	@RequestMapping("/goToViewNews")
-	public String showNews(@RequestParam("id") String id, Model model) {
-		try {
-			News news = newsService.findById(id);
-			model.addAttribute("news", news);
-			model.addAttribute("action", "viewNews");
-			return "baseLayout/baseLayout";
-		}
-		catch(ServiceException e) {
-			return "";
-		}
-	}
-	
-	@RequestMapping("/goToEditNews")
-	public String showEditNewsPage(@RequestParam("id") String id, Model model) {
-		try {
-			News news = newsService.findById(id);
-			model.addAttribute("news", news);
-			model.addAttribute("action", "editNews");
-			return "baseLayout/baseLayout";
-		}
-		catch(ServiceException e) {
-			return "";
-		}
-	}
-	
-	@RequestMapping("/doEditNews")
-	public String doEditNews(@ModelAttribute("news") News news) {
-		try {
-			newsService.editNews(news);
-			return "redirect:/news/goToNewsList";
-		}
-		catch(ServiceException e) {
-			return "";
-		}
-	}
-	
-	@RequestMapping("/doDeleteNews")
-	public String doDeleteNews(@RequestParam("id") String id) {
-		try {
-			newsService.deleteNewsById(id);
-			return "redirect:/news/goToNewsList";
-		}
-		catch(ServiceException e) {
-			return "";
-		}
-	}
-	
+
+//	@RequestMapping("/goToViewNews")
+//	public String showNews(@RequestParam("id") String id, Model model) {
+//		try {
+//			News news = newsService.findById(id);
+//			model.addAttribute("news", news);
+//			model.addAttribute("action", "viewNews");
+//			return "baseLayout/baseLayout";
+//		}
+//		catch(ServiceException e) {
+//			e.printStackTrace();
+//			return "";
+//		}
+//	}
+//
+//	@RequestMapping("/goToEditNews")
+//	public String showEditNewsPage(@RequestParam("id") String id, Model model) {
+//		try {
+//			News news = newsService.findById(id);
+//			model.addAttribute("news", news);
+//			model.addAttribute("action", "editNews");
+//			return "baseLayout/baseLayout";
+//		}
+//		catch(ServiceException e) {
+//			e.printStackTrace();
+//			return "";
+//		}
+//	}
+//
+//	@RequestMapping("/doEditNews")
+//	public String doEditNews(@ModelAttribute("news") News news) {
+//		try {
+//			newsService.editNews(news);
+//			return "redirect:/news/goToNewsList";
+//		}
+//		catch(ServiceException e) {
+//			e.printStackTrace();
+//			return "";
+//		}
+//	}
+//
+//	@RequestMapping("/doDeleteNews")
+//	public String doDeleteNews(@RequestParam("id") String id) {
+//		try {
+//			newsService.deleteNewsById(id);
+//			return "redirect:/news/goToNewsList";
+//		}
+//		catch(ServiceException e) {
+//			e.printStackTrace();
+//			return "";
+//		}
+//	}
+//
 	@RequestMapping("/goToRegistrationPage")
 	public String showRegistrationPage(Model model) {
 		User user = new User();
-		model.addAttribute("user", user);
+		model.addAttribute("userData", user);
 		model.addAttribute("action", "registrationPage");
 		return "baseLayout/baseLayout";
 	}
-	
+
 	@RequestMapping("/doRegistrationUser")
 	public String doRegistration(@ModelAttribute("user") User user) {
 		try {
@@ -117,10 +128,13 @@ public class FrontController {
 			return "";
 		}
 	}
-	
+
 	@RequestMapping("/doSignIn")
-	public String doSignIn(@RequestParam("username") String login, @RequestParam("password") String password, HttpServletRequest request) {
+	public String doSignIn(@RequestParam("username") String login,
+						   @RequestParam("password") String password,
+						   HttpServletRequest request) {
 		try {
+			//TODO Нужен ли мне этот юзер? Ради роли?
 			User user = userService.signIn(login, password);
 			HttpSession session = request.getSession(true);
 			session.setAttribute("active", "true");
@@ -131,7 +145,7 @@ public class FrontController {
 			return "";
 		}
 	}
-	
+
 	@RequestMapping("/doSignOut")
 	public String signOut(HttpServletRequest request) {
 		try {

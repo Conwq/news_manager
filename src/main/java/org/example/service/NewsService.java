@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.example.service.exception.ServiceException;
 
-import bean.News;
+import org.example.bean.News;
 
 public interface NewsService {
 	List<News> getNewses() throws ServiceException;

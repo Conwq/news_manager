@@ -1,15 +1,32 @@
-package bean;
+package org.example.bean;
+
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Entity
+@Table(name = "users")
 public class User implements Serializable{
-	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private int id;
+
+	@Column(name = "login")
 	private String login;
+
+	@Column(name = "email")
 	private String email;
+
+	@Column(name = "role_name")
 	private Role role;
+
+	@Column(name = "password")
 	private String password;
+
+	@Column(name = "registration_date")
+	private String registrationDate;
 	
 	public User() {
 	}
@@ -56,6 +73,14 @@ public class User implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(String registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 
 	@Override
