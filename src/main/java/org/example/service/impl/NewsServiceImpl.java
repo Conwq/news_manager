@@ -41,6 +41,7 @@ public class NewsServiceImpl implements NewsService {
 			throw new ServiceException(e);
 		}
 	}
+	
 	@Override
 	public News findById(String id) throws ServiceException{
 		try {

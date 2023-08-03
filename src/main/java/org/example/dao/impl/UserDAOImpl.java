@@ -44,7 +44,7 @@ public class UserDAOImpl implements UserDAO{
 				throw new DAOException("Not find this password");
 			}
 			User user = new User();
-			user.setId(resultSet.getInt("id"));
+			user.setId(resultSet.getInt("user_id"));
 			user.setLogin(resultSet.getString("login"));
 			user.setEmail(resultSet.getString("email"));
 			user.setRole(Role.valueOf(resultSet.getString("role_name").toUpperCase()));

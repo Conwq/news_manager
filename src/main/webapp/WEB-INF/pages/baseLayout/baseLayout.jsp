@@ -31,13 +31,6 @@
       margin: 0;
     }
 
-    form {
-      display: flex;
-    }
-
-    form label, form input {
-      margin-right: 10px;
-    }
 
     main {
       display: flex;
@@ -100,35 +93,7 @@
 
 <body>
   <header>
-<<<<<<< HEAD
       <c:import url="/WEB-INF/pages/tiles/header.jsp" charEncoding="utf-8"/>
-=======
-    <h1>News manager</h1>
-    <c:if test="${sessionScope.active eq 'true'}">
-    	<form action="news/doSignOut" id="signOutButton">
-    		<button type="submit">Sign Out</button>
-    	</form>
-    </c:if>
-    
-    <c:if test="${not (sessionScope.active eq 'true')}"> 
-	    <form id="loginForm" action="news/doSignIn" method="post">
-	      <input type="text" name="username" placeholder="Enter username" required>
-	      <input type="password" name="password" placeholder="Enter password" required>
-	      <button type="submit">Sign In</button>
-	      <a href="news/goToRegistrationPage">If you not registered click here</a>
-	    </form>
-    </c:if>
-    
-    <div id="languageButtons">
-		<form id = "changeLocaleEn" action="#" method="get">
-			<button id="changeLocaleEN" >EN</button>
-		</form>    
-		<form id = "changeLocaleEn" action="#" method="get">
-			 <button id="changeLocaleRU">RU</button>
-		</form>    
-    </div>
-    
->>>>>>> 52a4ebf7500afe41e91e70f38529019d964cb04d
   </header>
 
   <main>
@@ -143,78 +108,25 @@
     </div>
 
     <div id="newsList">
-      <h2>Latest News</h2> <hr>
         <c:if test="${action eq 'newsList'}">
             <c:import url="/WEB-INF/pages/tiles/newsList.jsp" charEncoding="utf-8"/>
         </c:if>
-<<<<<<< HEAD
 
         <c:if test="${action eq 'registrationPage'}">
-            <c:import url="/WEB-INF/pages/tiles/registrationPage.jsp" charEncoding="utf-8"/>
+            <c:import url="/WEB-INF/pages/tiles/registrationPage.jsp" charEncoding="utf-8">
+            	<c:param name="user" value="${user}"/>
+            </c:import> 
         </c:if>
 
         <c:if test="${action eq 'viewNews'}">
-            <c:import url="/WEB-INF/pages/tiles/viewNews.jsp" charEncoding="utf-8"/>
+            <c:import url="/WEB-INF/pages/tiles/viewNews.jsp" charEncoding="utf-8">
+            	<c:param name="news" value="${news}"/>
+            </c:import>
         </c:if>
-
-=======
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-        <a href="news/doEditNews">
-        	<button type="submit">Edit</button>
-        </a>
-        <a href="news/viewNews">
-        	<button type="submit">View news</button>
-        </a>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-        <a href="news/doEditNews">
-        	<button type="submit">Edit</button>
-        </a>
-        <a href="news/viewNews">
-        	<button type="submit">View news</button>
-        </a>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-        <a href="news/doEditNews">
-        	<button type="submit">Edit</button>
-        </a>
-        <a href="news/viewNews">
-        	<button type="submit">View news</button>
-        </a>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-        <a href="news/doEditNews">
-        	<button type="submit">Edit</button>
-        </a>
-        <a href="news/viewNews">
-        	<button type="submit">View news</button>
-        </a>
-      </div>
-      <div class="news-item">
-        <h3>News Title 2</h3>
-        <p>Published on: August 1, 2023</p>
-        <p>Quisque sit amet ipsum quis elit finibus iaculis nec id ligula.</p>
-        <a href="news/doEditNews">
-        	<button type="submit">Edit</button>
-        </a>
-        <a href="news/viewNews">
-        	<button type="submit">View news</button>
-        </a>
-      </div>
->>>>>>> 52a4ebf7500afe41e91e70f38529019d964cb04d
+        
+        <c:if test="${action eq 'editNews'}">
+        	<c:import url="/WEB-INF/pages/tiles/editNews.jsp" charEncoding="utf-8"/>
+        </c:if>
     </div>
   </main>
 

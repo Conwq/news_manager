@@ -30,7 +30,7 @@ public class NewsDAOImpl implements NewsDAO{
 			e.printStackTrace();
 		}
 	}
-
+	
 	private static final String SQL_GET_ALL_NEWSES = "SELECT * FROM news ORDER BY publication_date DESC";
 	@Override
 	public List<News> getNewses() throws DAOException{
@@ -63,7 +63,7 @@ public class NewsDAOImpl implements NewsDAO{
 			}
 		}
 	}
-
+	
 	private static final String SQL_GET_COUNT_NEWS = "SELECT * FROM news ORDER BY publication_date DESC LIMIT ?";
 	@Override
 	public List<News> getNewses(int count) throws DAOException{
@@ -112,7 +112,7 @@ public class NewsDAOImpl implements NewsDAO{
 			news.setTitle(resultSet.getString("title"));
 			news.setBrief(resultSet.getString("brief"));
 			news.setContent(resultSet.getString("content"));
-			news.setPublicationDate(resultSet.getString("date"));
+			news.setPublicationDate(resultSet.getString("publication_date"));
 			return news;
 		}
 		catch(SQLException e) {

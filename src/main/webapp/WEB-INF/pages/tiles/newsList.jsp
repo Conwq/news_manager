@@ -7,6 +7,7 @@
   </c:when>
 
   <c:otherwise>
+  	<h2>Latest News</h2> <hr>
     <c:forEach items="${requestScope.news}" var="news">
       <div class="news-item">
         <h3>${news.title}</h3>
@@ -14,10 +15,10 @@
         <p>${news.brief}</p>
 
         <c:if test="${sessionScope.role eq 'admin'}">
-          <a href="news/doEditNews">
-            <button type="submit">Edit</button>
+          <a href="${pageContext.request.contextPath}/news/doEditNews?id=${news.id}">
+            <button type="submit">Edit news</button>
           </a>
-          <a href="news/viewNews">
+          <a href="${pageContext.request.contextPath}/news/goToViewNews?id=${news.id}">
             <button type="submit">View news</button>
           </a>
         </c:if>

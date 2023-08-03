@@ -58,34 +58,34 @@ public class FrontController {
 		}
 	}
 
-//	@RequestMapping("/goToViewNews")
-//	public String showNews(@RequestParam("id") String id, Model model) {
-//		try {
-//			News news = newsService.findById(id);
-//			model.addAttribute("news", news);
-//			model.addAttribute("action", "viewNews");
-//			return "baseLayout/baseLayout";
-//		}
-//		catch(ServiceException e) {
-//			e.printStackTrace();
-//			return "";
-//		}
-//	}
-//
-//	@RequestMapping("/goToEditNews")
-//	public String showEditNewsPage(@RequestParam("id") String id, Model model) {
-//		try {
-//			News news = newsService.findById(id);
-//			model.addAttribute("news", news);
-//			model.addAttribute("action", "editNews");
-//			return "baseLayout/baseLayout";
-//		}
-//		catch(ServiceException e) {
-//			e.printStackTrace();
-//			return "";
-//		}
-//	}
-//
+	@RequestMapping("/goToViewNews")
+	public String showNews(@RequestParam("id") String id, Model model) {
+		try {
+			News news = newsService.findById(id);
+			model.addAttribute("news", news);
+			model.addAttribute("action", "viewNews");
+			return "baseLayout/baseLayout";
+		}
+		catch(ServiceException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	@RequestMapping("/goToEditNews")
+	public String showEditNewsPage(@RequestParam("id") String id, Model model) {
+		try {
+			News news = newsService.findById(id);
+			model.addAttribute("news", news);
+			model.addAttribute("action", "editNews");
+			return "baseLayout/baseLayout";
+		}
+		catch(ServiceException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
 //	@RequestMapping("/doEditNews")
 //	public String doEditNews(@ModelAttribute("news") News news) {
 //		try {
@@ -97,7 +97,7 @@ public class FrontController {
 //			return "";
 //		}
 //	}
-//
+
 //	@RequestMapping("/doDeleteNews")
 //	public String doDeleteNews(@RequestParam("id") String id) {
 //		try {
@@ -109,11 +109,11 @@ public class FrontController {
 //			return "";
 //		}
 //	}
-//
+
 	@RequestMapping("/goToRegistrationPage")
 	public String showRegistrationPage(Model model) {
 		User user = new User();
-		model.addAttribute("userData", user);
+		model.addAttribute("user", user);
 		model.addAttribute("action", "registrationPage");
 		return "baseLayout/baseLayout";
 	}
@@ -142,6 +142,7 @@ public class FrontController {
 			return "redirect:/news/goToNewsList";
 		}
 		catch(ServiceException e) {
+			e.printStackTrace();
 			return "";
 		}
 	}

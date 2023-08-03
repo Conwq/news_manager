@@ -10,8 +10,8 @@
 
 <c:if test="${not (sessionScope.active eq 'true')}">
   <form id="loginForm" action="${pageContext.request.contextPath}/news/doSignIn" method="post">
-    <input type="text" name="username" placeholder="Enter username" required>
-    <input type="text" name="password" placeholder="Enter password" required>
+    <input type="text" name="username" placeholder="Enter username">
+    <input type="text" name="password" placeholder="Enter password">
     <button type="submit">Sign In</button>
     <a href="${pageContext.request.contextPath}/news/goToRegistrationPage">If you not registered click here</a>
   </form>
