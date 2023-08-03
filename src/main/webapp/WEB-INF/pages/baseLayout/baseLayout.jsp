@@ -125,7 +125,9 @@
         </c:if>
         
         <c:if test="${action eq 'editNews'}">
-        	<c:import url="/WEB-INF/pages/tiles/editNews.jsp" charEncoding="utf-8"/>
+        	<c:import url="/WEB-INF/pages/tiles/editNews.jsp" charEncoding="utf-8"> 
+        		<c:param name="news" value="news"></c:param>
+        	</c:import>
         </c:if>
     </div>
   </main>

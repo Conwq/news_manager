@@ -14,13 +14,14 @@
         <p>Published on: ${news.publicationDate}</p>
         <p>${news.brief}</p>
 
+		<a href="${pageContext.request.contextPath}/news/goToViewNews?id=${news.id}">
+           		 <button type="submit">View news</button>
+         </a>
+         
         <c:if test="${sessionScope.role eq 'admin'}">
-          <a href="${pageContext.request.contextPath}/news/doEditNews?id=${news.id}">
-            <button type="submit">Edit news</button>
-          </a>
-          <a href="${pageContext.request.contextPath}/news/goToViewNews?id=${news.id}">
-            <button type="submit">View news</button>
-          </a>
+         	<a href="${pageContext.request.contextPath}/news/goToEditNews?id=${news.id}">
+            	<button type="submit">Edit news</button>
+         	</a>
         </c:if>
       </div>
     </c:forEach>

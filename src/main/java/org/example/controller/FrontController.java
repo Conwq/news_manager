@@ -86,17 +86,17 @@ public class FrontController {
 		}
 	}
 
-//	@RequestMapping("/doEditNews")
-//	public String doEditNews(@ModelAttribute("news") News news) {
-//		try {
-//			newsService.editNews(news);
-//			return "redirect:/news/goToNewsList";
-//		}
-//		catch(ServiceException e) {
-//			e.printStackTrace();
-//			return "";
-//		}
-//	}
+	@RequestMapping("/doEditNews")
+	public String doEditNews(@ModelAttribute("news") News news) {
+		try {
+			newsService.editNews(news);
+			return "redirect:/news/goToNewsList";
+		}
+		catch(ServiceException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
 
 //	@RequestMapping("/doDeleteNews")
 //	public String doDeleteNews(@RequestParam("id") String id) {

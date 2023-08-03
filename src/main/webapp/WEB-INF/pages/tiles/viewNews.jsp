@@ -93,10 +93,16 @@
 	  <h2 class="title">${news.title}</h2>
 	  <p class="brief">${news.brief}</p>
 	  <p class="content">${news.content}</p>
-	  <div class="action-buttons">
-	    <button class="edit">Edit news</button>
-	    <button class="delete">Delete news</button>
-	  </div>
+	  <c:if test="${sessionScope.role eq 'admin'}"> 
+	  	<div class="action-buttons">
+	  		<a href="${pageContext.request.contextPath}/news/goToEditNews?id=${news.id}">
+	  			<button class="edit">Edit news</button>
+	  		</a>
+	    	<a href="${pageContext.request.contextPath}/news/doDeleteNews?id=${news.id}">
+	  			<button class="delete">Delete news</button>
+	  		</a>
+	  	</div>
+	  </c:if>
 	  <a href="javascript:history.back()" class="back-button">Back</a>
 	</div>
 </body>
