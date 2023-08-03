@@ -1,10 +1,7 @@
 package org.example.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import org.example.bean.News;
+import org.example.bean.User;
 import org.example.service.NewsService;
 import org.example.service.UserService;
 import org.example.service.exception.ServiceException;
@@ -15,8 +12,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import org.example.bean.News;
-import org.example.bean.User;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("/news")
@@ -98,17 +97,48 @@ public class FrontController {
 		}
 	}
 
-//	@RequestMapping("/doDeleteNews")
-//	public String doDeleteNews(@RequestParam("id") String id) {
-//		try {
-//			newsService.deleteNewsById(id);
-//			return "redirect:/news/goToNewsList";
-//		}
-//		catch(ServiceException e) {
-//			e.printStackTrace();
-//			return "";
-//		}
-//	}
+	@RequestMapping("/doDeleteNews")
+	public String doDeleteNews(@RequestParam("id") String id) {
+		try {
+			newsService.deleteNewsById(id);
+			return "redirect:/news/goToNewsList";
+		}
+		catch(ServiceException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	@RequestMapping("/doDeleteSomeNews")
+	public String deleteSomeNews(@RequestParam("news") String[] news){
+		try {
+			newsService.deleteNews(news);
+			return "redirect:/news";
+		}
+		catch(ServiceException e){
+			return "";
+		}
+	}
+
+	@RequestMapping("/goToAddNewsPage")
+	public String showAddNewsPage(Model model){
+		News news = new News();
+		model.addAttribute("news", news);
+		model.addAttribute("action", "addNewsPage");
+		return "baseLayout/baseLayout";
+	}
+
+	@RequestMapping("/doAddNews")
+	public String addNews(@ModelAttribute("news") News news){
+		try {
+			newsService.addNews(news);
+			return "redirect:/news";
+		}
+		catch (ServiceException e){
+			e.printStackTrace();
+			return "";
+		}
+	}
 
 	@RequestMapping("/goToRegistrationPage")
 	public String showRegistrationPage(Model model) {

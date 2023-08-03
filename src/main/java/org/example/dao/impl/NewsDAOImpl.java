@@ -148,4 +148,49 @@ public class NewsDAOImpl implements NewsDAO{
 			throw new DAOException(e);
 		}
 	}
+
+	private static final String SQL_DELETE_SOME_NEWS = "DELETE FROM news WHERE news_id IN (%s)";
+	@Override
+	public void deleteNews(int[] someId) throws DAOException {
+		String parameter = preparedParameter(someId);
+		try (PreparedStatement preparedStatement = connection.prepareStatement(String.format(SQL_DELETE_SOME_NEWS, parameter))){
+//			for (int i = 0; i < someId.length; i++) {
+//				preparedStatement.setInt(i + 1, someId[i]);
+//			}
+//			preparedStatement.executeUpdate();
+//
+			//TODO
+			System.out.println(String.format(SQL_DELETE_SOME_NEWS, parameter));
+		}
+		catch (SQLException e){
+			throw new DAOException(e);
+		}
+	}
+
+	private String preparedParameter(int[] someId){
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i < someId.length; i++) {
+			if (someId.length - 1 == i){
+				stringBuilder.append("?");
+				break;
+			}
+			stringBuilder.append("?,");
+		}
+		return stringBuilder.toString();
+	}
+
+	private static final String SQL_ADD_NEWS = "INSERT INTO news (title, brief, content) VALUE (?,?,?)";
+	@Override
+	public void addNews(News news) throws DAOException {
+		try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_NEWS)) {
+			preparedStatement.setString(1, news.getTitle());
+			preparedStatement.setString(2, news.getBrief());
+			preparedStatement.setString(3, news.getContent());
+
+			preparedStatement.executeUpdate();
+		}
+		catch (SQLException e){
+			throw new DAOException(e);
+		}
+	}
 }

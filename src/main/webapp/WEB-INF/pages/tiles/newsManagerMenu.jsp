@@ -3,9 +3,13 @@
 
 
 <h2>Administration Menu</h2>
-<button id="allNewsListButton">Go to news list</button>
+<a href="${pageContext.request.contextPath}/news/goToNewsList">
+    <button id="allNewsListButton" type="button">Go to news list</button>
+</a>
 <c:if test="${sessionScope.role eq 'admin'}">
-  <button id="addNewsButton">Add News</button>
-  <button id="deleteNewsButton">Delete News</button>
-  <button id="listAllUsersButton">List All Users</button>
+    <a href="${pageContext.request.contextPath}/news/goToAddNewsPage">
+        <button id="addNewsButton" type="button">Add News</button>
+    </a>
+    <%--  <button id="listAllUsersButton">List All Users</button>--%>
+    <button id="deleteNewsButton" form="selectedNews" type="submit">Delete Selected News</button>
 </c:if>

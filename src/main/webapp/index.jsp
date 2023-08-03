@@ -3,6 +3,6 @@
 
 <html>
 <body>
-	<c:redirect url="news"></c:redirect>
+<c:redirect url="${pageContext.request.contextPath}/news"/>
 </body>
 </html>

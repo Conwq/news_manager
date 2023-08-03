@@ -1,10 +1,9 @@
 package org.example.service;
 
-import java.util.List;
-
+import org.example.bean.News;
 import org.example.service.exception.ServiceException;
 
-import org.example.bean.News;
+import java.util.List;
 
 public interface NewsService {
 	List<News> getNewses() throws ServiceException;
@@ -12,4 +11,6 @@ public interface NewsService {
 	News findById(String id) throws ServiceException;
 	void editNews(News news) throws ServiceException;
 	void deleteNewsById(String id) throws ServiceException;
+	void addNews(News news) throws ServiceException;
+	void deleteNews(String[] news) throws ServiceException;
 }

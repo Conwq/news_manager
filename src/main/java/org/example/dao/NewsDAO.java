@@ -1,10 +1,9 @@
 package org.example.dao;
 
-import java.util.List;
-
+import org.example.bean.News;
 import org.example.dao.exception.DAOException;
 
-import org.example.bean.News;
+import java.util.List;
 
 public interface NewsDAO {
 	List<News> getNewses() throws DAOException;
@@ -12,4 +11,6 @@ public interface NewsDAO {
 	News findById(int id) throws DAOException;
 	void editNews(News news) throws DAOException;
 	void deleteNewsById(int newsId) throws DAOException;
+	void addNews(News news)throws DAOException;
+	void deleteNews(int[] someId) throws DAOException;
 }

@@ -1,8 +1,6 @@
 package org.example.service.impl;
 
-import java.util.IllegalFormatException;
-import java.util.List;
-
+import org.example.bean.News;
 import org.example.dao.NewsDAO;
 import org.example.dao.exception.DAOException;
 import org.example.service.NewsService;
@@ -10,7 +8,8 @@ import org.example.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.example.bean.News;
+import java.util.IllegalFormatException;
+import java.util.List;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -70,7 +69,31 @@ public class NewsServiceImpl implements NewsService {
 			int newsId = Integer.parseInt(id);
 			newsDAO.deleteNewsById(newsId);
 		}
-		catch(DAOException e) {
+		catch(DAOException | IllegalArgumentException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public void deleteNews(String[] news) throws ServiceException {
+		try{
+			int[] someId = new int[news.length];
+			for (int i = 0; i < news.length; i++) {
+				someId[i] = Integer.parseInt(news[i]);
+			}
+			newsDAO.deleteNews(someId);
+		}
+		catch (DAOException | IllegalArgumentException e){
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public void addNews(News news) throws ServiceException {
+		try{
+			newsDAO.addNews(news);
+		}
+		catch (DAOException e){
 			throw new ServiceException(e);
 		}
 	}
