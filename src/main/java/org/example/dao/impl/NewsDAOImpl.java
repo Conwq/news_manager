@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.example.dao.NewsDAO;
 import org.example.dao.exception.DAOException;
@@ -66,7 +67,7 @@ public class NewsDAOImpl implements NewsDAO{
 	
 	private static final String SQL_GET_COUNT_NEWS = "SELECT * FROM news ORDER BY publication_date DESC LIMIT ?";
 	@Override
-	public List<News> getNewses(int count) throws DAOException{
+	public List<News> getNewses(int count, Locale locale) throws DAOException{
 		ResultSet resultSet = null;
 		try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_COUNT_NEWS)){
 			List<News> newses = new ArrayList<>();

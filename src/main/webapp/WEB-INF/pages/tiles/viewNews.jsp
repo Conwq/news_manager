@@ -96,11 +96,10 @@
 	<p class="content">${news.content}</p>
 	<c:if test="${sessionScope.role eq 'admin'}">
 		<div class="action-buttons">
-			<a
-				href="${pageContext.request.contextPath}/news/goToEditNews?id=${news.id}">
+			<a href="${pageContext.request.contextPath}/news/goToEditNews?id=${news.id}">
 				<button class="edit">Edit news</button>
-			</a> <a
-				href="${pageContext.request.contextPath}/news/doDeleteNews?id=${news.id}">
+			</a> 
+			<a href="${pageContext.request.contextPath}/news/doDeleteNews?id=${news.id}">
 				<button class="delete">Delete news</button>
 			</a>
 		</div>
