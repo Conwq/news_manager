@@ -6,6 +6,7 @@ import org.example.service.NewsService;
 import org.example.service.UserService;
 import org.example.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
