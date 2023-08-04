@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -149,9 +148,9 @@ public class FrontController {
 	}
 
 	@RequestMapping("/doRegistrationUser")
-	public String doRegistration(@ModelAttribute("user") User user) {
+	public String doRegistration(@ModelAttribute("user") User user, @RequestParam("confirmPassword") String confirmPassword) {
 		try {
-			userService.registration(user);
+			userService.registration(user, confirmPassword);
 			return "redirect:/news";
 		}
 		catch(ServiceException e) {

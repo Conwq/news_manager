@@ -154,13 +154,10 @@ public class NewsDAOImpl implements NewsDAO{
 	public void deleteNews(int[] someId) throws DAOException {
 		String parameter = preparedParameter(someId);
 		try (PreparedStatement preparedStatement = connection.prepareStatement(String.format(SQL_DELETE_SOME_NEWS, parameter))){
-//			for (int i = 0; i < someId.length; i++) {
-//				preparedStatement.setInt(i + 1, someId[i]);
-//			}
-//			preparedStatement.executeUpdate();
-//
-			//TODO
-			System.out.println(String.format(SQL_DELETE_SOME_NEWS, parameter));
+			for (int i = 0; i < someId.length; i++) {
+				preparedStatement.setInt(i + 1, someId[i]);
+			}
+			preparedStatement.executeUpdate();
 		}
 		catch (SQLException e){
 			throw new DAOException(e);

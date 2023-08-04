@@ -31,8 +31,11 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void registration(User user) throws ServiceException {
+	public void registration(User user, String confirmPassword) throws ServiceException {
 		try {
+			if(!user.getPassword().equals(confirmPassword)) {
+				throw new ServiceException("Password not confirm");
+			}
 			String password = user.getPassword();
 			String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 			user.setPassword(hashedPassword);

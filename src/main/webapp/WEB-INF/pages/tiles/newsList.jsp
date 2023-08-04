@@ -10,14 +10,14 @@
         margin-bottom: 15px;
         border-bottom: 1px solid #ddd;
         padding-bottom: 10px;
-        word-wrap: break-word; /* Добавляем свойство для переноса текста на новую строку */
-        position: relative; /* Добавляем позиционирование элемента */
+        word-wrap: break-word;
+        position: relative; 
     }
 
     .published-date {
-        position: absolute; /* Абсолютное позиционирование элемента */
-        top: 0; /* Располагаем его в верхней части блока */
-        right: 0; /* Располагаем его в правой части блока */
+        position: absolute; 
+        top: 0; 
+        right: 0; 
         font-size: 12px;
         color: #888;
     }
