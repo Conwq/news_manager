@@ -7,16 +7,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.example.dao.NewsDAO;
 import org.example.dao.exception.DAOException;
+import org.example.util.DateConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import org.example.entity.News;
+import org.example.bean.News;
 
 @Repository
 public class NewsDAOImpl implements NewsDAO{
 	private Connection connection;
+	private final DateConverter dateConverter;
 	
 	{
 		try {
@@ -30,10 +34,15 @@ public class NewsDAOImpl implements NewsDAO{
 			e.printStackTrace();
 		}
 	}
+
+	@Autowired
+	public NewsDAOImpl (DateConverter dateConverter){
+		this.dateConverter = dateConverter;
+	}
 	
 	private static final String SQL_GET_ALL_NEWSES = "SELECT * FROM news ORDER BY publication_date DESC";
 	@Override
-	public List<News> getNewses() throws DAOException{
+	public List<News> getNewses(Locale locale) throws DAOException{
 		ResultSet resultSet = null;
 		try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_ALL_NEWSES)){
 			List<News> newses = new ArrayList<>();
@@ -44,7 +53,8 @@ public class NewsDAOImpl implements NewsDAO{
 				news.setTitle(resultSet.getString("title"));
 				news.setBrief(resultSet.getString("brief"));
 				news.setContent(resultSet.getString("content"));
-				news.setPublicationDate(resultSet.getString("publication_date"));
+				String formatDate = dateConverter.getFormatDateByNewsList(resultSet.getString("publication_date"), locale);
+				news.setPublicationDate(formatDate);
 				newses.add(news);
 			}
 			return newses;
@@ -66,7 +76,7 @@ public class NewsDAOImpl implements NewsDAO{
 	
 	private static final String SQL_GET_COUNT_NEWS = "SELECT * FROM news ORDER BY publication_date DESC LIMIT ?";
 	@Override
-	public List<News> getNewses(int count) throws DAOException{
+	public List<News> getNewses(int count, Locale locale) throws DAOException{
 		ResultSet resultSet = null;
 		try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_COUNT_NEWS)){
 			List<News> newses = new ArrayList<>();
@@ -78,7 +88,8 @@ public class NewsDAOImpl implements NewsDAO{
 				news.setTitle(resultSet.getString("title"));
 				news.setBrief(resultSet.getString("brief"));
 				news.setContent(resultSet.getString("content"));
-				news.setPublicationDate(resultSet.getString("publication_date"));
+				String formatDate = dateConverter.getFormatDateByNewsList(resultSet.getString("publication_date"), locale);
+				news.setPublicationDate(formatDate);
 				newses.add(news);
 			}
 			return newses;
@@ -100,7 +111,7 @@ public class NewsDAOImpl implements NewsDAO{
 	
 	private static final String SQL_GET_NEWS_BY_ID = "SELECT * FROM news WHERE news_id = ?";
 	@Override
-	public News findById(int id) throws DAOException {
+	public News findById(int id, Locale locale) throws DAOException {
 		try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_NEWS_BY_ID)) {
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -112,7 +123,8 @@ public class NewsDAOImpl implements NewsDAO{
 			news.setTitle(resultSet.getString("title"));
 			news.setBrief(resultSet.getString("brief"));
 			news.setContent(resultSet.getString("content"));
-			news.setPublicationDate(resultSet.getString("publication_date"));
+			String dateFormat = dateConverter.getFormatDateByNews(resultSet.getString("publication_date"), locale);
+			news.setPublicationDate(dateFormat);
 			return news;
 		}
 		catch(SQLException e) {

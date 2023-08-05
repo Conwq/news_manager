@@ -4,6 +4,8 @@
 
 <c:set value="${sessionScope.role}" var="role"/>
 <c:set value="${requestScope.news}" var="news"/>
+<c:set value="${sessionScope.active}" var="active"/>
+
 
 <style>
     .news-item {
@@ -52,9 +54,11 @@
                     <p class="published-date">Published on: ${news.publicationDate}</p>
                     <p>${news.brief}</p>
 
-                    <a href="${pageContext.request.contextPath}/news/goToViewNews?id=${news.id}">
-                        <button type="button" class="btn-style">View news</button>
-                    </a>&nbsp;
+                    <c:if test="${active eq 'true'}">
+                        <a href="${pageContext.request.contextPath}/news/goToViewNews?id=${news.id}">
+                            <button type="button" class="btn-style">View news</button>
+                        </a>&nbsp;
+                    </c:if>
 
                     <c:if test="${role eq 'admin'}">
                         <a href="${pageContext.request.contextPath}/news/goToEditNews?id=${news.id}">

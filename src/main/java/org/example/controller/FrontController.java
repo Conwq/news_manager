@@ -1,20 +1,23 @@
 package org.example.controller;
 
-import org.example.entity.News;
-import org.example.entity.User;
+import org.example.bean.News;
+import org.example.bean.User;
 import org.example.service.NewsService;
 import org.example.service.UserService;
 import org.example.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/news")
@@ -31,7 +34,7 @@ public class FrontController {
 	@RequestMapping
 	public String goToBasePage(Model model) {
 		try {
-			List<News> news = newsService.getNewses("5");
+			List<News> news = newsService.getNewses("5", LocaleContextHolder.getLocale());
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
@@ -43,23 +46,25 @@ public class FrontController {
 	}
 	
 	@RequestMapping("/goToNewsList")
-	public String goToNewsList(Model model) {
+	public String goToNewsList(@SessionAttribute("locale")Locale locale,
+							   Model model) {
 		try {
-			List<News> news = newsService.getNewses();
+			List<News> news = newsService.getNewses(locale);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
 		}
 		catch(ServiceException e) {
-			e.printStackTrace();
 			return "";
 		}
 	}
 
 	@RequestMapping("/goToViewNews")
-	public String showNews(@RequestParam("id") String id, Model model) {
+	public String showNews(@RequestParam("id") String id,
+						   @SessionAttribute("locale") Locale locale,
+						   Model model) {
 		try {
-			News news = newsService.findById(id);
+			News news = newsService.findById(id, locale);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "viewNews");
 			return "baseLayout/baseLayout";
@@ -71,9 +76,11 @@ public class FrontController {
 	}
 
 	@RequestMapping("/goToEditNews")
-	public String showEditNewsPage(@RequestParam("id") String id, Model model) {
+	public String showEditNewsPage(@RequestParam("id") String id,
+								   @SessionAttribute("locale") Locale locale,
+								   Model model) {
 		try {
-			News news = newsService.findById(id);
+			News news = newsService.findById(id, locale);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "editNews");
 			return "baseLayout/baseLayout";
@@ -112,7 +119,7 @@ public class FrontController {
 	public String deleteSomeNews(@RequestParam("news") String[] news){
 		try {
 			newsService.deleteNews(news);
-			return "redirect:/news";
+			return "redirect:/news/goToNewsList";
 		}
 		catch(ServiceException e){
 			return "";
@@ -131,7 +138,7 @@ public class FrontController {
 	public String addNews(@ModelAttribute("news") News news){
 		try {
 			newsService.addNews(news);
-			return "redirect:/news";
+			return "redirect:/news/goToNewsList";
 		}
 		catch (ServiceException e){
 			e.printStackTrace();
@@ -148,12 +155,16 @@ public class FrontController {
 	}
 
 	@RequestMapping("/doRegistrationUser")
-	public String doRegistration(@ModelAttribute("user") User user, @RequestParam("confirmPassword") String confirmPassword) {
+	public String doRegistration(@ModelAttribute("user") User user,
+								 @RequestParam("confirmPassword") String confirmPassword,
+								 @RequestParam("country") String country) {
 		try {
-			userService.registration(user, confirmPassword);
+
+			userService.registration(user, confirmPassword, country);
 			return "redirect:/news";
 		}
 		catch(ServiceException e) {
+			e.printStackTrace();
 			return "";
 		}
 	}
@@ -163,11 +174,11 @@ public class FrontController {
 						   @RequestParam("password") String password,
 						   HttpServletRequest request) {
 		try {
-			//TODO Нужен ли мне этот юзер? Ради роли?
 			User user = userService.signIn(login, password);
 			HttpSession session = request.getSession(true);
 			session.setAttribute("active", "true");
 			session.setAttribute("role", user.getRoleName());
+			session.setAttribute("locale", user.getLocale());
 			return "redirect:/news/goToNewsList";
 		}
 		catch(ServiceException e) {

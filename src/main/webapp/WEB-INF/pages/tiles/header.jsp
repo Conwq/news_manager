@@ -23,7 +23,6 @@
         <input type="text" name="username" placeholder="Enter username">
         <input type="text" name="password" placeholder="Enter password">
         <button type="submit">Sign In</button>
-        <a href="${pageContext.request.contextPath}/news/goToRegistrationPage">If you not registered click here</a>
     </form>
 </c:if>
 

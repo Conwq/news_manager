@@ -5,14 +5,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 
 import org.example.dao.UserDAO;
 import org.example.dao.exception.DAOException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
-import org.example.entity.Role;
-import org.example.entity.User;
+import org.example.bean.Role;
+import org.example.bean.User;
 
 @Repository
 public class UserDAOImpl implements UserDAO{
@@ -31,7 +32,10 @@ public class UserDAOImpl implements UserDAO{
 		}
 	}
 	
-	private static final String SQL_SIGN_IN = "SELECT * FROM users JOIN roles ON users.role_id = roles.role_id WHERE login=?";
+	private static final String SQL_SIGN_IN = "SELECT * FROM users " +
+			"JOIN roles ON users.role_id = roles.role_id " +
+			"JOIN locales ON users.user_id = locales.user_id " +
+			"WHERE login=?";
 	@Override
 	public User signIn(String login, String password) throws DAOException{
 		try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_SIGN_IN)){
@@ -48,6 +52,9 @@ public class UserDAOImpl implements UserDAO{
 			user.setLogin(resultSet.getString("login"));
 			user.setEmail(resultSet.getString("email"));
 			user.setRole(Role.valueOf(resultSet.getString("role_name").toUpperCase()));
+			String country = resultSet.getString("country");
+			String language = resultSet.getString("language");
+			user.setLocale(new Locale(country, language));
 			return user;
 		}
 		catch(SQLException e) {
@@ -56,13 +63,30 @@ public class UserDAOImpl implements UserDAO{
 	}
 
 	private static final String SQL_REGISTRATION_USER = "INSERT INTO users (email, login, password, role_id) VALUE (?, ?, ?, 1)";
+	private static final String SQL_ADD_LOCALE = "INSERT INTO locales (user_id, country, language) VALUE (?,?,?)";
 	@Override
 	public void registration(User user) throws DAOException{
-		try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_REGISTRATION_USER)){
+		try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_REGISTRATION_USER, PreparedStatement.RETURN_GENERATED_KEYS)){
+			connection.setAutoCommit(false);
+
 			preparedStatement.setString(1, user.getEmail());
 			preparedStatement.setString(2, user.getLogin());
 			preparedStatement.setString(3, user.getPassword());
 			preparedStatement.executeUpdate();
+
+			ResultSet resultSet = preparedStatement.getGeneratedKeys();
+			if (!resultSet.next()){
+				throw new DAOException("Error with registration");
+			}
+			int id = resultSet.getInt(1);
+			PreparedStatement preparedStatement1 = connection.prepareStatement(SQL_ADD_LOCALE);
+			preparedStatement1.setInt(1, id);
+			preparedStatement1.setString(2, user.getLocale().getCountry());
+			preparedStatement1.setString(3, user.getLocale().getLanguage());
+			preparedStatement1.executeUpdate();
+
+			connection.commit();
+			connection.setAutoCommit(true);
 		}
 		catch(SQLException e) {
 			throw new DAOException(e);

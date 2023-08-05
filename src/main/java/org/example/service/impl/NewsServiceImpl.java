@@ -1,6 +1,6 @@
 package org.example.service.impl;
 
-import org.example.entity.News;
+import org.example.bean.News;
 import org.example.dao.NewsDAO;
 import org.example.dao.exception.DAOException;
 import org.example.service.NewsService;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.IllegalFormatException;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -21,9 +22,9 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public List<News> getNewses() throws ServiceException{
+	public List<News> getNewses(Locale locale) throws ServiceException{
 		try {
-			return newsDAO.getNewses();
+			return newsDAO.getNewses(locale);
 		}
 		catch(DAOException e) {
 			throw new ServiceException(e);
@@ -31,10 +32,10 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public List<News> getNewses(String count) throws ServiceException{
+	public List<News> getNewses(String count, Locale locale) throws ServiceException{
 		try {
 			int c = Integer.parseInt(count);
-			return newsDAO.getNewses(c);
+			return newsDAO.getNewses(c, locale);
 		}
 		catch(IllegalFormatException | DAOException e) {
 			throw new ServiceException(e);
@@ -42,10 +43,10 @@ public class NewsServiceImpl implements NewsService {
 	}
 	
 	@Override
-	public News findById(String id) throws ServiceException{
+	public News findById(String id, Locale locale) throws ServiceException{
 		try {
 			int newsId = Integer.parseInt(id);
-			return newsDAO.findById(newsId);
+			return newsDAO.findById(newsId, locale);
 		}
 		catch(IllegalArgumentException | DAOException e) {
 			throw new ServiceException(e);
@@ -60,7 +61,6 @@ public class NewsServiceImpl implements NewsService {
 		catch(DAOException e) {
 			throw new ServiceException(e);
 		}
-		
 	}
 
 	@Override

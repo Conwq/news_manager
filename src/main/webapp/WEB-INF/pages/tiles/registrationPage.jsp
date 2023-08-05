@@ -10,7 +10,7 @@
         border-radius: 5px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         background-color: #fff;
-        margin: 20px auto;
+        margin: 15px auto;
     }
 
     #registrationForm h2 {
@@ -23,6 +23,16 @@
         display: block;
         margin-bottom: 8px;
         color: #333;
+    }
+
+    #registrationForm select {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        display: block;
+        box-sizing: border-box;
     }
 
     #registrationForm input[type="text"],
@@ -83,6 +93,14 @@
         <label for="confirmPassword">Confirm password:</label>
         <input type="text" id="confirmPassword" name="confirmPassword"/>
         <br>
+
+        <label for="country">Select country:</label>
+        <select id="country" name="country">
+            <option value="ru">Russian Federation</option>
+            <option value="us">United States</option>
+        </select>
+        <br>
+
         <button type="submit">Register</button>
     </form:form>
     <a href="javascript:history.back()" class="back-button">Back</a>

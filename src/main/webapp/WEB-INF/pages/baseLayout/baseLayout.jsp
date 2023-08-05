@@ -40,6 +40,8 @@
             flex: 1;
             border: 1px solid #ddd;
             padding: 10px;
+            height: 80vh;
+            overflow: auto;
         }
 
         #newsManagementMenu {
@@ -68,6 +70,10 @@
         }
 
         footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             background-color: #333;
             color: #fff;
             text-align: center;
@@ -85,6 +91,7 @@
     <div id="newsManagementMenu">
         <c:if test="${not (active eq 'true')}">
             <h2>Welcome in news manager!</h2>
+            <a href="${pageContext.request.contextPath}/news/goToRegistrationPage">If you want to register click here</a>
         </c:if>
 
         <c:if test="${active eq 'true'}">

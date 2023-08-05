@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.example.entity.User;
+import org.example.bean.User;
 import org.example.service.UserService;
 import org.example.service.exception.ServiceException;
 
@@ -27,9 +27,11 @@ public class UsersController {
 		return "baseLayout/baseLayout";
 	}
 	
-	public String registrationUser(@ModelAttribute("user") User user, @RequestParam("confirmPassword") String confirmPassword) {
+	public String registrationUser(@ModelAttribute("user") User user,
+								   @RequestParam("confirmPassword") String confirmPassword,
+								   @RequestParam("country") String country) {
 		try {
-			userService.registration(user, confirmPassword);
+			userService.registration(user, confirmPassword, country);
 			return "redirect:/news";
 		}
 		catch(ServiceException e) {

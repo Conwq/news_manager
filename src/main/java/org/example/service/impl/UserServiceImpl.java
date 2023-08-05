@@ -8,7 +8,9 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.example.entity.User;
+import org.example.bean.User;
+
+import java.util.Locale;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -31,14 +33,19 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void registration(User user, String confirmPassword) throws ServiceException {
+	public void registration(User user, String confirmPassword, String country) throws ServiceException {
 		try {
 			if(!user.getPassword().equals(confirmPassword)) {
 				throw new ServiceException("Password not confirm");
 			}
+			Locale locale = new Locale("ru", "RU");
+			if (country.equals("us")){
+				locale = Locale.US;
+			}
 			String password = user.getPassword();
 			String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 			user.setPassword(hashedPassword);
+			user.setLocale(locale);
 			userDAO.registration(user);
 		}
 		catch(DAOException e) {
