@@ -1,8 +1,7 @@
-package org.example.entity;
-
-import jakarta.persistence.*;
+package org.example.bean;
 
 import java.io.Serializable;
+import java.util.Locale;
 import java.util.Objects;
 
 public class User implements Serializable{
@@ -17,6 +16,7 @@ public class User implements Serializable{
 	private String password;
 
 	private String registrationDate;
+	private Locale locale;
 	
 	public User() {
 	}
@@ -28,7 +28,15 @@ public class User implements Serializable{
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
+	public Locale getLocale() {
+		return locale;
+	}
+
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+
 	public String getLogin() {
 		return login;
 	}

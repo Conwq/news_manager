@@ -89,7 +89,7 @@
 </style>
 
 <div class="news-details">
-	<span class="publication-date">Publication Date:${news.publicationDate}</span> <br>
+	<span class="publication-date">Publication Date: ${news.publicationDate}</span> <br>
     <hr>
     <h2 class="title">${news.title}</h2>
     <p class="brief">${news.brief}</p>
