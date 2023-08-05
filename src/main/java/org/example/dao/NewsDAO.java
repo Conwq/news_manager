@@ -1,10 +1,9 @@
 package org.example.dao;
 
-import org.example.bean.News;
+import org.example.entity.News;
 import org.example.dao.exception.DAOException;
 
 import java.util.List;
-import java.util.Locale;
 
 public interface NewsDAO {
 	List<News> getNewses() throws DAOException;

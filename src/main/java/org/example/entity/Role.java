@@ -1,4 +1,4 @@
-package org.example.bean;
+package org.example.entity;
 
 public enum Role {
 	USER,

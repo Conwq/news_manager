@@ -2,7 +2,7 @@ package org.example.service;
 
 import org.example.service.exception.ServiceException;
 
-import org.example.bean.User;
+import org.example.entity.User;
 
 public interface UserService {
 	User signIn(String login, String password) throws ServiceException;

@@ -1,27 +1,18 @@
-package org.example.bean;
+package org.example.entity;
 
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 
-@Entity
-@Table(name = "news")
 public class News implements Serializable{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "news_id")
 	private int id;
 
-	@Column(name = "title")
 	private String title;
 
-	@Column(name = "brief")
 	private String brief;
 
-	@Column(name = "content")
 	private String content;
 
-	@Column(name = "publication_date")
 	private String publicationDate;
 
 	public News() {

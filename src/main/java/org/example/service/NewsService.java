@@ -1,10 +1,9 @@
 package org.example.service;
 
-import org.example.bean.News;
+import org.example.entity.News;
 import org.example.service.exception.ServiceException;
 
 import java.util.List;
-import java.util.Locale;
 
 public interface NewsService {
 	List<News> getNewses() throws ServiceException;

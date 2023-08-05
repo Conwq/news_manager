@@ -11,8 +11,8 @@ import org.example.dao.exception.DAOException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
-import org.example.bean.Role;
-import org.example.bean.User;
+import org.example.entity.Role;
+import org.example.entity.User;
 
 @Repository
 public class UserDAOImpl implements UserDAO{

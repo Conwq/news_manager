@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.example.bean.User;
+import org.example.entity.User;
 import org.example.service.UserService;
 import org.example.service.exception.ServiceException;
 

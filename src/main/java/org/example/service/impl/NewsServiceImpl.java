@@ -1,6 +1,6 @@
 package org.example.service.impl;
 
-import org.example.bean.News;
+import org.example.entity.News;
 import org.example.dao.NewsDAO;
 import org.example.dao.exception.DAOException;
 import org.example.service.NewsService;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.IllegalFormatException;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class NewsServiceImpl implements NewsService {

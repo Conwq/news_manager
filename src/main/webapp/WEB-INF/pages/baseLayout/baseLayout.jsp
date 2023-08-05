@@ -124,7 +124,7 @@
 </main>
 
 <footer>
-    <p>All rights reserved &copy;</p>
+    <p>All privileges reserved &copy;</p>
 </footer>
 </body>
 </html>

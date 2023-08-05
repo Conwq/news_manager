@@ -8,7 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.example.bean.User;
+import org.example.entity.User;
 
 @Service
 public class UserServiceImpl implements UserService{

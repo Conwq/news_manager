@@ -1,5 +1,5 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page isELIgnored="false" pageEncoding="UTF-8" %>
 
 <c:set value="${sessionScope.role}" var="role"/>
@@ -11,13 +11,13 @@
         border-bottom: 1px solid #ddd;
         padding-bottom: 10px;
         word-wrap: break-word;
-        position: relative; 
+        position: relative;
     }
 
     .published-date {
-        position: absolute; 
-        top: 0; 
-        right: 0; 
+        position: absolute;
+        top: 0;
+        right: 0;
         font-size: 12px;
         color: #888;
     }

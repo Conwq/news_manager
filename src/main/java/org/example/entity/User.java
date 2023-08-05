@@ -1,31 +1,21 @@
-package org.example.bean;
+package org.example.entity;
 
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-@Entity
-@Table(name = "users")
 public class User implements Serializable{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
 	private int id;
 
-	@Column(name = "login")
 	private String login;
 
-	@Column(name = "email")
 	private String email;
 
-	@Column(name = "role_name")
 	private Role role;
 
-	@Column(name = "password")
 	private String password;
 
-	@Column(name = "registration_date")
 	private String registrationDate;
 	
 	public User() {
