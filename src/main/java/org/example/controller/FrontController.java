@@ -20,21 +20,19 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
 
 @Controller
 @RequestMapping("/news")
 public class FrontController {
 	private final NewsService newsService;
 	private final UserService userService;
-	
+
 	@Autowired
 	public FrontController(NewsService newsService, UserService userService) {
 		this.newsService = newsService;
 		this.userService = userService;
 	}
-	
+
 	@RequestMapping
 	public String goToBasePage(HttpServletRequest request,
 							   Model model) {
@@ -51,7 +49,7 @@ public class FrontController {
 			return "";
 		}
 	}
-	
+
 	@RequestMapping("/goToNewsList")
 	public String goToNewsList(@SessionAttribute("locale")Locale locale,
 							   Model model) {
@@ -86,7 +84,7 @@ public class FrontController {
 								   @SessionAttribute("locale") Locale locale,
 								   Model model) {
 		try {
-			News news = newsService.findById(id, locale);
+			News news = newsService.findById(id);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "editNews");
 			return "baseLayout/baseLayout";
@@ -103,28 +101,6 @@ public class FrontController {
 			return "redirect:/news/goToNewsList";
 		}
 		catch(ServiceException e) {
-			return "";
-		}
-	}
-
-	@RequestMapping("/doDeleteNews")
-	public String doDeleteNews(@RequestParam("id") String id) {
-		try {
-			newsService.deleteNewsById(id);
-			return "redirect:/news/goToNewsList";
-		}
-		catch(ServiceException e) {
-			return "";
-		}
-	}
-
-	@RequestMapping("/doDeleteSomeNews")
-	public String deleteSomeNews(@RequestParam("news") String[] news){
-		try {
-			newsService.deleteNews(news);
-			return "redirect:/news/goToNewsList";
-		}
-		catch(ServiceException e){
 			return "";
 		}
 	}
@@ -146,6 +122,40 @@ public class FrontController {
 		catch (ServiceException e){
 			return "";
 		}
+	}
+
+	@RequestMapping("/doDeleteNews")
+	public String doDeleteNews(@RequestParam("id") String id) {
+		try {
+			newsService.deleteNewsById(id);
+			return "redirect:/news/goToNewsList";
+		}
+		catch(ServiceException e) {
+			return "";
+		}
+	}
+
+	@RequestMapping("/doDeleteSomeNews")
+	public String deleteNewsList(@RequestParam("news") String[] news){
+		try {
+			newsService.deleteNewsList(news);
+			return "redirect:/news/goToNewsList";
+		}
+		catch(ServiceException e){
+			return "";
+		}
+	}
+
+	@RequestMapping("/changeLocale")
+	public String changeLocale(HttpServletRequest request) throws URISyntaxException {
+		request.getSession().setAttribute("localization", request.getParameter("localization"));
+		request.getSession().setAttribute("locale", new Locale(request.getParameter("localization")));
+		URI uri = new URI(request.getHeader("referer"));
+		String path = uri.getPath();
+		if(uri.getQuery() != null){
+			path += "?" + uri.getQuery();
+		}
+		return "redirect:" + path;
 	}
 
 	@RequestMapping("/goToRegistrationPage")
@@ -197,17 +207,5 @@ public class FrontController {
 		catch(IllegalStateException e) {
 			return "";
 		}
-	}
-
-	@RequestMapping("/changeLocale")
-	public String changeLocale(HttpServletRequest request) throws URISyntaxException {
-		request.getSession().setAttribute("localization", request.getParameter("localization"));
-		request.getSession().setAttribute("locale", new Locale(request.getParameter("localization")));
-		URI uri = new URI(request.getHeader("referer"));
-		String path = uri.getPath();
-		if(uri.getQuery() != null){
-			path += "?" + uri.getQuery();
-		}
-		return "redirect:" + path;
 	}
 }

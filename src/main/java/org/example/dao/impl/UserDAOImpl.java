@@ -67,8 +67,6 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	public void registration(User user) throws DAOException{
 		try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_REGISTRATION_USER, PreparedStatement.RETURN_GENERATED_KEYS)){
-			connection.setAutoCommit(false);
-
 			preparedStatement.setString(1, user.getEmail());
 			preparedStatement.setString(2, user.getLogin());
 			preparedStatement.setString(3, user.getPassword());
@@ -84,9 +82,6 @@ public class UserDAOImpl implements UserDAO{
 			preparedStatement1.setString(2, user.getLocale().getCountry());
 			preparedStatement1.setString(3, user.getLocale().getLanguage());
 			preparedStatement1.executeUpdate();
-
-			connection.commit();
-			connection.setAutoCommit(true);
 		}
 		catch(SQLException e) {
 			throw new DAOException(e);

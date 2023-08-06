@@ -5,26 +5,34 @@ import org.example.dao.NewsDAO;
 import org.example.dao.exception.DAOException;
 import org.example.service.NewsService;
 import org.example.service.exception.ServiceException;
+import org.example.util.DateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Locale;
 
 @Service
 public class NewsServiceImpl implements NewsService {
-	private NewsDAO newsDAO;
+	private final NewsDAO newsDAO;
+	private final DateConverter dateConverter;
 	
 	@Autowired
-	public NewsServiceImpl(NewsDAO newsDAO) {
+	public NewsServiceImpl(NewsDAO newsDAO, DateConverter dateConverter) {
 		this.newsDAO = newsDAO;
+		this.dateConverter = dateConverter;
 	}
 
 	@Override
+	@Transactional
 	public List<News> getNewses(Locale locale) throws ServiceException{
 		try {
-			return newsDAO.getNewses(locale);
+			List<News> newsList = newsDAO.getNewses();
+			dateConverter.getFormatDateToNewsList(newsList, locale);
+			return newsList;
 		}
 		catch(DAOException e) {
 			throw new ServiceException(e);
@@ -32,21 +40,27 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
+	@Transactional
 	public List<News> getNewses(String count, Locale locale) throws ServiceException{
 		try {
-			int c = Integer.parseInt(count);
-			return newsDAO.getNewses(c, locale);
+			int countNews = Integer.parseInt(count);
+			List<News> newsList = newsDAO.getNewses(countNews);
+			dateConverter.getFormatDateToNewsList(newsList, locale);
+			return newsList;
 		}
 		catch(IllegalFormatException | DAOException e) {
 			throw new ServiceException(e);
 		}
 	}
-	
+
 	@Override
+	@Transactional
 	public News findById(String id, Locale locale) throws ServiceException{
 		try {
 			int newsId = Integer.parseInt(id);
-			return newsDAO.findById(newsId, locale);
+			News news = newsDAO.findById(newsId);
+			dateConverter.getFormatDateByNews(news, locale);
+			return news;
 		}
 		catch(IllegalArgumentException | DAOException e) {
 			throw new ServiceException(e);
@@ -54,6 +68,19 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
+	@Transactional
+	public News findById(String id) throws ServiceException{
+		try {
+			int newsId = Integer.parseInt(id);
+			return newsDAO.findById(newsId);
+		}
+		catch(IllegalArgumentException | DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	@Transactional
 	public void editNews(News news) throws ServiceException {
 		try {
 			newsDAO.editNews(news);
@@ -64,6 +91,19 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
+	@Transactional
+	public void addNews(News news) throws ServiceException {
+		try{
+			dateConverter.formatPublishDateToSave(news);
+			newsDAO.addNews(news);
+		}
+		catch (DAOException e){
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	@Transactional
 	public void deleteNewsById(String id) throws ServiceException {
 		try {
 			int newsId = Integer.parseInt(id);
@@ -75,25 +115,17 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public void deleteNews(String[] news) throws ServiceException {
+	@Transactional
+	public void deleteNewsList(String[] news) throws ServiceException {
 		try{
-			int[] someId = new int[news.length];
-			for (int i = 0; i < news.length; i++) {
-				someId[i] = Integer.parseInt(news[i]);
+			List<Integer> idList = new ArrayList<>(news.length);
+			for (String newsStr: news){
+				Integer x = Integer.parseInt(newsStr);
+				idList.add(x);
 			}
-			newsDAO.deleteNews(someId);
+			newsDAO.deleteNewsList(idList);
 		}
 		catch (DAOException | IllegalArgumentException e){
-			throw new ServiceException(e);
-		}
-	}
-
-	@Override
-	public void addNews(News news) throws ServiceException {
-		try{
-			newsDAO.addNews(news);
-		}
-		catch (DAOException e){
 			throw new ServiceException(e);
 		}
 	}

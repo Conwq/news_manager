@@ -1,204 +1,107 @@
 package org.example.dao.impl;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
+import org.example.bean.News;
 import org.example.dao.NewsDAO;
 import org.example.dao.exception.DAOException;
-import org.example.util.DateConverter;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import org.example.bean.News;
+import javax.persistence.Query;
+import java.util.List;
 
 @Repository
 public class NewsDAOImpl implements NewsDAO{
-	private Connection connection;
-	private final DateConverter dateConverter;
-	
-	{
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/news_manager", "root", "1");
-		}
-		catch(ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
+	private final SessionFactory sessionFactory;
 
 	@Autowired
-	public NewsDAOImpl (DateConverter dateConverter){
-		this.dateConverter = dateConverter;
+	public NewsDAOImpl (SessionFactory sessionFactory){
+		this.sessionFactory = sessionFactory;
 	}
-	
-	private static final String SQL_GET_ALL_NEWSES = "SELECT * FROM news ORDER BY publication_date DESC";
+
 	@Override
-	public List<News> getNewses(Locale locale) throws DAOException{
-		ResultSet resultSet = null;
-		try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_ALL_NEWSES)){
-			List<News> newses = new ArrayList<>();
-			resultSet = preparedStatement.executeQuery();
-			while(resultSet.next()) {
-				News news = new News();
-				news.setId(resultSet.getInt("news_id"));
-				news.setTitle(resultSet.getString("title"));
-				news.setBrief(resultSet.getString("brief"));
-				news.setContent(resultSet.getString("content"));
-				String formatDate = dateConverter.getFormatDateByNewsList(resultSet.getString("publication_date"), locale);
-				news.setPublicationDate(formatDate);
-				newses.add(news);
-			}
-			return newses;
+	public List<News> getNewses() throws DAOException{
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			List<News> newsList = session.createQuery("FROM News ORDER BY publicationDate DESC", News.class)
+					.getResultList();
+			session.clear();
+			return newsList;
 		}
-		catch(SQLException e) {
-			throw new DAOException();
-		}
-		finally {
-			if(resultSet != null) {
-				try {
-					resultSet.close();
-				} 
-				catch (SQLException e) {
-					throw new DAOException();
-				}
-			}
-		}
-	}
-	
-	private static final String SQL_GET_COUNT_NEWS = "SELECT * FROM news ORDER BY publication_date DESC LIMIT ?";
-	@Override
-	public List<News> getNewses(int count, Locale locale) throws DAOException{
-		ResultSet resultSet = null;
-		try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_COUNT_NEWS)){
-			List<News> newses = new ArrayList<>();
-			preparedStatement.setInt(1, count);
-			resultSet = preparedStatement.executeQuery();
-			while(resultSet.next()) {
-				News news = new News();
-				news.setId(resultSet.getInt("news_id"));
-				news.setTitle(resultSet.getString("title"));
-				news.setBrief(resultSet.getString("brief"));
-				news.setContent(resultSet.getString("content"));
-				String formatDate = dateConverter.getFormatDateByNewsList(resultSet.getString("publication_date"), locale);
-				news.setPublicationDate(formatDate);
-				newses.add(news);
-			}
-			return newses;
-		}
-		catch(SQLException e) {
+		catch (HibernateException e){
 			throw new DAOException(e);
 		}
-		finally {
-			if(resultSet != null) {
-				try {
-					resultSet.close();
-				} 
-				catch (SQLException e) {
-					throw new DAOException();
-				}
-			}
-		}
 	}
-	
-	private static final String SQL_GET_NEWS_BY_ID = "SELECT * FROM news WHERE news_id = ?";
+
 	@Override
-	public News findById(int id, Locale locale) throws DAOException {
-		try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_NEWS_BY_ID)) {
-			preparedStatement.setInt(1, id);
-			ResultSet resultSet = preparedStatement.executeQuery();
-			if(!resultSet.next()) {
-				throw new DAOException("News with current id not found");
-			}
-			News news = new News();
-			news.setId(resultSet.getInt("news_id"));
-			news.setTitle(resultSet.getString("title"));
-			news.setBrief(resultSet.getString("brief"));
-			news.setContent(resultSet.getString("content"));
-			String dateFormat = dateConverter.getFormatDateByNews(resultSet.getString("publication_date"), locale);
-			news.setPublicationDate(dateFormat);
+	public List<News> getNewses(int count) throws DAOException{
+		Session session = sessionFactory.getCurrentSession();
+		List<News> newsList = session.createQuery("FROM News ORDER BY publicationDate DESC", News.class)
+				.setMaxResults(count).getResultList();
+		session.clear();
+		return newsList;
+	}
+
+	@Override
+	public News findById(int id) throws DAOException {
+		try{
+			Session session = sessionFactory.getCurrentSession();
+			News news = session.get(News.class, id);
+			session.clear();
 			return news;
 		}
-		catch(SQLException e) {
+		catch (HibernateException e){
 			throw new DAOException(e);
 		}
 	}
-	
-	private static final String SQL_EDIT_NEWS = "UPDATE news SET title=?, brief=?, content=? WHERE news_id=?";
+
 	@Override
 	public void editNews(News news) throws DAOException {
-		try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_EDIT_NEWS)){
-			preparedStatement.setString(1, news.getTitle());
-			preparedStatement.setString(2, news.getBrief());
-			preparedStatement.setString(3, news.getContent());
-			preparedStatement.setInt(4, news.getId());
-			
-			preparedStatement.executeUpdate();
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			session.update(news);
 		}
-		catch(SQLException e) {
-			throw new DAOException(e);
-		}
-	}
-	
-	private static final String SQL_DELETE_NEWS = "DELETE FROM news WHERE news_id=?";
-	@Override
-	public void deleteNewsById(int newsId) throws DAOException {
-		try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_NEWS)){
-			preparedStatement.setInt(1, newsId);
-			
-			preparedStatement.executeUpdate();
-		}
-		catch(SQLException e) {
+		catch (HibernateException e){
 			throw new DAOException(e);
 		}
 	}
 
-	private static final String SQL_DELETE_SOME_NEWS = "DELETE FROM news WHERE news_id IN (%s)";
-	@Override
-	public void deleteNews(int[] someId) throws DAOException {
-		String parameter = preparedParameter(someId);
-		try (PreparedStatement preparedStatement = connection.prepareStatement(String.format(SQL_DELETE_SOME_NEWS, parameter))){
-			for (int i = 0; i < someId.length; i++) {
-				preparedStatement.setInt(i + 1, someId[i]);
-			}
-			preparedStatement.executeUpdate();
-		}
-		catch (SQLException e){
-			throw new DAOException(e);
-		}
-	}
-
-	private String preparedParameter(int[] someId){
-		StringBuilder stringBuilder = new StringBuilder();
-		for (int i = 0; i < someId.length; i++) {
-			if (someId.length - 1 == i){
-				stringBuilder.append("?");
-				break;
-			}
-			stringBuilder.append("?,");
-		}
-		return stringBuilder.toString();
-	}
-
-	private static final String SQL_ADD_NEWS = "INSERT INTO news (title, brief, content) VALUE (?,?,?)";
 	@Override
 	public void addNews(News news) throws DAOException {
-		try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_NEWS)) {
-			preparedStatement.setString(1, news.getTitle());
-			preparedStatement.setString(2, news.getBrief());
-			preparedStatement.setString(3, news.getContent());
-
-			preparedStatement.executeUpdate();
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			session.save(news);
 		}
-		catch (SQLException e){
+		catch (HibernateException e){
+			throw new DAOException(e);
+		}
+	}
+
+	@Override
+	public void deleteNewsById(int newsId) throws DAOException {
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query query = session.createQuery("DELETE FROM News WHERE id=:newsId");
+			query.setParameter("newsId", newsId);
+			query.executeUpdate();
+		}
+		catch (HibernateException e){
+			throw new DAOException(e);
+		}
+	}
+
+	@Override
+	public void deleteNewsList(List<Integer> idList) throws DAOException {
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			session.createQuery("DELETE FROM News WHERE id IN (:id)")
+					.setParameterList("id", idList)
+					.executeUpdate();
+			session.flush();
+		}
+		catch (HibernateException e){
 			throw new DAOException(e);
 		}
 	}

@@ -53,6 +53,4 @@
         <input type="hidden" name="localization" value="ru"/>
         <button type="submit">${ru_button}</button>
     </form>
-
-    <% System.out.println(session.getAttribute("localization"));%>
 </div>

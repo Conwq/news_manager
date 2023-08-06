@@ -83,6 +83,7 @@
     <h2>${edit_text}</h2>
     <form:form action="${pageContext.request.contextPath}/news/doEditNews" method="post" modelAttribute="news">
         <form:hidden path="id" value="${news.id}"/>
+        <form:hidden path="publicationDate" value="${news.publicationDate}"/>
 
         <label for="title">${title_text}</label>
         <form:input path="title" id="title" value="${news.title}"/>
