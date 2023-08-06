@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 @Controller
 @RequestMapping("/news")
@@ -32,15 +36,18 @@ public class FrontController {
 	}
 	
 	@RequestMapping
-	public String goToBasePage(Model model) {
+	public String goToBasePage(HttpServletRequest request,
+							   Model model) {
 		try {
-			List<News> news = newsService.getNewses("5", LocaleContextHolder.getLocale());
+			String localeParameter = (String) request.getSession().getAttribute("localization");
+			Locale locale = localeParameter == null ? LocaleContextHolder.getLocale() : new Locale(localeParameter);
+
+			List<News> news = newsService.getNewses("5", locale);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
 		}
 		catch(ServiceException e){
-			e.printStackTrace();
 			return "";
 		}
 	}
@@ -70,7 +77,6 @@ public class FrontController {
 			return "baseLayout/baseLayout";
 		}
 		catch(ServiceException e) {
-			e.printStackTrace();
 			return "";
 		}
 	}
@@ -86,7 +92,6 @@ public class FrontController {
 			return "baseLayout/baseLayout";
 		}
 		catch(ServiceException e) {
-			e.printStackTrace();
 			return "";
 		}
 	}
@@ -98,7 +103,6 @@ public class FrontController {
 			return "redirect:/news/goToNewsList";
 		}
 		catch(ServiceException e) {
-			e.printStackTrace();
 			return "";
 		}
 	}
@@ -110,7 +114,6 @@ public class FrontController {
 			return "redirect:/news/goToNewsList";
 		}
 		catch(ServiceException e) {
-			e.printStackTrace();
 			return "";
 		}
 	}
@@ -141,7 +144,6 @@ public class FrontController {
 			return "redirect:/news/goToNewsList";
 		}
 		catch (ServiceException e){
-			e.printStackTrace();
 			return "";
 		}
 	}
@@ -164,7 +166,6 @@ public class FrontController {
 			return "redirect:/news";
 		}
 		catch(ServiceException e) {
-			e.printStackTrace();
 			return "";
 		}
 	}
@@ -179,10 +180,10 @@ public class FrontController {
 			session.setAttribute("active", "true");
 			session.setAttribute("role", user.getRoleName());
 			session.setAttribute("locale", user.getLocale());
+			session.setAttribute("localization", user.getLocale().getLanguage());
 			return "redirect:/news/goToNewsList";
 		}
 		catch(ServiceException e) {
-			e.printStackTrace();
 			return "";
 		}
 	}
@@ -196,5 +197,17 @@ public class FrontController {
 		catch(IllegalStateException e) {
 			return "";
 		}
+	}
+
+	@RequestMapping("/changeLocale")
+	public String changeLocale(HttpServletRequest request) throws URISyntaxException {
+		request.getSession().setAttribute("localization", request.getParameter("localization"));
+		request.getSession().setAttribute("locale", new Locale(request.getParameter("localization")));
+		URI uri = new URI(request.getHeader("referer"));
+		String path = uri.getPath();
+		if(uri.getQuery() != null){
+			path += "?" + uri.getQuery();
+		}
+		return "redirect:" + path;
 	}
 }

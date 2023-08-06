@@ -1,5 +1,9 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 <%@ page isELIgnored="false" pageEncoding="UTF-8" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setLocale value="${sessionScope.localization}"/>
+<fmt:setBundle basename="locales.locale" var="loc"/>
 
 <style>
     .comments-container {

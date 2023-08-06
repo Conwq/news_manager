@@ -1,7 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
          pageEncoding="utf-8" isELIgnored="false" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<fmt:setLocale value="${sessionScope.localization}"/>
+<fmt:setBundle basename="locales.locale" var="loc"/>
+
+<fmt:message bundle="${loc}" key="locale.manager_menu.text.welcome_in_news_manager" var="welcome_text"/>
+<fmt:message bundle="${loc}" key="locale.manager_menu.text.registration" var="registration_text"/>
+<fmt:message bundle="${loc}" key="locale.header.text.news_manager" var="news_manager_text"/>
+<fmt:message bundle="${loc}" key="locale.footer.text.reserved" var="fot"/>
 
 <c:set value="${sessionScope.active}" var="active"/>
 
@@ -10,7 +18,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News manager</title>
+    <title>${news_manager_text}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -90,8 +98,8 @@
 <main>
     <div id="newsManagementMenu">
         <c:if test="${not (active eq 'true')}">
-            <h2>Welcome in news manager!</h2>
-            <a href="${pageContext.request.contextPath}/news/goToRegistrationPage">If you want to register click here</a>
+            <h2>${welcome_text}</h2>
+            <a href="${pageContext.request.contextPath}/news/goToRegistrationPage">${registration_text}</a>
         </c:if>
 
         <c:if test="${active eq 'true'}">
@@ -131,7 +139,7 @@
 </main>
 
 <footer>
-    <p>All privileges reserved &copy;</p>
+    <p>${fot}&copy;</p>
 </footer>
 </body>
 </html>
