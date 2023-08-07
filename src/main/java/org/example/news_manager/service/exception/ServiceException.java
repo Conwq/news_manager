@@ -1,4 +1,4 @@
-package org.example.service.exception;
+package org.example.news_manager.service.exception;
 
 public class ServiceException extends Exception{
 	public ServiceException() {super();}

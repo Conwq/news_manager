@@ -1,6 +1,6 @@
-package org.example.util;
+package org.example.news_manager.util;
 
-import org.example.bean.News;
+import org.example.news_manager.bean.News;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 

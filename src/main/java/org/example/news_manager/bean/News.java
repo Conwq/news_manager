@@ -1,4 +1,4 @@
-package org.example.bean;
+package org.example.news_manager.bean;
 
 import javax.persistence.*;
 import java.io.Serializable;

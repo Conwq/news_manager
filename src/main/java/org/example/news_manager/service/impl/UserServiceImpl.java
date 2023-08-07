@@ -1,14 +1,14 @@
-package org.example.service.impl;
+package org.example.news_manager.service.impl;
 
-import org.example.dao.UserDAO;
-import org.example.dao.exception.DAOException;
-import org.example.service.UserService;
-import org.example.service.exception.ServiceException;
+import org.example.news_manager.dao.UserDAO;
+import org.example.news_manager.dao.exception.DAOException;
+import org.example.news_manager.service.UserService;
+import org.example.news_manager.service.exception.ServiceException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.example.bean.User;
+import org.example.news_manager.bean.User;
 
 import java.util.Locale;
 

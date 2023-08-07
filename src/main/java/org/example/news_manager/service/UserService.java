@@ -1,8 +1,8 @@
-package org.example.service;
+package org.example.news_manager.service;
 
-import org.example.service.exception.ServiceException;
+import org.example.news_manager.service.exception.ServiceException;
 
-import org.example.bean.User;
+import org.example.news_manager.bean.User;
 
 public interface UserService {
 	User signIn(String login, String password) throws ServiceException;

@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.news_manager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -6,9 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.example.bean.User;
-import org.example.service.UserService;
-import org.example.service.exception.ServiceException;
+import org.example.news_manager.bean.User;
+import org.example.news_manager.service.UserService;
+import org.example.news_manager.service.exception.ServiceException;
 
 @Controller
 @RequestMapping("/user")

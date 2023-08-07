@@ -1,11 +1,11 @@
-package org.example.service.impl;
+package org.example.news_manager.service.impl;
 
-import org.example.bean.News;
-import org.example.dao.NewsDAO;
-import org.example.dao.exception.DAOException;
-import org.example.service.NewsService;
-import org.example.service.exception.ServiceException;
-import org.example.util.DateConverter;
+import org.example.news_manager.bean.News;
+import org.example.news_manager.dao.NewsDAO;
+import org.example.news_manager.dao.exception.DAOException;
+import org.example.news_manager.service.NewsService;
+import org.example.news_manager.service.exception.ServiceException;
+import org.example.news_manager.util.DateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

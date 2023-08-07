@@ -1,8 +1,8 @@
-package org.example.dao.impl;
+package org.example.news_manager.dao.impl;
 
-import org.example.bean.News;
-import org.example.dao.NewsDAO;
-import org.example.dao.exception.DAOException;
+import org.example.news_manager.bean.News;
+import org.example.news_manager.dao.NewsDAO;
+import org.example.news_manager.dao.exception.DAOException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

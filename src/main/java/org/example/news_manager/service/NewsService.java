@@ -1,7 +1,7 @@
-package org.example.service;
+package org.example.news_manager.service;
 
-import org.example.bean.News;
-import org.example.service.exception.ServiceException;
+import org.example.news_manager.bean.News;
+import org.example.news_manager.service.exception.ServiceException;
 
 import java.util.List;
 import java.util.Locale;

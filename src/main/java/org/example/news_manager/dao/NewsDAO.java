@@ -1,7 +1,7 @@
-package org.example.dao;
+package org.example.news_manager.dao;
 
-import org.example.bean.News;
-import org.example.dao.exception.DAOException;
+import org.example.news_manager.bean.News;
+import org.example.news_manager.dao.exception.DAOException;
 
 import java.util.List;
 

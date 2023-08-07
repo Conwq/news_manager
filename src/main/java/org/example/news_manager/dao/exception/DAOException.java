@@ -1,4 +1,4 @@
-package org.example.dao.exception;
+package org.example.news_manager.dao.exception;
 
 public class DAOException extends Exception{
 	public DAOException() {super();}

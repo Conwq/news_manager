@@ -1,4 +1,4 @@
-package org.example.dao.impl;
+package org.example.news_manager.dao.impl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,13 +7,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
 
-import org.example.dao.UserDAO;
-import org.example.dao.exception.DAOException;
+import org.example.news_manager.dao.UserDAO;
+import org.example.news_manager.dao.exception.DAOException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
-import org.example.bean.Role;
-import org.example.bean.User;
+import org.example.news_manager.bean.Role;
+import org.example.news_manager.bean.User;
 
 @Repository
 public class UserDAOImpl implements UserDAO{
