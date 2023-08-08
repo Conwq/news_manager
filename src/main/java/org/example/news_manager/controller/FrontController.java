@@ -1,7 +1,15 @@
 package org.example.news_manager.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.example.news_manager.bean.News;
-import org.example.news_manager.bean.User;
+import org.example.news_manager.bean.UserBean;
 import org.example.news_manager.service.NewsService;
 import org.example.news_manager.service.UserService;
 import org.example.news_manager.service.exception.ServiceException;
@@ -13,13 +21,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/news")
@@ -160,19 +161,19 @@ public class FrontController {
 
 	@RequestMapping("/goToRegistrationPage")
 	public String showRegistrationPage(Model model) {
-		User user = new User();
-		model.addAttribute("user", user);
+		UserBean userBean = new UserBean();
+		model.addAttribute("user", userBean);
 		model.addAttribute("action", "registrationPage");
 		return "baseLayout/baseLayout";
 	}
 
 	@RequestMapping("/doRegistrationUser")
-	public String doRegistration(@ModelAttribute("user") User user,
+	public String doRegistration(@ModelAttribute("user") UserBean userBean,
 								 @RequestParam("confirmPassword") String confirmPassword,
-								 @RequestParam("country") String country) {
+								 @RequestParam("loc") int localeId) {
 		try {
 
-			userService.registration(user, confirmPassword, country);
+			userService.registration(userBean, confirmPassword, localeId);
 			return "redirect:/news";
 		}
 		catch(ServiceException e) {
@@ -185,12 +186,12 @@ public class FrontController {
 						   @RequestParam("password") String password,
 						   HttpServletRequest request) {
 		try {
-			User user = userService.signIn(login, password);
+			UserBean userBean = userService.signIn(login, password);
 			HttpSession session = request.getSession(true);
 			session.setAttribute("active", "true");
-			session.setAttribute("role", user.getRoleName());
-			session.setAttribute("locale", user.getLocale());
-			session.setAttribute("localization", user.getLocale().getLanguage());
+			session.setAttribute("role", userBean.getRoleName());
+			session.setAttribute("locale", userBean.getLocale());
+			session.setAttribute("localization", userBean.getLocale().getLanguage());
 			return "redirect:/news/goToNewsList";
 		}
 		catch(ServiceException e) {

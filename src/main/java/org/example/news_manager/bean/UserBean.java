@@ -4,21 +4,20 @@ import java.io.Serializable;
 import java.util.Locale;
 import java.util.Objects;
 
-public class User implements Serializable{
+public class UserBean implements Serializable{
 	private int id;
+	
+	private String email;
 
 	private String login;
 
-	private String email;
-
-	private Role role;
-
 	private String password;
 
-	private String registrationDate;
 	private Locale locale;
 	
-	public User() {
+	private Role role;
+	
+	public UserBean() {
 	}
 	
 	public int getId() {
@@ -73,17 +72,9 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
-	public String getRegistrationDate() {
-		return registrationDate;
-	}
-
-	public void setRegistrationDate(String registrationDate) {
-		this.registrationDate = registrationDate;
-	}
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, login);
+		return Objects.hash(email, id, locale, login, password, role);
 	}
 
 	@Override
@@ -94,12 +85,14 @@ public class User implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
-		return Objects.equals(email, other.email) && Objects.equals(login, other.login);
+		UserBean other = (UserBean) obj;
+		return Objects.equals(email, other.email) && id == other.id && Objects.equals(locale, other.locale)
+				&& Objects.equals(login, other.login) && Objects.equals(password, other.password) && role == other.role;
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getName() + " [id=" + id + ", login=" + login + ", email=" + email + "]";
+		return "UserBean [id=" + id + ", email=" + email + ", login=" + login + ", password=" + password + ", locale="
+				+ locale + ", role=" + role + "]";
 	}
 }
