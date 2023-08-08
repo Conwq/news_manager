@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "news")
-public class Newss implements Serializable {
+public class NewsEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +15,7 @@ public class Newss implements Serializable {
 
 	@Column(name = "title")
 	private String title;
+	
 	@Column(name = "brief")
 	private String brief;
 
@@ -24,8 +25,7 @@ public class Newss implements Serializable {
 	@Column(name = "publication_date")
 	private String publicationDate;
 
-	public Newss(){
-
+	public NewsEntity(){
 	}
 
 	public int getId() {
@@ -72,8 +72,8 @@ public class Newss implements Serializable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Newss newss = (Newss) o;
-		return id == newss.id && Objects.equals(title, newss.title) && Objects.equals(brief, newss.brief) && Objects.equals(content, newss.content) && Objects.equals(publicationDate, newss.publicationDate);
+		NewsEntity newsEntity = (NewsEntity) o;
+		return id == newsEntity.id && Objects.equals(title, newsEntity.title) && Objects.equals(brief, newsEntity.brief) && Objects.equals(content, newsEntity.content) && Objects.equals(publicationDate, newsEntity.publicationDate);
 	}
 
 	@Override
