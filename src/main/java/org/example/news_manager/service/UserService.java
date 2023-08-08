@@ -7,5 +7,5 @@ import org.example.news_manager.entity.UserEntity;
 
 public interface UserService {
 	UserBean signIn(String login, String password) throws ServiceException;
-	void registration(UserBean userBean, String confirmPassword, int locId) throws ServiceException;
+	void registration(UserBean userBean, String confirmPassword, int localId) throws ServiceException;
 }

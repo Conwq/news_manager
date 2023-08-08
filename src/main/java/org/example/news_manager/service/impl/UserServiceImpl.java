@@ -54,7 +54,6 @@ public class UserServiceImpl implements UserService{
 			UserEntity userEntity = userMapper.convertToUserEntity(userBean);
 			LocaleEntity localeEntity = userDAO.getLocaleById(localeId);
 			RoleEntity roleEntity = userDAO.getRoleUser(1);
-			
 			userDAO.registration(userEntity);
 		}
 		catch(DAOException e) {
