@@ -1,23 +1,17 @@
-package org.example.news_manager.bean;
+package org.example.news_manager.dto;
 
 import java.io.Serializable;
 import java.util.Locale;
-import java.util.Objects;
 
-public class UserBean implements Serializable{
+public class UserDTO implements Serializable{
 	private int id;
-	
 	private String email;
-
 	private String login;
-
 	private String password;
-
 	private Locale locale;
-	
 	private Role role;
 	
-	public UserBean() {
+	public UserDTO() {
 	}
 	
 	public int getId() {
@@ -70,24 +64,6 @@ public class UserBean implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(email, id, locale, login, password, role);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UserBean other = (UserBean) obj;
-		return Objects.equals(email, other.email) && id == other.id && Objects.equals(locale, other.locale)
-				&& Objects.equals(login, other.login) && Objects.equals(password, other.password) && role == other.role;
 	}
 
 	@Override

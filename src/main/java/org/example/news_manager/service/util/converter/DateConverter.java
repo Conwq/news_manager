@@ -1,6 +1,6 @@
-package org.example.news_manager.util;
+package org.example.news_manager.service.util.converter;
 
-import org.example.news_manager.bean.News;
+import org.example.news_manager.dto.NewsDTO;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -14,29 +14,7 @@ import java.util.Locale;
 @Component
 public class DateConverter {
 
-	public String getFormatDateByNews(String date, Locale locale){
-		if (locale == null){
-			locale = LocaleContextHolder.getLocale();
-		}
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
-		return localDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(locale));
-	}
-
-	public String getFormatDateByNewsList(String date, Locale locale){
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		LocalDateTime datePublication = LocalDateTime.parse(date, formatter);
-
-		LocalDate dateNews = datePublication.toLocalDate();
-		LocalDate dateNow = LocalDate.now();
-
-		if (dateNews.isBefore(dateNow)){
-			return datePublication.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale));
-		}
-		return datePublication.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(locale));
-	}
-
-	public void getFormatDateByNews(News news, Locale locale){
+	public void getFormatDateByNews(NewsDTO news, Locale locale){
 		String date = news.getPublicationDate();
 		if (locale == null){
 			locale = LocaleContextHolder.getLocale();
@@ -47,8 +25,8 @@ public class DateConverter {
 		news.setPublicationDate(formatDate);
 	}
 
-	public void getFormatDateToNewsList(List<News> newsList, Locale locale){
-		for (News news: newsList) {
+	public void getFormatDateToNewsList(List<NewsDTO> newsList, Locale locale){
+		for (NewsDTO news: newsList) {
 			String date = news.getPublicationDate();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			LocalDateTime datePublication = LocalDateTime.parse(date, formatter);
@@ -63,7 +41,7 @@ public class DateConverter {
 		}
 	}
 
-	public void formatPublishDateToSave(News news){
+	public void formatPublishDateToSave(NewsDTO news){
 		LocalDateTime localDateTime = LocalDateTime.now();
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String format = localDateTime.format(dateTimeFormatter);

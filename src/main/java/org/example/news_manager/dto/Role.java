@@ -1,4 +1,4 @@
-package org.example.news_manager.bean;
+package org.example.news_manager.dto;
 
 public enum Role {
 	USER,

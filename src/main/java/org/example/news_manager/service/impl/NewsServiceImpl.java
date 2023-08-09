@@ -1,12 +1,15 @@
 package org.example.news_manager.service.impl;
 
-import org.example.news_manager.bean.News;
 import org.example.news_manager.dao.NewsDAO;
 import org.example.news_manager.dao.exception.DAOException;
+import org.example.news_manager.dto.NewsDTO;
+import org.example.news_manager.entity.NewsEntity;
 import org.example.news_manager.service.NewsService;
 import org.example.news_manager.service.exception.ServiceException;
-import org.example.news_manager.util.DateConverter;
+import org.example.news_manager.service.util.converter.DateConverter;
+import org.example.news_manager.service.util.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,20 +22,21 @@ import java.util.Locale;
 public class NewsServiceImpl implements NewsService {
 	private final NewsDAO newsDAO;
 	private final DateConverter dateConverter;
+	private final Mapper<NewsDTO, NewsEntity> mapper;
 	
 	@Autowired
-	public NewsServiceImpl(NewsDAO newsDAO, DateConverter dateConverter) {
+	public NewsServiceImpl(NewsDAO newsDAO, DateConverter dateConverter,
+						   @Qualifier("newsMapper") Mapper<NewsDTO, NewsEntity> mapper) {
 		this.newsDAO = newsDAO;
 		this.dateConverter = dateConverter;
+		this.mapper = mapper;
 	}
 
 	@Override
 	@Transactional
-	public List<News> getNewses(Locale locale) throws ServiceException{
+	public List<NewsDTO> getNewses(Locale locale) throws ServiceException{
 		try {
-			List<News> newsList = newsDAO.getNewses();
-			dateConverter.getFormatDateToNewsList(newsList, locale);
-			return newsList;
+			return getDTOConvertedNewsListInLocaleFormat(newsDAO.getNewses(), locale);
 		}
 		catch(DAOException e) {
 			throw new ServiceException(e);
@@ -41,26 +45,35 @@ public class NewsServiceImpl implements NewsService {
 
 	@Override
 	@Transactional
-	public List<News> getNewses(String count, Locale locale) throws ServiceException{
+	public List<NewsDTO> getNewses(String count, Locale locale) throws ServiceException{
 		try {
 			int countNews = Integer.parseInt(count);
-			List<News> newsList = newsDAO.getNewses(countNews);
-			dateConverter.getFormatDateToNewsList(newsList, locale);
-			return newsList;
+			return getDTOConvertedNewsListInLocaleFormat(newsDAO.getNewses(countNews), locale);
 		}
 		catch(IllegalFormatException | DAOException e) {
 			throw new ServiceException(e);
 		}
 	}
 
+	private List<NewsDTO> getDTOConvertedNewsListInLocaleFormat(List<NewsEntity> newsEntities, Locale locale){
+		List<NewsDTO> newsDTOList = new ArrayList<>(newsEntities.size());
+		for (NewsEntity entity: newsEntities){
+			NewsDTO newsDTO = mapper.mapToDTO(entity);
+			newsDTOList.add(newsDTO);
+		}
+		dateConverter.getFormatDateToNewsList(newsDTOList, locale);
+		return newsDTOList;
+	}
+
 	@Override
 	@Transactional
-	public News findById(String id, Locale locale) throws ServiceException{
+	public NewsDTO findById(String id, Locale locale) throws ServiceException{
 		try {
 			int newsId = Integer.parseInt(id);
-			News news = newsDAO.findById(newsId);
-			dateConverter.getFormatDateByNews(news, locale);
-			return news;
+			NewsEntity newsEntity = newsDAO.findById(newsId);
+			NewsDTO newsDTO = mapper.mapToDTO(newsEntity);
+			dateConverter.getFormatDateByNews(newsDTO, locale);
+			return newsDTO;
 		}
 		catch(IllegalArgumentException | DAOException e) {
 			throw new ServiceException(e);
@@ -69,10 +82,11 @@ public class NewsServiceImpl implements NewsService {
 
 	@Override
 	@Transactional
-	public News findById(String id) throws ServiceException{
+	public NewsDTO findById(String id) throws ServiceException{
 		try {
 			int newsId = Integer.parseInt(id);
-			return newsDAO.findById(newsId);
+			NewsEntity newsEntity = newsDAO.findById(newsId);
+			return mapper.mapToDTO(newsEntity);
 		}
 		catch(IllegalArgumentException | DAOException e) {
 			throw new ServiceException(e);
@@ -81,9 +95,10 @@ public class NewsServiceImpl implements NewsService {
 
 	@Override
 	@Transactional
-	public void editNews(News news) throws ServiceException {
+	public void editNews(NewsDTO news) throws ServiceException {
 		try {
-			newsDAO.editNews(news);
+			NewsEntity newsEntity = mapper.mapToEntity(news);
+			newsDAO.editNews(newsEntity);
 		}
 		catch(DAOException e) {
 			throw new ServiceException(e);
@@ -92,10 +107,12 @@ public class NewsServiceImpl implements NewsService {
 
 	@Override
 	@Transactional
-	public void addNews(News news) throws ServiceException {
+	public void addNews(NewsDTO news) throws ServiceException {
 		try{
+			System.out.println(news);
 			dateConverter.formatPublishDateToSave(news);
-			newsDAO.addNews(news);
+			NewsEntity newsEntity = mapper.mapToEntity(news);
+			newsDAO.addNews(newsEntity);
 		}
 		catch (DAOException e){
 			throw new ServiceException(e);

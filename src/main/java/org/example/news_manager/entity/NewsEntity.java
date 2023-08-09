@@ -1,5 +1,8 @@
 package org.example.news_manager.entity;
 
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,7 +10,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "news")
 public class NewsEntity implements Serializable {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "news_id")
@@ -23,6 +25,7 @@ public class NewsEntity implements Serializable {
 	private String content;
 
 	@Column(name = "publication_date")
+	@Generated(GenerationTime.ALWAYS)
 	private String publicationDate;
 
 	public NewsEntity(){
@@ -72,8 +75,8 @@ public class NewsEntity implements Serializable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		NewsEntity newsEntity = (NewsEntity) o;
-		return id == newsEntity.id && Objects.equals(title, newsEntity.title) && Objects.equals(brief, newsEntity.brief) && Objects.equals(content, newsEntity.content) && Objects.equals(publicationDate, newsEntity.publicationDate);
+		NewsEntity that = (NewsEntity) o;
+		return id == that.id && Objects.equals(title, that.title) && Objects.equals(brief, that.brief) && Objects.equals(content, that.content) && Objects.equals(publicationDate, that.publicationDate);
 	}
 
 	@Override

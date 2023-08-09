@@ -1,14 +1,12 @@
 package org.example.news_manager.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
-
-import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class UserEntity implements Serializable{
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
@@ -25,12 +23,12 @@ public class UserEntity implements Serializable{
 
 	@ManyToOne (fetch = FetchType.LAZY, 
 			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-	@JoinColumn(name = "role_id")
+	@JoinColumn(name = "role_id", referencedColumnName = "role_id")
 	private RoleEntity roleEntity;
 	
 	@ManyToOne (fetch = FetchType.LAZY,
 			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-	@JoinColumn(name = "locale_id")
+	@JoinColumn(name = "locale_id", referencedColumnName = "locale_id")
 	private LocaleEntity localeEntity;
 	
 	public UserEntity() {
@@ -83,24 +81,18 @@ public class UserEntity implements Serializable{
 	public void setLocaleEntity(LocaleEntity localeEntity) {
 		this.localeEntity = localeEntity;
 	}
-	
+
 	@Override
-	public int hashCode() {
-		return Objects.hash(email, id, localeEntity, login, password, roleEntity);
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		UserEntity that = (UserEntity) o;
+		return id == that.id && Objects.equals(email, that.email) && Objects.equals(login, that.login) && Objects.equals(password, that.password) && Objects.equals(roleEntity, that.roleEntity) && Objects.equals(localeEntity, that.localeEntity);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UserEntity other = (UserEntity) obj;
-		return Objects.equals(email, other.email) && id == other.id && Objects.equals(localeEntity, other.localeEntity)
-				&& Objects.equals(login, other.login) && Objects.equals(password, other.password)
-				&& Objects.equals(roleEntity, other.roleEntity);
+	public int hashCode() {
+		return Objects.hash(id, email, login, password, roleEntity, localeEntity);
 	}
 
 	@Override

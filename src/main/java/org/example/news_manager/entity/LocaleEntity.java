@@ -1,16 +1,14 @@
 package org.example.news_manager.entity;
 
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.*;
-
 @Entity
 @Table(name = "locales")
 public class LocaleEntity implements Serializable{
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "locale_id")
@@ -61,21 +59,16 @@ public class LocaleEntity implements Serializable{
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hash(country, id, language, usersEntity);
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		LocaleEntity that = (LocaleEntity) o;
+		return id == that.id && Objects.equals(country, that.country) && Objects.equals(language, that.language) && Objects.equals(usersEntity, that.usersEntity);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		LocaleEntity other = (LocaleEntity) obj;
-		return Objects.equals(country, other.country) && id == other.id && Objects.equals(language, other.language)
-				&& Objects.equals(usersEntity, other.usersEntity);
+	public int hashCode() {
+		return Objects.hash(id, country, language, usersEntity);
 	}
 
 	@Override

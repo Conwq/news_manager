@@ -109,10 +109,10 @@
         <input type="text" id="confirmPassword" name="confirmPassword"/>
         <br>
 
-        <label for="loc">${country_text}</label>
-        <select id="loc" name="locId">
-            <option value=1>${rs_text}</option>
-            <option value=2>${us_text}</option>
+        <label for="localeName">${country_text}</label>
+        <select id="localeName" name="localeName">
+            <option value="ru_RU">${rs_text}</option>
+            <option value="en_US">${us_text}</option>
         </select>
         <br>
 

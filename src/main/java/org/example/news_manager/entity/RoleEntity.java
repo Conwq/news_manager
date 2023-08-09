@@ -1,24 +1,13 @@
 package org.example.news_manager.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
 @Entity
 @Table(name = "roles")
 public class RoleEntity implements Serializable{
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "role_id")
@@ -59,21 +48,16 @@ public class RoleEntity implements Serializable{
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hash(id, roleName, usersEntity);
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		RoleEntity that = (RoleEntity) o;
+		return id == that.id && Objects.equals(roleName, that.roleName) && Objects.equals(usersEntity, that.usersEntity);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RoleEntity other = (RoleEntity) obj;
-		return id == other.id && Objects.equals(roleName, other.roleName)
-				&& Objects.equals(usersEntity, other.usersEntity);
+	public int hashCode() {
+		return Objects.hash(id, roleName, usersEntity);
 	}
 
 	@Override

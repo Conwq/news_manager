@@ -1,9 +1,5 @@
 package org.example.news_manager.dao.impl;
 
-import java.util.List;
-
-import javax.persistence.NoResultException;
-
 import org.example.news_manager.dao.UserDAO;
 import org.example.news_manager.dao.exception.DAOException;
 import org.example.news_manager.entity.LocaleEntity;
@@ -15,9 +11,11 @@ import org.hibernate.query.Query;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
+
 @Repository
 public class UserDAOImpl implements UserDAO{
-	private SessionFactory sessionFactory;
+	private final SessionFactory sessionFactory;
 	
 	public UserDAOImpl(SessionFactory sessionFactory){
 		this.sessionFactory = sessionFactory;
@@ -28,31 +26,31 @@ public class UserDAOImpl implements UserDAO{
 		Session session = sessionFactory.getCurrentSession();
 		Query<UserEntity> query = session.createQuery("FROM UserEntity WHERE login = :loginUser", UserEntity.class);
 		query.setParameter("loginUser", login);
-		UserEntity userEntity = null;
+		UserEntity userEntity;
 		try {
 			userEntity = query.getSingleResult();
+			if(!BCrypt.checkpw(password, userEntity.getPassword())) {
+				throw new DAOException("Incorrect password");
+			}
+			return userEntity;
 		}
 		catch (NoResultException e) {
 			throw new DAOException("This user was not found");
 		}
-		if(!BCrypt.checkpw(password, userEntity.getPassword())) {
-			throw new DAOException("Incorrect password");
-		}
-		return userEntity;
 	}
 
 	@Override
-	public void registration(UserEntity userEntity) throws DAOException{
+	public void registration(UserEntity userEntity, int localeId) throws DAOException{
 		Session session = sessionFactory.getCurrentSession();
-		userEntity.setRoleEntity(session.get(RoleEntity.class, 1));
-		userEntity.setLocaleEntity(session.get(LocaleEntity.class, userEntity.getLocaleEntity().getId()));
+
+		LocaleEntity localeEntity = session.get(LocaleEntity.class, localeId);
+		RoleEntity roleEntity = session.get(RoleEntity.class, 1);
+		userEntity.setLocaleEntity(localeEntity);
+		userEntity.setRoleEntity(roleEntity);
+
+		localeEntity.getUsersEntity().add(userEntity);
+		roleEntity.getUsersEntity().add(userEntity);
+
 		session.save(userEntity);
-	}
-	
-	@Override
-	public RoleEntity getRoleUser(int roleId) {
-		Session session = sessionFactory.getCurrentSession();
-		RoleEntity role = session.get(RoleEntity.class, roleId);
-		return role;
 	}
 }

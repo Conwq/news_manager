@@ -1,15 +1,7 @@
 package org.example.news_manager.controller;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.example.news_manager.bean.News;
-import org.example.news_manager.bean.UserBean;
+import org.example.news_manager.dto.NewsDTO;
+import org.example.news_manager.dto.UserDTO;
 import org.example.news_manager.service.NewsService;
 import org.example.news_manager.service.UserService;
 import org.example.news_manager.service.exception.ServiceException;
@@ -21,6 +13,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/news")
@@ -41,7 +40,7 @@ public class FrontController {
 			String localeParameter = (String) request.getSession().getAttribute("localization");
 			Locale locale = localeParameter == null ? LocaleContextHolder.getLocale() : new Locale(localeParameter);
 
-			List<News> news = newsService.getNewses("5", locale);
+			List<NewsDTO> news = newsService.getNewses("5", locale);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
@@ -55,7 +54,7 @@ public class FrontController {
 	public String goToNewsList(@SessionAttribute("locale")Locale locale,
 							   Model model) {
 		try {
-			List<News> news = newsService.getNewses(locale);
+			List<NewsDTO> news = newsService.getNewses(locale);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
@@ -70,7 +69,7 @@ public class FrontController {
 						   @SessionAttribute("locale") Locale locale,
 						   Model model) {
 		try {
-			News news = newsService.findById(id, locale);
+			NewsDTO news = newsService.findById(id, locale);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "viewNews");
 			return "baseLayout/baseLayout";
@@ -82,10 +81,9 @@ public class FrontController {
 
 	@RequestMapping("/goToEditNews")
 	public String showEditNewsPage(@RequestParam("id") String id,
-								   @SessionAttribute("locale") Locale locale,
 								   Model model) {
 		try {
-			News news = newsService.findById(id);
+			NewsDTO news = newsService.findById(id);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "editNews");
 			return "baseLayout/baseLayout";
@@ -96,7 +94,7 @@ public class FrontController {
 	}
 
 	@RequestMapping("/doEditNews")
-	public String doEditNews(@ModelAttribute("news") News news) {
+	public String doEditNews(@ModelAttribute("news") NewsDTO news) {
 		try {
 			newsService.editNews(news);
 			return "redirect:/news/goToNewsList";
@@ -108,14 +106,14 @@ public class FrontController {
 
 	@RequestMapping("/goToAddNewsPage")
 	public String showAddNewsPage(Model model){
-		News news = new News();
+		NewsDTO news = new NewsDTO();
 		model.addAttribute("news", news);
 		model.addAttribute("action", "addNewsPage");
 		return "baseLayout/baseLayout";
 	}
 
 	@RequestMapping("/doAddNews")
-	public String addNews(@ModelAttribute("news") News news){
+	public String addNews(@ModelAttribute("news") NewsDTO news){
 		try {
 			newsService.addNews(news);
 			return "redirect:/news/goToNewsList";
@@ -161,19 +159,18 @@ public class FrontController {
 
 	@RequestMapping("/goToRegistrationPage")
 	public String showRegistrationPage(Model model) {
-		UserBean userBean = new UserBean();
+		UserDTO userBean = new UserDTO();
 		model.addAttribute("user", userBean);
 		model.addAttribute("action", "registrationPage");
 		return "baseLayout/baseLayout";
 	}
 
 	@RequestMapping("/doRegistrationUser")
-	public String doRegistration(@ModelAttribute("user") UserBean userBean,
+	public String doRegistration(@ModelAttribute("user") UserDTO userBean,
 								 @RequestParam("confirmPassword") String confirmPassword,
-								 @RequestParam("loc") int localeId) {
+								 @RequestParam("localeName") String localeName) {
 		try {
-
-			userService.registration(userBean, confirmPassword, localeId);
+			userService.registration(userBean, confirmPassword, localeName);
 			return "redirect:/news";
 		}
 		catch(ServiceException e) {
@@ -186,12 +183,13 @@ public class FrontController {
 						   @RequestParam("password") String password,
 						   HttpServletRequest request) {
 		try {
-			UserBean userBean = userService.signIn(login, password);
+			UserDTO userBean = userService.signIn(login, password);
+			Locale locale = userBean.getLocale();
 			HttpSession session = request.getSession(true);
 			session.setAttribute("active", "true");
 			session.setAttribute("role", userBean.getRoleName());
-			session.setAttribute("locale", userBean.getLocale());
-			session.setAttribute("localization", userBean.getLocale().getLanguage());
+			session.setAttribute("locale", locale);
+			session.setAttribute("localization", locale.getLanguage());
 			return "redirect:/news/goToNewsList";
 		}
 		catch(ServiceException e) {
