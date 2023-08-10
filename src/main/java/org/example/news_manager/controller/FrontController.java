@@ -115,6 +115,12 @@ public class FrontController {
 	public String addNews(@ModelAttribute("news") NewsDTO news,
 			@RequestParam("image") MultipartFile image) {
 		try {
+//			String imageName = image.getOriginalFilename();
+//			String path = context.getRealPath("/WEB-INF/images/");
+//			File file = new File(path + imageName);
+//			image.transferTo(file);
+//			news.setImagePath("images/" + imageName);
+
 			newsService.addNews(news);
 			return "redirect:/news/goToNewsList";
 		}
