@@ -11,7 +11,7 @@ import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Locale;
 
-@Component
+@Component("dateConvert")
 public class DateConverter {
 
 	public void getFormatDateByNews(NewsDTO news, Locale locale){

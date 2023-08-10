@@ -35,7 +35,7 @@
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="myDataSource"/>
-        <property name="packagesToScan" value="org.example.news_manager"/>
+        <property name="packagesToScan" value="org.example.news_manager.entity"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
@@ -47,6 +47,10 @@
     <bean id="transactionalManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+    
+    <bean id="multipartResolver" 
+    	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</bean>
 
     <tx:annotation-driven transaction-manager="transactionalManager"/>
 </beans>

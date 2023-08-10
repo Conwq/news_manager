@@ -8,6 +8,7 @@ public class NewsDTO implements Serializable{
 	private String brief;
 	private String content;
 	private String publicationDate;
+	private String imagePath;
 
 	public NewsDTO() {
 	}
@@ -50,6 +51,14 @@ public class NewsDTO implements Serializable{
 
 	public void setPublicationDate(String publicationDate) {
 		this.publicationDate = publicationDate;
+	}
+	
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	@Override

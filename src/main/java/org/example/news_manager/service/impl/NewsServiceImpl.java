@@ -25,8 +25,9 @@ public class NewsServiceImpl implements NewsService {
 	private final Mapper<NewsDTO, NewsEntity> mapper;
 	
 	@Autowired
-	public NewsServiceImpl(NewsDAO newsDAO, DateConverter dateConverter,
-						   @Qualifier("newsMapper") Mapper<NewsDTO, NewsEntity> mapper) {
+	public NewsServiceImpl(NewsDAO newsDAO, 
+						   @Qualifier("dateConvert") DateConverter dateConverter,
+						   @Qualifier("newsMap") Mapper<NewsDTO, NewsEntity> mapper) {
 		this.newsDAO = newsDAO;
 		this.dateConverter = dateConverter;
 		this.mapper = mapper;
@@ -109,7 +110,6 @@ public class NewsServiceImpl implements NewsService {
 	@Transactional
 	public void addNews(NewsDTO news) throws ServiceException {
 		try{
-			System.out.println(news);
 			dateConverter.formatPublishDateToSave(news);
 			NewsEntity newsEntity = mapper.mapToEntity(news);
 			newsDAO.addNews(newsEntity);

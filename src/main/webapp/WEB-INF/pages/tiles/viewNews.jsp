@@ -96,6 +96,19 @@
     .news-details .back-button:hover {
         background-color: #333;
     }
+    
+    .news-details .image {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .news-details .image img {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 </style>
 
 <div class="news-details">
@@ -105,6 +118,11 @@
     <p class="brief">${news.brief}</p>
     <hr><br>
     <p class="content">${news.content}</p>
+    
+     <div class="image">
+        <img src="${news.imagePath}" alt="${news.imagePath}">
+    </div>
+    
     <c:if test="${sessionScope.role eq 'admin'}">
         <div class="action-buttons">
             <a href="${pageContext.request.contextPath}/news/goToEditNews?id=${news.id}">

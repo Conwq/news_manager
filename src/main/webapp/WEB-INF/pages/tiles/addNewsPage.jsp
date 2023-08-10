@@ -77,11 +77,19 @@
     .create-news-page .create-button:focus, .create-news-page .back-button:focus {
         outline: none;
     }
+    
+     .create-news-page input[type="file"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+    }
 </style>
 
 
 <div class="create-news-page">
-    <form:form modelAttribute="news" action="${pageContext.request.contextPath}/news/doAddNews">
+    <form:form modelAttribute="news" action="${pageContext.request.contextPath}/news/doAddNews" enctype="multipart/form-data">
         <label for="title">${title_text}</label>
         <form:input id="title" path="title"/>
 
@@ -90,6 +98,9 @@
 
         <label for="content">${content_text}</label>
         <form:textarea id="content" path="content"/>
+        
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" accept="image/*"/>
 
         <div class="buttons-create-news-page-form">
             <button class="create-button" type="submit">${create_button}</button>

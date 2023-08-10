@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	public UserServiceImpl(UserDAO userDAO,
-						   @Qualifier(value = "userMapper") Mapper<UserDTO, UserEntity> mapper) {
+						   @Qualifier(value = "userMap") Mapper<UserDTO, UserEntity> mapper) {
 		this.userDAO = userDAO;
 		this.mapper = mapper;
 	}

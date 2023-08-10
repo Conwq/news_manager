@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
-@Component(value = "userMapper")
+@Component(value = "userMap")
 public class UserMapper implements Mapper<UserDTO, UserEntity> {
 	
 	@Override

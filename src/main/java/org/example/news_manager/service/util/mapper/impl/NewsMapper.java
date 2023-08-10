@@ -5,7 +5,7 @@ import org.example.news_manager.entity.NewsEntity;
 import org.example.news_manager.service.util.mapper.Mapper;
 import org.springframework.stereotype.Component;
 
-@Component(value = "newsMapper")
+@Component(value = "newsMap")
 public class NewsMapper implements Mapper<NewsDTO, NewsEntity> {
 
 	@Override
@@ -15,6 +15,7 @@ public class NewsMapper implements Mapper<NewsDTO, NewsEntity> {
 		newsEntity.setTitle(newsDTO.getTitle());
 		newsEntity.setBrief(newsDTO.getBrief());
 		newsEntity.setContent(newsDTO.getContent());
+		newsEntity.setImagePath(newsDTO.getImagePath());
 		return newsEntity;
 	}
 
@@ -26,6 +27,7 @@ public class NewsMapper implements Mapper<NewsDTO, NewsEntity> {
 		newsDTO.setBrief(newsEntity.getBrief());
 		newsDTO.setContent(newsEntity.getContent());
 		newsDTO.setPublicationDate(newsEntity.getPublicationDate());
+		newsDTO.setImagePath(newsEntity.getImagePath());
 		return newsDTO;
 	}
 }

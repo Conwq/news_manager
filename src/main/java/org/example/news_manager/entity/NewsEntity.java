@@ -27,6 +27,9 @@ public class NewsEntity implements Serializable {
 	@Column(name = "publication_date")
 	@Generated(GenerationTime.ALWAYS)
 	private String publicationDate;
+	
+	@Column(name = "image_path")
+	private String imagePath;
 
 	public NewsEntity(){
 	}
@@ -69,6 +72,14 @@ public class NewsEntity implements Serializable {
 
 	public void setPublicationDate(String publicationDate) {
 		this.publicationDate = publicationDate;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	@Override
