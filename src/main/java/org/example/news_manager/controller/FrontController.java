@@ -1,7 +1,5 @@
 package org.example.news_manager.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -18,7 +16,6 @@ import org.example.news_manager.service.UserService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -115,6 +112,12 @@ public class FrontController {
 	public String addNews(@ModelAttribute("news") NewsDTO news,
 			@RequestParam("image") MultipartFile image) {
 		try {
+//			String imageName = image.getOriginalFilename();
+//			String path = context.getRealPath("/WEB-INF/images/");
+//			File file = new File(path + imageName);
+//			image.transferTo(file);
+//			news.setImagePath("images/" + imageName);
+
 			newsService.addNews(news);
 			return "redirect:/news/goToNewsList";
 		}
