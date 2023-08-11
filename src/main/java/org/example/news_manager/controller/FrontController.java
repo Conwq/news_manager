@@ -1,16 +1,5 @@
 package org.example.news_manager.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.example.news_manager.dto.CommentDTO;
 import org.example.news_manager.dto.NewsDTO;
 import org.example.news_manager.dto.UserDTO;
@@ -22,13 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/news")
@@ -39,7 +33,10 @@ public class FrontController {
 	private final ServletContext context;
 
 	@Autowired
-	public FrontController(NewsService newsService, UserService userService, CommentService commentService, ServletContext context) {
+	public FrontController(NewsService newsService,
+						   UserService userService,
+						   CommentService commentService,
+						   ServletContext context) {
 		this.newsService = newsService;
 		this.userService = userService;
 		this.commentService = commentService;
@@ -146,10 +143,14 @@ public class FrontController {
 	}
 
 	@PostMapping("/doEditNews")
-	public String doEditNews(@ModelAttribute("news") NewsDTO news) {
+	public String doEditNews(@ModelAttribute("news") NewsDTO news,
+							 @RequestParam("image") MultipartFile image) {
 		try {
+			if(!image.isEmpty()){
+				createImagePathForNews(news, image);
+			}
 			newsService.editNews(news);
-			return "redirect:/news/goToNewsList";
+			return "redirect:/news/goToViewNews?id=" + news.getId();
 		} 
 		catch (ServiceException e) {
 			return "";
@@ -195,18 +196,22 @@ public class FrontController {
 
 	@GetMapping("/changeLocale")
 	public String changeLocale(HttpServletRequest request) {
+		request.getSession().setAttribute("localization", request.getParameter("localization"));
+		request.getSession().setAttribute("locale", new Locale(request.getParameter("localization")));
+		return "redirect:" + getRequestURL(request);
+	}
+
+	private String getRequestURL(HttpServletRequest request){
 		try {
-			request.getSession().setAttribute("localization", request.getParameter("localization"));
-			request.getSession().setAttribute("locale", new Locale(request.getParameter("localization")));
 			URI uri = new URI(request.getHeader("referer"));
 			String path = uri.getPath();
 			if (uri.getQuery() != null) {
 				path += "?" + uri.getQuery();
 			}
-			return "redirect:" + path;
+			return path;
 		}
-		catch(URISyntaxException e){
-			return "";
+		catch (URISyntaxException e){
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -225,7 +230,8 @@ public class FrontController {
 		try {
 			userService.registration(userBean, confirmPassword, localeName);
 			return "redirect:/news";
-		} catch (ServiceException e) {
+		}
+		catch (ServiceException e) {
 			return "";
 		}
 	}
@@ -293,8 +299,6 @@ public class FrontController {
 		}
 	}
 	
-	
-	//TODO доделать!! Нужно изменить редирект ибо из-за него пропадает модель из реквеста!!
 	@RequestMapping("/goToEditComment")
 	public String getTextComment(@RequestParam("commentId") String commentId,
 								 @RequestParam("newsId") String newsId,
@@ -302,9 +306,23 @@ public class FrontController {
 		try {
 			CommentDTO commentDTO = commentService.getCommentById(commentId);
 			model.addAttribute("text", commentDTO.getText());
-			return "redirect:/news/goToViewNews?id=" + newsId;
+			model.addAttribute("commentId", commentDTO.getId());
+			return "forward:/news/goToViewNews?id=" + newsId;
 		}
 		catch(ServiceException e) {
+			return "";
+		}
+	}
+
+	@PostMapping("/doEditComment")
+	public String editComment(@RequestParam("text") String text,
+							  @RequestParam("commentId") String commentId,
+							  @RequestParam("newsId") String newsId){
+		try{
+			commentService.editCommentById(commentId, text);
+			return "redirect:/news/goToViewNews?id=" + newsId;
+		}
+		catch(ServiceException e){
 			return "";
 		}
 	}

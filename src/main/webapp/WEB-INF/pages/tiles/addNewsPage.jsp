@@ -12,6 +12,7 @@
 <fmt:message bundle="${loc}" key="locale.add_news.text.enter_content" var="content_text"/>
 <fmt:message bundle="${loc}" key="locale.add_news.button.create" var="create_button"/>
 <fmt:message bundle="${loc}" key="locale.button.back" var="back_button"/>
+<fmt:message bundle="${loc}" key="locale.add_news.text.image" var="image_text"/>
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/addNewsPage.css"/>"/>
 
@@ -26,7 +27,7 @@
         <label for="content">${content_text}</label>
         <form:textarea id="content" path="content"/>
         
-        <label for="image">Image:</label>
+        <label for="image">${image_text}</label>
         <input type="file" id="image" name="image" accept="image/*"/>
 
         <div class="buttons-create-news-page-form">

@@ -1,11 +1,15 @@
-<%@page import="org.springframework.ui.Model"%>
-<%@page import="org.jboss.logging.Param"%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 <%@ page isELIgnored="false" pageEncoding="UTF-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <fmt:setLocale value="${sessionScope.localization}"/>
 <fmt:setBundle basename="locales.locale" var="loc"/>
+
+<fmt:message bundle="${loc}" key="locale.comment.button.delete" var="delete"/>
+<fmt:message bundle="${loc}" key="locale.comment.button.edit" var="edit"/>
+<fmt:message bundle="${loc}" key="locale.comment.button.enter_commit" var="enterCommit"/>
+<fmt:message bundle="${loc}" key="locale.comment.button.submit" var="submit"/>
+<fmt:message bundle="${loc}" key="locale.comment.text.no_comment" var="no_comment"/>
 
 <c:set value="${sessionScope.user.login}" var="login"/>
 <c:set value="${sessionScope.role}" var="role"/>
@@ -16,7 +20,7 @@
 
 	<c:if test="${empty comments}">
 		<div class="comment">
-        	<p>No comments. Be first.</p>
+        	<p>${no_comment}</p>
     	</div>
 	</c:if>
 	
@@ -27,30 +31,47 @@
        		<div class="content">${comment.text}</div>
        		
        		<c:if test="${(role eq 'admin') or (comment.username eq login)}"> 
-       			<form action="doDeleteComment?commentId=${comment.id}" method="post">
+       			<form action="${pageContext.request.contextPath}/news/doDeleteComment?commentId=${comment.id}" method="post">
        				<input type="hidden" value="${news.id}" name="newsId"/>
-    				<button class="delete_button" type="submit">Delete</button>
+    				<button class="delete_button" type="submit">${delete}</button>
        			</form>
     		</c:if>
     		
     		<c:if test="${comment.username eq login}">
-    			<form action="goToEditComment" method="post">
+    			<form action="${pageContext.request.contextPath}/news/goToEditComment" method="get">
     				<input type="hidden" value="${comment.id}" name="commentId"/>
     				<input type="hidden" value="${news.id}" name="newsId"/>
     				
-    				<button class="edit_button" type="submit">Edit</button>
+    				<button class="edit_button" type="submit">${edit}</button>
     			</form>
     		</c:if>
     	</div>
     </c:forEach>
-	
-    <div class="comment-form">
-	    <form action="doAddComment" method="post">
-	    	<input type="hidden" value="${news.id}" name="newsId"/>
-	    	
-	    	<label for="new-comment">Enter your comment:</label>
-        	<textarea id="new-comment" name="text"></textarea>
-        	<button class="submit-button" type="submit">Submit</button>
-	    </form>
-    </div>
+
+	<c:if test="${not empty text}">
+		<div class="comment-form">
+			<form action="${pageContext.request.contextPath}/news/doEditComment" method="post">
+				<input type="hidden" value="${news.id}" name="newsId"/>
+				<input type="hidden" value="${commentId}" name="commentId"/>
+
+				<label for="new-comment">${enterCommit}</label>
+				<textarea id="new-comment" name="text">${text}</textarea>
+
+				<button class="submit-button" type="submit">${submit}</button>
+			</form>
+		</div>
+	</c:if>
+
+	<c:if test="${empty text}">
+		<div class="comment-form">
+			<form action="${pageContext.request.contextPath}/news/doAddComment" method="post">
+				<input type="hidden" value="${news.id}" name="newsId"/>
+
+				<label for="new-comment">${enterCommit}</label>
+				<textarea id="new-comment" name="text"></textarea>
+
+				<button class="submit-button" type="submit">${submit}</button>
+			</form>
+		</div>
+	</c:if>
 </div>

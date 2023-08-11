@@ -55,6 +55,7 @@
                     <c:param name="news" value="${news}"/>
                     <c:param name="comments" value="${comments}"/>
                     <c:param name="text" value="${text}"/>
+                    <c:param name="commentId" value="${commentId}"/>
                 </c:import>
             </c:if>
 

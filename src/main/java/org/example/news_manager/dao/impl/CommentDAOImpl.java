@@ -1,8 +1,7 @@
 package org.example.news_manager.dao.impl;
 
-import java.util.List;
-
 import org.example.news_manager.dao.CommentDAO;
+import org.example.news_manager.dao.exception.DAOException;
 import org.example.news_manager.entity.CommentEntity;
 import org.example.news_manager.entity.NewsEntity;
 import org.example.news_manager.entity.UserEntity;
@@ -10,6 +9,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class CommentDAOImpl implements CommentDAO{
@@ -53,5 +54,12 @@ public class CommentDAOImpl implements CommentDAO{
 		Session session = sessionFactory.getCurrentSession();
 		CommentEntity comment = session.get(CommentEntity.class, commentId);
 		return comment;
+	}
+
+	@Override
+	public void editCommentById(int id, String text) throws DAOException {
+		Session session = sessionFactory.getCurrentSession();
+		CommentEntity comment = session.get(CommentEntity.class, id);
+		comment.setText(text);
 	}
 }

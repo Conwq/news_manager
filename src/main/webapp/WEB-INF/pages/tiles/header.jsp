@@ -17,15 +17,14 @@
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/header.css"/>"/>
 
-<h1 class="news-manager">${news_manager_text}</h1>
-
+<h1>${news_manager_text}</h1>
 <c:if test="${active eq 'true'}">
     <form id="signOutButton" action="${pageContext.request.contextPath}/news/doSignOut" method="get">
         <button type="submit">${sign_out_button}</button>
     </form>
 </c:if>
 
-<c:if test="${not (sessionScope.active eq 'true')}">
+<c:if test="${not (active eq 'true')}">
     <form id="loginForm" action="${pageContext.request.contextPath}/news/doSignIn" method="get">
         <label>
             <input type="text" name="username" placeholder="${username_text}">

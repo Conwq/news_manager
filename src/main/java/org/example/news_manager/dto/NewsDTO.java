@@ -69,6 +69,7 @@ public class NewsDTO implements Serializable{
 				", brief='" + brief + '\'' +
 				", content='" + content + '\'' +
 				", publicationDate='" + publicationDate + '\'' +
+				", imagePath='" + imagePath + '\'' +
 				'}';
 	}
 }

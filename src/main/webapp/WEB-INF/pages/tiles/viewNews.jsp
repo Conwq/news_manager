@@ -10,6 +10,10 @@
 <fmt:message bundle="${loc}" key="locale.button.back" var="back_button"/>
 <fmt:message bundle="${loc}" key="locale.button.delete_news" var="delete_button"/>
 <fmt:message bundle="${loc}" key="locale.button.edit_news" var="edit_button"/>
+<fmt:message bundle="${loc}" key="locale.view_news.text.image_news" var="image_news"/>
+
+<c:set value="${sessionScope.role}" var="role"/>
+
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/viewNews.css"/>" />
 
@@ -22,10 +26,10 @@
     <p class="content">${news.content}</p>
     
      <div class="image">
-        <img src="<c:url value="${news.imagePath}"/>" alt="Image for news">
+        <img src="<c:url value="${news.imagePath}"/>" alt="${image_news}">
     </div>
 
-    <c:if test="${sessionScope.role eq 'admin'}">
+    <c:if test="${role eq 'admin'}">
         <div class="action-buttons">
             <a href="${pageContext.request.contextPath}/news/goToEditNews?id=${news.id}">
                 <button class="edit">${edit_button}</button>
@@ -43,4 +47,5 @@
 	<c:param name="news" value="${news}"/>
 	<c:param name="comments" value="${comments}"/>
 	<c:param name="text" value="${text}"/>
+	<c:param name="commentId" value="${commentId}"/>
 </c:import>

@@ -7,8 +7,6 @@ public class CommentDTO {
 	private int id;
 	private String text;
 	private String publicationDate;
-	private UserEntity userEntity;
-	private NewsEntity newsEntity;
 	private String username;
 	
 	public CommentDTO() {
@@ -38,22 +36,6 @@ public class CommentDTO {
 		this.publicationDate = publicationDate;
 	}
 
-	public UserEntity getUserEntity() {
-		return userEntity;
-	}
-
-	public void setUserEntity(UserEntity userEntity) {
-		this.userEntity = userEntity;
-	}
-
-	public NewsEntity getNewsEntity() {
-		return newsEntity;
-	}
-
-	public void setNewsEntity(NewsEntity newsEntity) {
-		this.newsEntity = newsEntity;
-	}
-	
 	public String getUsername() {
 		return username;
 	}
@@ -61,11 +43,4 @@ public class CommentDTO {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-	@Override
-	public String toString() {
-		return getClass().getName() + " [id=" + id + ", text=" + text + ", publicationDate=" + publicationDate + ", userEntity="
-				+ userEntity + ", newsEntity=" + newsEntity + ", username=" + username + "]";
-	}
-
 }

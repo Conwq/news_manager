@@ -1,9 +1,5 @@
 package org.example.news_manager.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import org.example.news_manager.dao.CommentDAO;
 import org.example.news_manager.dao.exception.DAOException;
 import org.example.news_manager.dto.CommentDTO;
@@ -15,6 +11,10 @@ import org.example.news_manager.service.util.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -86,6 +86,18 @@ public class CommentServiceImpl implements CommentService {
 			return mapper.mapToDTO(commentEntity);
 		}
 		catch(DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	@Transactional
+	public void editCommentById(String commentId, String text) throws ServiceException {
+		try{
+			int id = Integer.parseInt(commentId);
+			commentDAO.editCommentById(id, text);
+		}
+		catch (DAOException e){
 			throw new ServiceException(e);
 		}
 	}
