@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +51,7 @@ public class FrontController {
 	 *********** 
 	 ***********/
 	
-	@RequestMapping
+	@GetMapping
 	public String goToBasePage(HttpServletRequest request, Model model) {
 		try {
 			String localeParameter = (String) request.getSession().getAttribute("localization");
@@ -66,7 +67,7 @@ public class FrontController {
 		}
 	}
 
-	@RequestMapping("/goToNewsList")
+	@GetMapping("/goToNewsList")
 	public String goToNewsList(@SessionAttribute("locale") Locale locale, Model model) {
 		try {
 			List<NewsDTO> news = newsService.getNewses(locale);
@@ -79,7 +80,7 @@ public class FrontController {
 		}
 	}
 
-	@RequestMapping("/goToViewNews")
+	@GetMapping("/goToViewNews")
 	public String showNews(@RequestParam("id") String id, @SessionAttribute("locale") Locale locale, Model model) {
 		try {
 			NewsDTO news = newsService.findById(id, locale);
@@ -96,7 +97,7 @@ public class FrontController {
 		}
 	}
 
-	@RequestMapping("/goToEditNews")
+	@GetMapping("/goToEditNews")
 	public String showEditNewsPage(@RequestParam("id") String id, Model model) {
 		try {
 			NewsDTO news = newsService.findById(id);
@@ -109,7 +110,7 @@ public class FrontController {
 		}
 	}
 
-	@RequestMapping("/doEditNews")
+	@PostMapping("/doEditNews")
 	public String doEditNews(@ModelAttribute("news") NewsDTO news) {
 		try {
 			newsService.editNews(news);
@@ -120,7 +121,7 @@ public class FrontController {
 		}
 	}
 
-	@RequestMapping("/goToAddNewsPage")
+	@GetMapping("/goToAddNewsPage")
 	public String showAddNewsPage(Model model) {
 		NewsDTO news = new NewsDTO();
 		model.addAttribute("news", news);
@@ -128,7 +129,7 @@ public class FrontController {
 		return "baseLayout/baseLayout";
 	}
 
-	@RequestMapping("/doAddNews")
+	@PostMapping("/doAddNews")
 	public String addNews(@ModelAttribute("news") NewsDTO news, @RequestParam("image") MultipartFile image) {
 		try {
 //			String imageName = image.getOriginalFilename();
@@ -174,7 +175,7 @@ public class FrontController {
 	 *********** 
 	 ***********/
 
-	@RequestMapping("/changeLocale")
+	@GetMapping("/changeLocale")
 	public String changeLocale(HttpServletRequest request) throws URISyntaxException {
 		request.getSession().setAttribute("localization", request.getParameter("localization"));
 		request.getSession().setAttribute("locale", new Locale(request.getParameter("localization")));
@@ -186,7 +187,7 @@ public class FrontController {
 		return "redirect:" + path;
 	}
 
-	@RequestMapping("/goToRegistrationPage")
+	@GetMapping("/goToRegistrationPage")
 	public String showRegistrationPage(Model model) {
 		UserDTO userBean = new UserDTO();
 		model.addAttribute("user", userBean);
@@ -194,7 +195,7 @@ public class FrontController {
 		return "baseLayout/baseLayout";
 	}
 
-	@RequestMapping("/doRegistrationUser")
+	@PostMapping("/doRegistrationUser")
 	public String doRegistration(@ModelAttribute("user") UserDTO userBean, @RequestParam("confirmPassword") String confirmPassword, @RequestParam("localeName") String localeName) {
 		try {
 			userService.registration(userBean, confirmPassword, localeName);
@@ -204,7 +205,7 @@ public class FrontController {
 		}
 	}
 
-	@RequestMapping("/doSignIn")
+	@GetMapping("/doSignIn")
 	public String doSignIn(@RequestParam("username") String login, @RequestParam("password") String password,
 			HttpServletRequest request) {
 		try {
@@ -223,7 +224,7 @@ public class FrontController {
 		}
 	}
 
-	@RequestMapping("/doSignOut")
+	@GetMapping("/doSignOut")
 	public String signOut(HttpServletRequest request) {
 		try {
 			request.getSession(true).invalidate();

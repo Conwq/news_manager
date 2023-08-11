@@ -89,7 +89,7 @@
 
 
 <div class="create-news-page">
-    <form:form modelAttribute="news" action="${pageContext.request.contextPath}/news/doAddNews" enctype="multipart/form-data">
+    <form:form modelAttribute="news" action="${pageContext.request.contextPath}/news/doAddNews" method="post" enctype="multipart/form-data">
         <label for="title">${title_text}</label>
         <form:input id="title" path="title"/>
 

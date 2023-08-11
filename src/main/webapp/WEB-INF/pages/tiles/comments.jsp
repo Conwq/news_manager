@@ -7,6 +7,9 @@
 <fmt:setLocale value="${sessionScope.localization}"/>
 <fmt:setBundle basename="locales.locale" var="loc"/>
 
+<c:set value="${sessionScope.user.login}" var="login"/>
+<c:set value="${sessionScope.role}" var="role"/>
+
 <style>
     .comments-container {
         flex: 0.3;
@@ -132,14 +135,14 @@
         	<div class="date">${comment.publicationDate}</div>
        		<div class="content">${comment.text}</div>
        		
-       		<c:if test="${(sessionScope.role eq 'admin') or (comment.username eq sessionScope.user.login)}"> 
+       		<c:if test="${(role eq 'admin') or (comment.username eq login)}"> 
        			<form action="doDeleteComment?commentId=${comment.id}" method="post">
        				<input type="hidden" value="${news.id}" name="newsId"/>
     				<button class="delete_button" type="submit">Delete</button>
        			</form>
     		</c:if>
     		
-    		<c:if test="${comment.username eq sessionScope.user.login}">
+    		<c:if test="${comment.username eq login}">
     			<form action="goToEditComment" method="post">
     				<input type="hidden" value="${comment.id}" name="commentId"/>
     				<input type="hidden" value="${news.id}" name="newsId"/>
@@ -155,9 +158,7 @@
 	    	<input type="hidden" value="${news.id}" name="newsId"/>
 	    	
 	    	<label for="new-comment">Enter your comment:</label>
-        	<textarea id="new-comment" name="text">
-				
-        	</textarea>
+        	<textarea id="new-comment" name="text"></textarea>
         	<button class="submit-button" type="submit">Submit</button>
 	    </form>
     </div>

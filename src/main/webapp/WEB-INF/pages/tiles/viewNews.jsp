@@ -128,9 +128,10 @@
             <a href="${pageContext.request.contextPath}/news/goToEditNews?id=${news.id}">
                 <button class="edit">${edit_button}</button>
             </a>
-            <a href="${pageContext.request.contextPath}/news/doDeleteNews?id=${news.id}">
-                <button class="delete">${delete_button}</button>
-            </a>
+            
+            <form action="${pageContext.request.contextPath}/news/doDeleteNews?id=${news.id}" method="post">
+           		<button type="submit" class="delete">${delete_button}</button>
+            </form>
         </div>
     </c:if>
     <a href="javascript:history.back()" class="back-button">${back_button}</a>

@@ -13,6 +13,8 @@
 <fmt:message bundle="${loc}" key="locale.header.text_form.enter_password" var="password_text"/>
 <fmt:message bundle="${loc}" key="locale.header.text_form.enter_username" var="username_text"/>
 
+<c:set value="${sessionScope.active}" var="active"></c:set>
+
 
 <style>
     #languageButtons {
@@ -25,14 +27,14 @@
 </style>
 
 <h1>${news_manager_text}</h1>
-<c:if test="${sessionScope.active eq 'true'}">
-    <form action="${pageContext.request.contextPath}/news/doSignOut" id="signOutButton">
+<c:if test="${active eq 'true'}">
+    <form id="signOutButton" action="${pageContext.request.contextPath}/news/doSignOut" method="get">
         <button type="submit">${sign_out_button}</button>
     </form>
 </c:if>
 
 <c:if test="${not (sessionScope.active eq 'true')}">
-    <form id="loginForm" action="${pageContext.request.contextPath}/news/doSignIn" method="post">
+    <form id="loginForm" action="${pageContext.request.contextPath}/news/doSignIn" method="get">
         <label>
             <input type="text" name="username" placeholder="${username_text}">
         </label>
@@ -45,11 +47,11 @@
 </c:if>
 
 <div id="languageButtons">
-    <form action="${pageContext.request.contextPath}/news/changeLocale">
+    <form action="${pageContext.request.contextPath}/news/changeLocale" method="get">
         <input type="hidden" name="localization" value="en">
         <button type="submit">${en_button}</button>
     </form>
-    <form action="${pageContext.request.contextPath}/news/changeLocale">
+    <form action="${pageContext.request.contextPath}/news/changeLocale" method="get">
         <input type="hidden" name="localization" value="ru"/>
         <button type="submit">${ru_button}</button>
     </form>
