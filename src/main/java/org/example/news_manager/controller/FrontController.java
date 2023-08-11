@@ -263,6 +263,8 @@ public class FrontController {
 		}
 	}
 	
+	
+	//TODO доделать!! Нужно изменить редирект ибо изза него пропадает модель из реквеста!!
 	@RequestMapping("/goToEditComment")
 	public String getTextComment(@RequestParam("commentId") String commentId, @RequestParam("newsId") String newsId,Model model) {
 		try {
