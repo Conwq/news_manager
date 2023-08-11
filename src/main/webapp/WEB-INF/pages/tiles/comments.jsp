@@ -1,3 +1,5 @@
+<%@page import="org.springframework.ui.Model"%>
+<%@page import="org.jboss.logging.Param"%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 <%@ page isELIgnored="false" pageEncoding="UTF-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -17,6 +19,7 @@
         border: 1px solid #ddd;
         border-radius: 5px;
         margin-bottom: 15px;
+        position: relative; 
     }
 
     .comment .username {
@@ -74,31 +77,88 @@
     .comment-form .submit-button:focus {
         outline: none;
     }
+    
+    .delete_button {
+        background-color: #c0392b;
+        color: #fff;
+        padding: 5px 10px; 
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        float: right; 
+        margin-top: -5px; 
+    }
+
+    .delete_button:hover {
+        background-color: #e74c3c;
+    }
+
+    .delete_button:focus {
+        outline: none;
+    }
+    
+    .edit_button {
+        background-color: #333;
+        color: #fff;
+        padding: 5px 10px; 
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        float: right;
+        margin-top: -5px;
+        margin-right: 5px;
+    }
+
+    .edit_button:hover {
+        background-color: #555;
+    }
+
+    .edit_button:focus {
+        outline: none;
+    }
 </style>
 
 <div class="comments-container">
-    <div class="comment">
-        <div class="username">John Doe</div>
-        <div class="date">2023-08-02</div>
-        <div class="content">
-            Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit. Nulla sit amet nisl justo.
-        </div>
-    </div>
 
-    <div class="comment">
-        <div class="username">Jane Smith</div>
-        <div class="date">2023-08-03</div>
-        <div class="content">
-            Aenean faucibus a quam quis congue. Sed
-            euismod, nunc a congue euismod, ex massa suscipit justo, sit amet
-            semper metus quam ut felis.
-        </div>
-    </div>
-
+	<c:if test="${empty comments}">
+		<div class="comment">
+        	<p>No comments. Be first.</p>
+    	</div>
+	</c:if>
+	
+    <c:forEach items="${comments}" var="comment">
+    	<div class="comment">
+        	<div class="username">${comment.username}</div>
+        	<div class="date">${comment.publicationDate}</div>
+       		<div class="content">${comment.text}</div>
+       		
+       		<c:if test="${(sessionScope.role eq 'admin') or (comment.username eq sessionScope.user.login)}"> 
+       			<form action="doDeleteComment?commentId=${comment.id}" method="post">
+       				<input type="hidden" value="${news.id}" name="newsId"/>
+    				<button class="delete_button" type="submit">Delete</button>
+       			</form>
+    		</c:if>
+    		
+    		<c:if test="${comment.username eq sessionScope.user.login}">
+    			<form action="goToEditComment" method="post">
+    				<input type="hidden" value="${comment.id}" name="commentId"/>
+    				<input type="hidden" value="${news.id}" name="newsId"/>
+    				
+    				<button class="edit_button" type="submit">Edit</button>
+    			</form>
+    		</c:if>
+    	</div>
+    </c:forEach>
+	
     <div class="comment-form">
-        <label for="new-comment">Enter your comment:</label>
-        <textarea id="new-comment"></textarea>
-        <button class="submit-button" type="submit">Submit</button>
+	    <form action="doAddComment" method="post">
+	    	<input type="hidden" value="${news.id}" name="newsId"/>
+	    	
+	    	<label for="new-comment">Enter your comment:</label>
+        	<textarea id="new-comment" name="text">
+				
+        	</textarea>
+        	<button class="submit-button" type="submit">Submit</button>
+	    </form>
     </div>
 </div>

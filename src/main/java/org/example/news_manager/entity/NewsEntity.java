@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +31,9 @@ public class NewsEntity implements Serializable {
 	
 	@Column(name = "image_path")
 	private String imagePath;
+	
+	@OneToMany(mappedBy = "newsEntity")
+	private List<CommentEntity> comments;
 
 	public NewsEntity(){
 	}
@@ -80,6 +84,14 @@ public class NewsEntity implements Serializable {
 
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
+	}
+	
+	public List<CommentEntity> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<CommentEntity> comments) {
+		this.comments = comments;
 	}
 
 	@Override

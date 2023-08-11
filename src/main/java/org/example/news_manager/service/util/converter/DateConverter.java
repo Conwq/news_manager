@@ -1,5 +1,6 @@
 package org.example.news_manager.service.util.converter;
 
+import org.example.news_manager.dto.CommentDTO;
 import org.example.news_manager.dto.NewsDTO;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,17 @@ public class DateConverter {
 		LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
 		String formatDate = localDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(locale));
 		news.setPublicationDate(formatDate);
+	}
+	
+	public void getFormatDateByComment(CommentDTO comment, Locale locale){
+		String date = comment.getPublicationDate();
+		if (locale == null){
+			locale = LocaleContextHolder.getLocale();
+		}
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
+		String formatDate = localDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(locale));
+		comment.setPublicationDate(formatDate);
 	}
 
 	public void getFormatDateToNewsList(List<NewsDTO> newsList, Locale locale){

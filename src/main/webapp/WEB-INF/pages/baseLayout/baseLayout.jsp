@@ -121,6 +121,8 @@
         <c:if test="${action eq 'viewNews'}">
             <c:import url="/WEB-INF/pages/tiles/viewNews.jsp" charEncoding="utf-8">
                 <c:param name="news" value="${news}"/>
+                <c:param name="comments" value="${comments}"/>
+                <c:param name="text" value="${text}"/>
             </c:import>
         </c:if>
 
@@ -139,6 +141,7 @@
 </main>
 
 <footer>
+	${text}
     <p>${fot}&copy;</p>
 </footer>
 </body>

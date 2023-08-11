@@ -136,4 +136,8 @@
     <a href="javascript:history.back()" class="back-button">${back_button}</a>
 </div>
 
-<c:import url="/WEB-INF/pages/tiles/comments.jsp" charEncoding="utf-8"/>
+<c:import url="/WEB-INF/pages/tiles/comments.jsp" charEncoding="utf-8">
+	<c:param name="news" value="${news}"/>
+	<c:param name="comments" value="${comments}"/>
+	<c:param name="text" value="${text}"/>
+</c:import>

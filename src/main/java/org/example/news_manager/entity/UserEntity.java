@@ -2,6 +2,7 @@ package org.example.news_manager.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +31,9 @@ public class UserEntity implements Serializable{
 			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinColumn(name = "locale_id", referencedColumnName = "locale_id")
 	private LocaleEntity localeEntity;
+	
+	@OneToMany(mappedBy = "userEntity")
+	private List<CommentEntity> comments;
 	
 	public UserEntity() {
 	}
@@ -80,6 +84,14 @@ public class UserEntity implements Serializable{
 
 	public void setLocaleEntity(LocaleEntity localeEntity) {
 		this.localeEntity = localeEntity;
+	}
+
+	public List<CommentEntity> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<CommentEntity> comments) {
+		this.comments = comments;
 	}
 
 	@Override

@@ -36,9 +36,18 @@
     }
 
     .btn-style {
-        background-color: #333;
+    	background-color: #333;
+        color: #fff;
+        padding: 5px 10px; 
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: -5px;
+        margin-right: 5px;
+        
+        <%-- background-color: #333;
         color: white;
-        padding: 4px 8px;
+        padding: 5px 10px;
         border: none;
         cursor: pointer;
         border-radius: 5px;
@@ -46,8 +55,9 @@
         text-decoration: none;
         display: inline-block;
         font-size: 10px;
-        margin: 4px 2px;
+        margin: 4px 2px; --%>
     }
+    
 </style>
 
 <c:choose>

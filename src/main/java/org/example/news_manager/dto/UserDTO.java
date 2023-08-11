@@ -68,7 +68,7 @@ public class UserDTO implements Serializable{
 
 	@Override
 	public String toString() {
-		return "UserBean [id=" + id + ", email=" + email + ", login=" + login + ", password=" + password + ", locale="
+		return getClass().getName() + " [id=" + id + ", email=" + email + ", login=" + login + ", password=" + password + ", locale="
 				+ locale + ", role=" + role + "]";
 	}
 }
