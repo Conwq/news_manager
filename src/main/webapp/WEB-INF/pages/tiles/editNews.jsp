@@ -13,71 +13,7 @@
 <fmt:message bundle="${loc}" key="locale.edit_news.text.title" var="title_text"/>
 <fmt:message bundle="${loc}" key="locale.button.back" var="back_button"/>
 
-<style>
-    .edit-news-form {
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background-color: #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .edit-news-form h2 {
-        margin-top: 0;
-        color: #333;
-    }
-
-    .edit-news-form label {
-        display: block;
-        margin-bottom: 8px;
-        color: #333;
-    }
-
-    .edit-news-form input[type="text"],
-    .edit-news-form textarea {
-        width: 100%;
-        padding: 12px;
-        margin-bottom: 15px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
-
-    .edit-news-form textarea {
-        resize: vertical;
-        height: 150px;
-    }
-
-    .edit-news-form button {
-        padding: 10px 20px;
-        background-color: #333;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .edit-news-form button:hover {
-        background-color: #555;
-    }
-
-    .edit-news-form .back-button {
-        display: inline-block;
-        background-color: #555;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        text-decoration: none;
-        border-radius: 5px;
-        margin-top: 10px;
-    }
-
-    .edit-news-form .back-button:hover {
-        background-color: #333;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/editNews.css"/>"/>
 
 <div class="edit-news-form">
     <h2>${edit_text}</h2>

@@ -13,20 +13,12 @@
 <fmt:message bundle="${loc}" key="locale.header.text_form.enter_password" var="password_text"/>
 <fmt:message bundle="${loc}" key="locale.header.text_form.enter_username" var="username_text"/>
 
-<c:set value="${sessionScope.active}" var="active"></c:set>
+<c:set value="${sessionScope.active}" var="active"/>
 
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/header.css"/>"/>
 
-<style>
-    #languageButtons {
-        display: flex;
-    }
+<h1 class="news-manager">${news_manager_text}</h1>
 
-    #languageButtons button {
-        margin-right: 5px;
-    }
-</style>
-
-<h1>${news_manager_text}</h1>
 <c:if test="${active eq 'true'}">
     <form id="signOutButton" action="${pageContext.request.contextPath}/news/doSignOut" method="get">
         <button type="submit">${sign_out_button}</button>

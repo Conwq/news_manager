@@ -54,5 +54,5 @@
 
     <tx:annotation-driven transaction-manager="transactionalManager"/>
 
-    <mvc:resources mapping="/images/**" location="/WEB-INF/images/"/>
+    <mvc:resources location="/resources/" mapping="/resources/**"/>
 </beans>

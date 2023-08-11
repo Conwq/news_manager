@@ -1,0 +1,21 @@
+.news-manager {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+}
+
+#signOutButton,
+#loginForm {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#languageButtons {
+    text-align: center;
+    margin-top: 10px;
+}
+
+#languageButtons form {
+    display: inline-block;
+    margin-right: 10px;
+}

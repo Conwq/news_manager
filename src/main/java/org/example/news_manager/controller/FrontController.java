@@ -1,5 +1,7 @@
 package org.example.news_manager.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -52,7 +54,8 @@ public class FrontController {
 	 ***********/
 	
 	@GetMapping
-	public String goToBasePage(HttpServletRequest request, Model model) {
+	public String goToBasePage(HttpServletRequest request,
+							   Model model) {
 		try {
 			String localeParameter = (String) request.getSession().getAttribute("localization");
 			Locale locale = localeParameter == null ? LocaleContextHolder.getLocale() : new Locale(localeParameter);
@@ -68,7 +71,8 @@ public class FrontController {
 	}
 
 	@GetMapping("/goToNewsList")
-	public String goToNewsList(@SessionAttribute("locale") Locale locale, Model model) {
+	public String goToNewsList(@SessionAttribute("locale") Locale locale,
+							   Model model) {
 		try {
 			List<NewsDTO> news = newsService.getNewses(locale);
 			model.addAttribute("news", news);
@@ -80,8 +84,38 @@ public class FrontController {
 		}
 	}
 
+	@PostMapping("/doAddNews")
+	public String addNews(@ModelAttribute("news") NewsDTO news,
+						  @RequestParam("image") MultipartFile image) {
+		try {
+			if(!image.isEmpty()){
+				createImagePathForNews(news, image);
+			}
+			newsService.addNews(news);
+			return "redirect:/news/goToNewsList";
+		}
+		catch (ServiceException e){
+			return "";
+		}
+	}
+
+	private void createImagePathForNews(NewsDTO news, MultipartFile image){
+		try {
+			String imageName = image.getOriginalFilename();
+			String path = context.getRealPath("/resources/images/");
+			File file = new File(path + imageName);
+			image.transferTo(file);
+			news.setImagePath("/resources/images/" + imageName);
+		}
+		catch (IOException e){
+			throw new RuntimeException();
+		}
+	}
+
 	@GetMapping("/goToViewNews")
-	public String showNews(@RequestParam("id") String id, @SessionAttribute("locale") Locale locale, Model model) {
+	public String showNews(@RequestParam("id") String id,
+						   @SessionAttribute("locale") Locale locale,
+						   Model model) {
 		try {
 			NewsDTO news = newsService.findById(id, locale);
 			List<CommentDTO> comments = commentService.getCommentsFromNewsById(id, locale);
@@ -98,7 +132,8 @@ public class FrontController {
 	}
 
 	@GetMapping("/goToEditNews")
-	public String showEditNewsPage(@RequestParam("id") String id, Model model) {
+	public String showEditNewsPage(@RequestParam("id") String id,
+								   Model model) {
 		try {
 			NewsDTO news = newsService.findById(id);
 			model.addAttribute("news", news);
@@ -127,23 +162,6 @@ public class FrontController {
 		model.addAttribute("news", news);
 		model.addAttribute("action", "addNewsPage");
 		return "baseLayout/baseLayout";
-	}
-
-	@PostMapping("/doAddNews")
-	public String addNews(@ModelAttribute("news") NewsDTO news, @RequestParam("image") MultipartFile image) {
-		try {
-//			String imageName = image.getOriginalFilename();
-//			String path = context.getRealPath("/WEB-INF/images/");
-//			File file = new File(path + imageName);
-//			image.transferTo(file);
-//			news.setImagePath("images/" + imageName);
-
-			newsService.addNews(news);
-			return "redirect:/news/goToNewsList";
-		}
-		catch (ServiceException e){
-			return "";
-		}
 	}
 
 	@RequestMapping("/doDeleteNews")
@@ -176,15 +194,20 @@ public class FrontController {
 	 ***********/
 
 	@GetMapping("/changeLocale")
-	public String changeLocale(HttpServletRequest request) throws URISyntaxException {
-		request.getSession().setAttribute("localization", request.getParameter("localization"));
-		request.getSession().setAttribute("locale", new Locale(request.getParameter("localization")));
-		URI uri = new URI(request.getHeader("referer"));
-		String path = uri.getPath();
-		if (uri.getQuery() != null) {
-			path += "?" + uri.getQuery();
+	public String changeLocale(HttpServletRequest request) {
+		try {
+			request.getSession().setAttribute("localization", request.getParameter("localization"));
+			request.getSession().setAttribute("locale", new Locale(request.getParameter("localization")));
+			URI uri = new URI(request.getHeader("referer"));
+			String path = uri.getPath();
+			if (uri.getQuery() != null) {
+				path += "?" + uri.getQuery();
+			}
+			return "redirect:" + path;
 		}
-		return "redirect:" + path;
+		catch(URISyntaxException e){
+			return "";
+		}
 	}
 
 	@GetMapping("/goToRegistrationPage")
@@ -196,7 +219,9 @@ public class FrontController {
 	}
 
 	@PostMapping("/doRegistrationUser")
-	public String doRegistration(@ModelAttribute("user") UserDTO userBean, @RequestParam("confirmPassword") String confirmPassword, @RequestParam("localeName") String localeName) {
+	public String doRegistration(@ModelAttribute("user") UserDTO userBean,
+								 @RequestParam("confirmPassword") String confirmPassword,
+								 @RequestParam("localeName") String localeName) {
 		try {
 			userService.registration(userBean, confirmPassword, localeName);
 			return "redirect:/news";
@@ -206,8 +231,9 @@ public class FrontController {
 	}
 
 	@GetMapping("/doSignIn")
-	public String doSignIn(@RequestParam("username") String login, @RequestParam("password") String password,
-			HttpServletRequest request) {
+	public String doSignIn(@RequestParam("username") String login,
+						   @RequestParam("password") String password,
+						   HttpServletRequest request) {
 		try {
 			UserDTO userDTO = userService.signIn(login, password);
 			Locale locale = userDTO.getLocale();
@@ -243,7 +269,9 @@ public class FrontController {
 	 ***********/
 	
 	@PostMapping("/doAddComment")
-	public String addComment(@RequestParam("text") String text, @RequestParam("newsId") String newsId, @SessionAttribute("user") UserDTO user) {
+	public String addComment(@RequestParam("text") String text,
+							 @RequestParam("newsId") String newsId,
+							 @SessionAttribute("user") UserDTO user) {
 		try {
 			commentService.saveComment(text, user.getId(), newsId);
 			return "redirect:/news/goToViewNews?id=" + newsId;
@@ -254,7 +282,8 @@ public class FrontController {
 	}
 	
 	@PostMapping("/doDeleteComment")
-	public String deleteComment(@RequestParam("commentId") String commentId, @RequestParam("newsId") String newsId) {
+	public String deleteComment(@RequestParam("commentId") String commentId,
+								@RequestParam("newsId") String newsId) {
 		try {
 			commentService.deleteCommentById(commentId);
 			return "redirect:/news/goToViewNews?id=" + newsId;
@@ -265,9 +294,11 @@ public class FrontController {
 	}
 	
 	
-	//TODO доделать!! Нужно изменить редирект ибо изза него пропадает модель из реквеста!!
+	//TODO доделать!! Нужно изменить редирект ибо из-за него пропадает модель из реквеста!!
 	@RequestMapping("/goToEditComment")
-	public String getTextComment(@RequestParam("commentId") String commentId, @RequestParam("newsId") String newsId,Model model) {
+	public String getTextComment(@RequestParam("commentId") String commentId,
+								 @RequestParam("newsId") String newsId,
+								 Model model) {
 		try {
 			CommentDTO commentDTO = commentService.getCommentById(commentId);
 			model.addAttribute("text", commentDTO.getText());
