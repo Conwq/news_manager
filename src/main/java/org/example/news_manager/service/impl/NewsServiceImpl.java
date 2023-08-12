@@ -12,7 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IllegalFormatException;
 import java.util.List;
@@ -21,14 +25,17 @@ import java.util.Locale;
 @Service
 public class NewsServiceImpl implements NewsService {
 	private final NewsDAO newsDAO;
+	private final ServletContext context;
 	private final DateConverter dateConverter;
 	private final Mapper<NewsDTO, NewsEntity> mapper;
-	
+
 	@Autowired
-	public NewsServiceImpl(NewsDAO newsDAO, 
+	public NewsServiceImpl(NewsDAO newsDAO,
+						   ServletContext context,
 						   @Qualifier("dateConvert") DateConverter dateConverter,
 						   @Qualifier("newsMap") Mapper<NewsDTO, NewsEntity> mapper) {
 		this.newsDAO = newsDAO;
+		this.context = context;
 		this.dateConverter = dateConverter;
 		this.mapper = mapper;
 	}
@@ -96,27 +103,41 @@ public class NewsServiceImpl implements NewsService {
 
 	@Override
 	@Transactional
-	public void editNews(NewsDTO news) throws ServiceException {
+	public void editNews(NewsDTO news, MultipartFile image) throws ServiceException {
 		try {
+			if(!image.isEmpty()){
+				createImagePathForNews(news, image);
+			}
 			NewsEntity newsEntity = mapper.mapToEntity(news);
 			newsDAO.editNews(newsEntity);
 		}
-		catch(DAOException e) {
+		catch(DAOException |IOException e) {
 			throw new ServiceException(e);
 		}
 	}
 
 	@Override
 	@Transactional
-	public void addNews(NewsDTO news) throws ServiceException {
+	public void addNews(NewsDTO news, MultipartFile image) throws ServiceException {
 		try{
+			if(!image.isEmpty()){
+				createImagePathForNews(news, image);
+			}
 			dateConverter.formatPublishDateToSave(news);
 			NewsEntity newsEntity = mapper.mapToEntity(news);
 			newsDAO.addNews(newsEntity);
 		}
-		catch (DAOException e){
+		catch (DAOException | IOException e){
 			throw new ServiceException(e);
 		}
+	}
+
+	private void createImagePathForNews(NewsDTO news, MultipartFile image) throws IOException {
+		String imageName = image.getOriginalFilename();
+		String path = context.getRealPath("/resources/images/");
+		File file = new File(path + imageName);
+		image.transferTo(file);
+		news.setImagePath("/resources/images/" + imageName);
 	}
 
 	@Override

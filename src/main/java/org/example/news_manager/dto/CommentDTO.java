@@ -1,8 +1,5 @@
 package org.example.news_manager.dto;
 
-import org.example.news_manager.entity.NewsEntity;
-import org.example.news_manager.entity.UserEntity;
-
 public class CommentDTO {
 	private int id;
 	private String text;

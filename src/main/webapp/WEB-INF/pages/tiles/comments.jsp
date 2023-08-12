@@ -68,7 +68,7 @@
 				<input type="hidden" value="${news.id}" name="newsId"/>
 
 				<label for="new-comment">${enterCommit}</label>
-				<textarea id="new-comment" name="text"></textarea>
+				<textarea id="new-comment" name="text" placeholder="Write your comment here...."></textarea>
 
 				<button class="submit-button" type="submit">${submit}</button>
 			</form>

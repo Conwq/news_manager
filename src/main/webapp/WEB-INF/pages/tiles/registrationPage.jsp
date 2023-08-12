@@ -20,9 +20,24 @@
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/registrationPage.css"/>"/>
 
+<style>
+    .error {
+        color: #ff0000;
+    }
+
+    .error-block {
+        color: #000;
+        background-color: #ffEEEE;
+        border: 3px solid #ff0000;
+        padding: 8px;
+        margin: 16px;
+    }
+</style>
+
 <div id="registrationForm">
     <h2>${registration_form_text}</h2>
     <form:form modelAttribute="user" action="${pageContext.request.contextPath}/news/doRegistrationUser" method="post">
+        <form:errors path="*" element="div" cssClass="error-block"/>
         <label for="login">${login_text}</label>
         <form:input path="login" id="login"/>
         <br>
@@ -33,14 +48,14 @@
         <form:input path="password" id="password"/>
         <br>
         <label for="confirmPassword">${conf_password_text}</label>
-        <input type="text" id="confirmPassword" name="confirmPassword"/>
+        <form:input path="confirmPassword" id="confirmPassword"/>
         <br>
 
         <label for="localeName">${country_text}</label>
-        <select id="localeName" name="localeName">
-            <option value="ru_RU">${rs_text}</option>
-            <option value="en_US">${us_text}</option>
-        </select>
+        <form:select path="localeId" id="localeName" name="localeName">
+            <option value=1>${rs_text}</option>
+            <option value=2>${us_text}</option>
+        </form:select>
         <br>
 
         <button type="submit">${register_button}</button>

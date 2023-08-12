@@ -3,6 +3,7 @@ package org.example.news_manager.controller;
 import org.example.news_manager.dto.CommentDTO;
 import org.example.news_manager.dto.NewsDTO;
 import org.example.news_manager.dto.UserDTO;
+import org.example.news_manager.dto.UserDTOForRegistration;
 import org.example.news_manager.service.CommentService;
 import org.example.news_manager.service.NewsService;
 import org.example.news_manager.service.UserService;
@@ -11,14 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -30,17 +31,14 @@ public class FrontController {
 	private final NewsService newsService;
 	private final UserService userService;
 	private final CommentService commentService;
-	private final ServletContext context;
 
 	@Autowired
 	public FrontController(NewsService newsService,
 						   UserService userService,
-						   CommentService commentService,
-						   ServletContext context) {
+						   CommentService commentService) {
 		this.newsService = newsService;
 		this.userService = userService;
 		this.commentService = commentService;
-		this.context = context;
 	}
 
 	
@@ -63,7 +61,7 @@ public class FrontController {
 			return "baseLayout/baseLayout";
 		} 
 		catch (ServiceException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 
@@ -77,7 +75,7 @@ public class FrontController {
 			return "baseLayout/baseLayout";
 		} 
 		catch (ServiceException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 
@@ -85,27 +83,11 @@ public class FrontController {
 	public String addNews(@ModelAttribute("news") NewsDTO news,
 						  @RequestParam("image") MultipartFile image) {
 		try {
-			if(!image.isEmpty()){
-				createImagePathForNews(news, image);
-			}
-			newsService.addNews(news);
+			newsService.addNews(news, image);
 			return "redirect:/news/goToNewsList";
 		}
 		catch (ServiceException e){
-			return "";
-		}
-	}
-
-	private void createImagePathForNews(NewsDTO news, MultipartFile image){
-		try {
-			String imageName = image.getOriginalFilename();
-			String path = context.getRealPath("/resources/images/");
-			File file = new File(path + imageName);
-			image.transferTo(file);
-			news.setImagePath("/resources/images/" + imageName);
-		}
-		catch (IOException e){
-			throw new RuntimeException();
+			return "redirect:/news/errorPage";
 		}
 	}
 
@@ -124,7 +106,7 @@ public class FrontController {
 			return "baseLayout/baseLayout";
 		} 
 		catch (ServiceException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 
@@ -138,7 +120,7 @@ public class FrontController {
 			return "baseLayout/baseLayout";
 		} 
 		catch (ServiceException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 
@@ -146,14 +128,11 @@ public class FrontController {
 	public String doEditNews(@ModelAttribute("news") NewsDTO news,
 							 @RequestParam("image") MultipartFile image) {
 		try {
-			if(!image.isEmpty()){
-				createImagePathForNews(news, image);
-			}
-			newsService.editNews(news);
+			newsService.editNews(news, image);
 			return "redirect:/news/goToViewNews?id=" + news.getId();
 		} 
 		catch (ServiceException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 
@@ -172,7 +151,7 @@ public class FrontController {
 			return "redirect:/news/goToNewsList";
 		} 
 		catch (ServiceException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 
@@ -183,7 +162,7 @@ public class FrontController {
 			return "redirect:/news/goToNewsList";
 		} 
 		catch (ServiceException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 	
@@ -217,22 +196,26 @@ public class FrontController {
 
 	@GetMapping("/goToRegistrationPage")
 	public String showRegistrationPage(Model model) {
-		UserDTO userBean = new UserDTO();
-		model.addAttribute("user", userBean);
+		UserDTOForRegistration user = new UserDTOForRegistration();
+		model.addAttribute("user", user);
 		model.addAttribute("action", "registrationPage");
 		return "baseLayout/baseLayout";
 	}
 
 	@PostMapping("/doRegistrationUser")
-	public String doRegistration(@ModelAttribute("user") UserDTO userBean,
-								 @RequestParam("confirmPassword") String confirmPassword,
-								 @RequestParam("localeName") String localeName) {
+	public String doRegistration(@ModelAttribute("user") @Valid UserDTOForRegistration user,
+								 BindingResult bindingResult,
+								 Model model) {
 		try {
-			userService.registration(userBean, confirmPassword, localeName);
+			if(bindingResult.hasErrors()){
+				model.addAttribute("action", "registrationPage");
+				return "baseLayout/baseLayout";
+			}
+			userService.registration(user);
 			return "redirect:/news";
 		}
 		catch (ServiceException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 
@@ -252,7 +235,7 @@ public class FrontController {
 			return "redirect:/news/goToNewsList";
 		} 
 		catch (ServiceException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 
@@ -263,7 +246,7 @@ public class FrontController {
 			return "redirect:/news";
 		} 
 		catch (IllegalStateException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 	
@@ -283,7 +266,7 @@ public class FrontController {
 			return "redirect:/news/goToViewNews?id=" + newsId;
 		}
 		catch(ServiceException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 	
@@ -295,7 +278,7 @@ public class FrontController {
 			return "redirect:/news/goToViewNews?id=" + newsId;
 		}
 		catch(ServiceException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 	
@@ -310,7 +293,7 @@ public class FrontController {
 			return "forward:/news/goToViewNews?id=" + newsId;
 		}
 		catch(ServiceException e) {
-			return "";
+			return "redirect:/news/errorPage";
 		}
 	}
 
@@ -323,7 +306,12 @@ public class FrontController {
 			return "redirect:/news/goToViewNews?id=" + newsId;
 		}
 		catch(ServiceException e){
-			return "";
+			return "redirect:/news/errorPage";
 		}
+	}
+
+	@GetMapping("/errorPage")
+	public String errorPage(){
+		return "error";
 	}
 }
