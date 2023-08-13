@@ -19,13 +19,13 @@
 
 <h1>${news_manager_text}</h1>
 <c:if test="${active eq 'true'}">
-    <form id="signOutButton" action="${pageContext.request.contextPath}/news/doSignOut" method="get">
+    <form id="signOutButton" action="${pageContext.request.contextPath}/user/doSignOut" method="post">
         <button type="submit">${sign_out_button}</button>
     </form>
 </c:if>
 
 <c:if test="${not (active eq 'true')}">
-    <form id="loginForm" action="${pageContext.request.contextPath}/news/doSignIn" method="get">
+    <form id="loginForm" action="${pageContext.request.contextPath}/user/doSignIn" method="post">
         <label>
             <input type="text" name="username" placeholder="${username_text}">
         </label>

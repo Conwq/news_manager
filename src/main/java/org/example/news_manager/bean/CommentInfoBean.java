@@ -1,12 +1,12 @@
-package org.example.news_manager.dto;
+package org.example.news_manager.bean;
 
-public class CommentDTO {
+public class CommentInfoBean {
 	private int id;
 	private String text;
-	private String publicationDate;
 	private String username;
-	
-	public CommentDTO() {
+	private String publicationDate;
+
+	public CommentInfoBean() {
 	}
 
 	public int getId() {
@@ -25,19 +25,19 @@ public class CommentDTO {
 		this.text = text;
 	}
 
-	public String getPublicationDate() {
-		return publicationDate;
-	}
-
-	public void setPublicationDate(String publicationDate) {
-		this.publicationDate = publicationDate;
-	}
-
 	public String getUsername() {
 		return username;
 	}
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getPublicationDate() {
+		return publicationDate;
+	}
+
+	public void setPublicationDate(String publicationDate) {
+		this.publicationDate = publicationDate;
 	}
 }

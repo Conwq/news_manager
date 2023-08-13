@@ -21,10 +21,6 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/registrationPage.css"/>"/>
 
 <style>
-    .error {
-        color: #ff0000;
-    }
-
     .error-block {
         color: #000;
         background-color: #ffEEEE;
@@ -36,7 +32,7 @@
 
 <div id="registrationForm">
     <h2>${registration_form_text}</h2>
-    <form:form modelAttribute="user" action="${pageContext.request.contextPath}/news/doRegistrationUser" method="post">
+    <form:form modelAttribute="user" action="${pageContext.request.contextPath}/user/doRegistrationUser" method="post">
         <form:errors path="*" element="div" cssClass="error-block"/>
         <label for="login">${login_text}</label>
         <form:input path="login" id="login"/>

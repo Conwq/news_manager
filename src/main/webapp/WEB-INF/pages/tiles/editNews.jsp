@@ -19,7 +19,8 @@
 
 <div class="edit-news-form">
     <h2>${edit_text}</h2>
-    <form:form action="${pageContext.request.contextPath}/news/doEditNews" method="post" modelAttribute="news" enctype="multipart/form-data">
+    <form:form action="${pageContext.request.contextPath}/news/doEditNews" method="post" modelAttribute="news"
+               enctype="multipart/form-data">
         <form:hidden path="id" value="${news.id}"/>
         <form:hidden path="publicationDate" value="${news.publicationDate}"/>
         <from:hidden path="imagePath" value="${news.imagePath}"/>

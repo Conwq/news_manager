@@ -1,8 +1,6 @@
-package org.example.news_manager.dto;
+package org.example.news_manager.bean;
 
-import java.io.Serializable;
-
-public class NewsDTO implements Serializable{
+public class NewsInfoBean {
 	private int id;
 	private String title;
 	private String brief;
@@ -10,8 +8,7 @@ public class NewsDTO implements Serializable{
 	private String publicationDate;
 	private String imagePath;
 
-	public NewsDTO() {
-	}
+	public NewsInfoBean(){}
 
 	public int getId() {
 		return id;
@@ -52,24 +49,12 @@ public class NewsDTO implements Serializable{
 	public void setPublicationDate(String publicationDate) {
 		this.publicationDate = publicationDate;
 	}
-	
+
 	public String getImagePath() {
 		return imagePath;
 	}
 
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
-	}
-
-	@Override
-	public String toString() {
-		return "NewsDTO{" +
-				"id=" + id +
-				", title='" + title + '\'' +
-				", brief='" + brief + '\'' +
-				", content='" + content + '\'' +
-				", publicationDate='" + publicationDate + '\'' +
-				", imagePath='" + imagePath + '\'' +
-				'}';
 	}
 }

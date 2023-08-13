@@ -23,7 +23,7 @@ public class NewsDAOImpl implements NewsDAO{
 	}
 
 	@Override
-	public List<NewsEntity> getNewses() throws DAOException{
+	public List<NewsEntity> getNews() throws DAOException{
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			List<NewsEntity> newsList = session.createQuery("FROM NewsEntity ORDER BY publicationDate DESC", NewsEntity.class)
@@ -36,11 +36,29 @@ public class NewsDAOImpl implements NewsDAO{
 	}
 
 	@Override
-	public List<NewsEntity> getNewses(int count) throws DAOException{
-		Session session = sessionFactory.getCurrentSession();
-		List<NewsEntity> newsList = session.createQuery("FROM NewsEntity ORDER BY publicationDate DESC", NewsEntity.class)
-				.setMaxResults(count).getResultList();
-		return newsList;
+	public List<NewsEntity> getNews(int count) throws DAOException{
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			List<NewsEntity> newsList = session.createQuery("FROM NewsEntity ORDER BY publicationDate DESC", NewsEntity.class)
+					.setMaxResults(count).getResultList();
+			return newsList;
+		}
+		catch (HibernateException e){
+			throw new DAOException(e);
+		}
+	}
+
+	@Override
+	public List<NewsEntity> getFoundNewsByValue(String value) throws DAOException{
+		try{
+			Session session = sessionFactory.getCurrentSession();
+			Query query = session.createQuery("FROM NewsEntity WHERE title LIKE (:value) ORDER BY publicationDate DESC", NewsEntity.class);
+			query.setParameter("value", "%" + value + "%");
+			return query.getResultList();
+		}
+		catch (HibernateException e){
+			throw new DAOException(e);
+		}
 	}
 
 	@Override
