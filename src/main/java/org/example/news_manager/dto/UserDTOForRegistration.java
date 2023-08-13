@@ -5,14 +5,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class UserDTOForRegistration {
-	@NotBlank(message = "Поле Login не должно быть пустым")
+	@NotBlank(message = "- The 'login' field cannot be empty")
 	private String login;
-	@NotBlank(message = "Поле Email не должно содержать пробелов")
-	@Size(min = 1, max = 10, message = "Поле Email должно быть от 1 до 10 символов")
+	@NotBlank(message = "- The 'email' field cannot be empty")
+	@Size(min = 1, max = 10, message = "- Email field must be between 1 and 10 characters")
 	private String email;
-	@NotBlank(message = "Поле Password не должно быть пустым и содержать пробелов")
+	@NotBlank(message = "- The 'password' field cannot be empty")
 	private String password;
-	@NotBlank(message = "Поле Confirm Password не должно быть пустым и содержать пробелов")
+	@NotBlank(message = "- The 'Confirm password' field cannot be empty")
 	private String confirmPassword;
 	private int localeId;
 	

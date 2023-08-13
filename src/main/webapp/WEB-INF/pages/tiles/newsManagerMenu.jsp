@@ -11,11 +11,13 @@
 <fmt:message bundle="${loc}" key="locale.manager_menu.button.go_to_news_list" var="news_list_button"/>
 <fmt:message bundle="${loc}" key="locale.manager_menu.text.administration_menu" var="menu_text"/>
 
+<c:set value="${sessionScope.role}" var="role"/>
+
 <h2>${menu_text}</h2>
 <a href="${pageContext.request.contextPath}/news/goToNewsList">
     <button id="allNewsListButton" type="button">${news_list_button}</button>
 </a>
-<c:if test="${sessionScope.role eq 'admin'}">
+<c:if test="${role eq 'admin'}">
     <a href="${pageContext.request.contextPath}/news/goToAddNewsPage">
         <button id="addNewsButton" type="button">${add_news_button}</button>
     </a>

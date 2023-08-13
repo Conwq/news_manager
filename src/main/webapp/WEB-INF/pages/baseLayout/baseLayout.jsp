@@ -31,7 +31,7 @@
         <div id="newsManagementMenu">
             <c:if test="${not (active eq 'true')}">
                 <h2>${welcome_text}</h2>
-                <a href="${pageContext.request.contextPath}/news/goToRegistrationPage">${registration_text}</a>
+                <a href="${pageContext.request.contextPath}/user/goToRegistrationPage">${registration_text}</a>
             </c:if>
 
             <c:if test="${active eq 'true'}">
