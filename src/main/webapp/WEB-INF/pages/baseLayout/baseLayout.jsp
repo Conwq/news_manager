@@ -56,12 +56,14 @@
                     <c:param name="comments" value="${comments}"/>
                     <c:param name="text" value="${text}"/>
                     <c:param name="commentId" value="${commentId}"/>
+                    <c:param name="tags" value="${tags}"/>
                 </c:import>
             </c:if>
 
             <c:if test="${action eq 'addNewsPage'}">
                 <c:import url="/WEB-INF/pages/tiles/addNewsPage.jsp" charEncoding="utf-8">
                     <c:param name="news" value="${news}"/>
+                    <c:param name="tags" value="${tags}"/>
                 </c:import>
             </c:if>
 

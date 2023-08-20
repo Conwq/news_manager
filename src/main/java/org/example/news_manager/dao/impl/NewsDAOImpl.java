@@ -26,11 +26,10 @@ public class NewsDAOImpl implements NewsDAO{
 	public List<NewsEntity> getNews() throws DAOException{
 		try {
 			Session session = sessionFactory.getCurrentSession();
-			List<NewsEntity> newsList = session.createQuery("FROM NewsEntity ORDER BY publicationDate DESC", NewsEntity.class)
+			return session.createQuery("FROM NewsEntity ORDER BY publicationDate DESC", NewsEntity.class)
 					.getResultList();
-			return newsList;
 		}
-		catch (HibernateException e){
+		catch (Exception e){
 			throw new DAOException(e);
 		}
 	}
@@ -39,11 +38,10 @@ public class NewsDAOImpl implements NewsDAO{
 	public List<NewsEntity> getNews(int count) throws DAOException{
 		try {
 			Session session = sessionFactory.getCurrentSession();
-			List<NewsEntity> newsList = session.createQuery("FROM NewsEntity ORDER BY publicationDate DESC", NewsEntity.class)
+			return session.createQuery("FROM NewsEntity ORDER BY publicationDate DESC", NewsEntity.class)
 					.setMaxResults(count).getResultList();
-			return newsList;
 		}
-		catch (HibernateException e){
+		catch (Exception e){
 			throw new DAOException(e);
 		}
 	}
@@ -56,7 +54,7 @@ public class NewsDAOImpl implements NewsDAO{
 			query.setParameter("value", "%" + value + "%");
 			return query.getResultList();
 		}
-		catch (HibernateException e){
+		catch (Exception e){
 			throw new DAOException(e);
 		}
 	}
@@ -65,10 +63,9 @@ public class NewsDAOImpl implements NewsDAO{
 	public NewsEntity findById(int id) throws DAOException {
 		try{
 			Session session = sessionFactory.getCurrentSession();
-			NewsEntity newsEntity = session.get(NewsEntity.class, id);
-			return newsEntity;
+			return session.get(NewsEntity.class, id);
 		}
-		catch (HibernateException e){
+		catch (Exception e){
 			throw new DAOException(e);
 		}
 	}
@@ -79,8 +76,7 @@ public class NewsDAOImpl implements NewsDAO{
 			Session session = sessionFactory.getCurrentSession();
 			session.update(newsEntity);
 		}
-		catch (StaleStateException e){
-			e.printStackTrace();
+		catch (Exception e){
 			throw new DAOException(e);
 		}
 	}
@@ -91,7 +87,7 @@ public class NewsDAOImpl implements NewsDAO{
 			Session session = sessionFactory.getCurrentSession();
 			session.save(newsEntity);
 		}
-		catch (HibernateException e){
+		catch (Exception e){
 			throw new DAOException(e);
 		}
 	}
@@ -104,7 +100,7 @@ public class NewsDAOImpl implements NewsDAO{
 			query.setParameter("newsId", newsId);
 			query.executeUpdate();
 		}
-		catch (HibernateException e){
+		catch (Exception e){
 			throw new DAOException(e);
 		}
 	}
@@ -118,7 +114,7 @@ public class NewsDAOImpl implements NewsDAO{
 					.executeUpdate();
 			session.flush();
 		}
-		catch (HibernateException e){
+		catch (Exception e){
 			throw new DAOException(e);
 		}
 	}

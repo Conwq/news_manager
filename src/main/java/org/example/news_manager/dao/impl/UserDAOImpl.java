@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
@@ -16,7 +17,8 @@ import javax.persistence.NoResultException;
 @Repository
 public class UserDAOImpl implements UserDAO{
 	private final SessionFactory sessionFactory;
-	
+
+	@Autowired
 	public UserDAOImpl(SessionFactory sessionFactory){
 		this.sessionFactory = sessionFactory;
 	}
@@ -37,20 +39,28 @@ public class UserDAOImpl implements UserDAO{
 		catch (NoResultException e) {
 			throw new DAOException("This user was not found");
 		}
+		catch (Exception e){
+			throw new DAOException(e);
+		}
 	}
 
 	@Override
 	public void registration(UserEntity userEntity, int localeId) throws DAOException{
-		Session session = sessionFactory.getCurrentSession();
+		try {
+			Session session = sessionFactory.getCurrentSession();
 
-		LocaleEntity localeEntity = session.get(LocaleEntity.class, localeId);
-		RoleEntity roleEntity = session.get(RoleEntity.class, 1);
-		userEntity.setLocaleEntity(localeEntity);
-		userEntity.setRoleEntity(roleEntity);
+			LocaleEntity localeEntity = session.get(LocaleEntity.class, localeId);
+			RoleEntity roleEntity = session.get(RoleEntity.class, 1);
+			userEntity.setLocaleEntity(localeEntity);
+			userEntity.setRoleEntity(roleEntity);
 
-		localeEntity.getUsersEntity().add(userEntity);
-		roleEntity.getUsersEntity().add(userEntity);
+			localeEntity.getUsersEntity().add(userEntity);
+			roleEntity.getUsersEntity().add(userEntity);
 
-		session.save(userEntity);
+			session.save(userEntity);
+		}
+		catch (Exception e){
+			throw new DAOException(e);
+		}
 	}
 }

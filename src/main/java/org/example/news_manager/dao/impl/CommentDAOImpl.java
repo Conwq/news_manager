@@ -21,45 +21,68 @@ public class CommentDAOImpl implements CommentDAO{
 	}
 	
 	@Override
-	public void saveComment(CommentEntity commentEntity, int userId, int newsId) {
-		Session session = sessionFactory.getCurrentSession();
-		UserEntity user = session.get(UserEntity.class, userId);
-		NewsEntity news = session.get(NewsEntity.class, newsId);
-		commentEntity.setNewsEntity(news);
-		commentEntity.setUserEntity(user);
-		user.getComments().add(commentEntity);
-		news.getComments().add(commentEntity);
-		
-		session.save(commentEntity);
+	public void saveComment(CommentEntity commentEntity, int userId, int newsId) throws DAOException{
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			UserEntity user = session.get(UserEntity.class, userId);
+			NewsEntity news = session.get(NewsEntity.class, newsId);
+			commentEntity.setNewsEntity(news);
+			commentEntity.setUserEntity(user);
+			user.getComments().add(commentEntity);
+			news.getComments().add(commentEntity);
+
+			session.save(commentEntity);
+		}
+		catch (Exception e){
+			throw new DAOException(e);
+		}
 	}
 	
 	@Override
-	public List<CommentEntity> getCommentsFromNewsById(int newsId){
-		Session session = sessionFactory.getCurrentSession();
-		NewsEntity newsEntity = session.get(NewsEntity.class, newsId);
-		List<CommentEntity> comments = newsEntity.getComments();
-		return comments;
+	public List<CommentEntity> getCommentsFromNewsById(int newsId) throws DAOException{
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			NewsEntity newsEntity = session.get(NewsEntity.class, newsId);
+			return newsEntity.getComments();
+		}
+		catch (Exception e){
+			throw new DAOException(e);
+		}
 	}
 	
 	@Override
-	public void deleteCommentById(int commentId) {
-		Session session = sessionFactory.getCurrentSession();
-		Query query = session.createQuery("DELETE FROM CommentEntity WHERE id = :id");
-		query.setParameter("id", commentId);
-		query.executeUpdate();
+	public void deleteCommentById(int commentId) throws DAOException{
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query query = session.createQuery("DELETE FROM CommentEntity WHERE id = :id", CommentEntity.class);
+			query.setParameter("id", commentId);
+			query.executeUpdate();
+		}
+		catch (Exception e){
+			throw new DAOException(e);
+		}
 	}
 	
 	@Override
-	public CommentEntity getCommentById(int commentId) {
-		Session session = sessionFactory.getCurrentSession();
-		CommentEntity comment = session.get(CommentEntity.class, commentId);
-		return comment;
+	public CommentEntity getCommentById(int commentId) throws DAOException{
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			return session.get(CommentEntity.class, commentId);
+		}
+		catch (Exception e){
+			throw new DAOException(e);
+		}
 	}
 
 	@Override
 	public void editCommentById(int id, String text) throws DAOException {
-		Session session = sessionFactory.getCurrentSession();
-		CommentEntity comment = session.get(CommentEntity.class, id);
-		comment.setText(text);
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			CommentEntity comment = session.get(CommentEntity.class, id);
+			comment.setText(text);
+		}
+		catch (Exception e){
+			throw new DAOException(e);
+		}
 	}
 }

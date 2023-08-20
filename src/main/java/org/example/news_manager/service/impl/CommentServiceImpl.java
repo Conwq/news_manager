@@ -8,6 +8,7 @@ import org.example.news_manager.entity.CommentEntity;
 import org.example.news_manager.service.CommentService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.example.news_manager.service.util.converter.DateConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,8 @@ import java.util.Locale;
 public class CommentServiceImpl implements CommentService {
 	private final CommentDAO commentDAO;
 	private final DateConverter dateConverter;
-	
+
+	@Autowired
 	public CommentServiceImpl(CommentDAO commentDAO,
 							  DateConverter dateConverter) {
 		this.commentDAO = commentDAO;

@@ -4,8 +4,10 @@ import org.example.news_manager.bean.NewsDataForNewsListBean;
 import org.example.news_manager.bean.NewsDataToAddBean;
 import org.example.news_manager.bean.NewsInfoBean;
 import org.example.news_manager.dao.NewsDAO;
+import org.example.news_manager.dao.TagDAO;
 import org.example.news_manager.dao.exception.DAOException;
 import org.example.news_manager.entity.NewsEntity;
+import org.example.news_manager.entity.TagEntity;
 import org.example.news_manager.service.NewsService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.example.news_manager.service.util.converter.DateConverter;
@@ -28,13 +30,16 @@ public class NewsServiceImpl implements NewsService {
 	private final NewsDAO newsDAO;
 	private final ServletContext context;
 	private final DateConverter dateConverter;
+	private final TagDAO tagDAO;
 
 	@Autowired
 	public NewsServiceImpl(NewsDAO newsDAO,
 						   ServletContext context,
+						   TagDAO tagDAO,
 						   @Qualifier("dateConvert") DateConverter dateConverter) {
 		this.newsDAO = newsDAO;
 		this.context = context;
+		this.tagDAO = tagDAO;
 		this.dateConverter = dateConverter;
 	}
 
@@ -83,6 +88,12 @@ public class NewsServiceImpl implements NewsService {
 			news.setBrief(entity.getBrief());
 			String formatPublicationDate = dateConverter.getFormatDateToNewsList(entity.getPublicationDate(), locale);
 			news.setPublicationDate(formatPublicationDate);
+			List<String> tags = new ArrayList<>();
+			for(TagEntity tag: entity.getTags()){
+				String tagName = tag.getName();
+				tags.add(tagName);
+			}
+			news.setTags(tags);
 			newsList.add(news);
 		}
 		return newsList;
@@ -100,9 +111,10 @@ public class NewsServiceImpl implements NewsService {
 			newsInfoBean.setTitle(newsEntity.getTitle());
 			newsInfoBean.setBrief(newsEntity.getBrief());
 			newsInfoBean.setContent(newsEntity.getContent());
+			newsInfoBean.setImagePath(newsEntity.getImagePath());
+
 			String formatPublicationDate = dateConverter.getFormatDateByNews(newsEntity.getPublicationDate(), locale);
 			newsInfoBean.setPublicationDate(formatPublicationDate);
-			newsInfoBean.setImagePath(newsEntity.getImagePath());
 
 			return newsInfoBean;
 		}
@@ -123,8 +135,8 @@ public class NewsServiceImpl implements NewsService {
 			newsInfoBean.setTitle(newsEntity.getTitle());
 			newsInfoBean.setBrief(newsEntity.getBrief());
 			newsInfoBean.setContent(newsEntity.getContent());
-			newsInfoBean.setPublicationDate(newsEntity.getPublicationDate());
 			newsInfoBean.setImagePath(newsEntity.getImagePath());
+			newsInfoBean.setPublicationDate(newsEntity.getPublicationDate());
 
 			return newsInfoBean;
 		}
@@ -144,6 +156,7 @@ public class NewsServiceImpl implements NewsService {
 			newsEntity.setContent(news.getContent());
 			newsEntity.setPublicationDate(news.getPublicationDate());
 			newsEntity.setImagePath(news.getImagePath());
+			newsEntity.setTags(tagDAO.getTagsForNewsById(news.getId()));
 
 			if(!image.isEmpty()){
 				newsEntity.setImagePath(createImagePathForNews(image));
@@ -163,11 +176,20 @@ public class NewsServiceImpl implements NewsService {
 			newsEntity.setTitle(news.getTitle());
 			newsEntity.setBrief(news.getBrief());
 			newsEntity.setContent(news.getContent());
+			newsEntity.setPublicationDate(dateConverter.formatPublishDateToSave());
+
 			if(!image.isEmpty()){
 				String imagePath = createImagePathForNews(image);
 				newsEntity.setImagePath(imagePath);
 			}
-			newsEntity.setPublicationDate(dateConverter.formatPublishDateToSave());
+
+			List<TagEntity> tags = new ArrayList<>();
+			for (int tagId : news.getTags()){
+				TagEntity tagEntity = tagDAO.findById(tagId);
+				tags.add(tagEntity);
+				tagEntity.getNews().add(newsEntity);
+			}
+			newsEntity.setTags(tags);
 			newsDAO.addNews(newsEntity);
 		}
 		catch (DAOException | IOException e){

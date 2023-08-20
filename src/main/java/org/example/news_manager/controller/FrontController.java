@@ -3,6 +3,7 @@ package org.example.news_manager.controller;
 import org.example.news_manager.bean.*;
 import org.example.news_manager.service.CommentService;
 import org.example.news_manager.service.NewsService;
+import org.example.news_manager.service.TagService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -22,12 +23,15 @@ import java.util.Locale;
 public class FrontController {
 	private final NewsService newsService;
 	private final CommentService commentService;
+	private final TagService tagService;
 
 	@Autowired
 	public FrontController(NewsService newsService,
-						   CommentService commentService) {
+						   CommentService commentService,
+						   TagService tagService) {
 		this.newsService = newsService;
 		this.commentService = commentService;
+		this.tagService = tagService;
 	}
 
 	
@@ -86,10 +90,17 @@ public class FrontController {
 
 	@GetMapping("/goToAddNewsPage")
 	public String showAddNewsPage(Model model) {
-		NewsDataToAddBean news = new NewsDataToAddBean();
-		model.addAttribute("news", news);
-		model.addAttribute("action", "addNewsPage");
-		return "baseLayout/baseLayout";
+		try {
+			NewsDataToAddBean news = new NewsDataToAddBean();
+			List<TagBean> tagsList = tagService.getAllTags();
+			model.addAttribute("tags", tagsList);
+			model.addAttribute("news", news);
+			model.addAttribute("action", "addNewsPage");
+			return "baseLayout/baseLayout";
+		}
+		catch (ServiceException e){
+			return "redirect:/news/errorPage";
+		}
 	}
 
 	@PostMapping("/doAddNews")
@@ -105,13 +116,15 @@ public class FrontController {
 	}
 
 	@GetMapping("/goToViewNews")
-	public String showNews(@RequestParam("id") String id,
+	public String showNews(@RequestParam("id") String newsId,
 						   @SessionAttribute("locale") Locale locale,
 						   Model model) {
 		try {
-			NewsInfoBean news = newsService.findById(id, locale);
-			List<CommentInfoBean> comments = commentService.getCommentsFromNewsById(id, locale);
-			
+			NewsInfoBean news = newsService.findById(newsId, locale);
+			List<CommentInfoBean> comments = commentService.getCommentsFromNewsById(newsId, locale);
+			List<TagBean> tags = tagService.getTagsForNewsById(newsId);
+
+			model.addAttribute("tags", tags);
 			model.addAttribute("comments", comments);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "viewNews");
@@ -119,6 +132,7 @@ public class FrontController {
 			return "baseLayout/baseLayout";
 		} 
 		catch (ServiceException e) {
+			e.printStackTrace();
 			return "redirect:/news/errorPage";
 		}
 	}
