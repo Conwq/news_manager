@@ -1,11 +1,9 @@
 package org.example.news_manager.controller;
 
-import org.example.news_manager.dto.CommentDTO;
-import org.example.news_manager.dto.NewsDTO;
-import org.example.news_manager.dto.UserDTO;
+import org.example.news_manager.bean.*;
 import org.example.news_manager.service.CommentService;
 import org.example.news_manager.service.NewsService;
-import org.example.news_manager.service.UserService;
+import org.example.news_manager.service.TagService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,16 +22,16 @@ import java.util.Locale;
 @RequestMapping("/news")
 public class FrontController {
 	private final NewsService newsService;
-	private final UserService userService;
 	private final CommentService commentService;
+	private final TagService tagService;
 
 	@Autowired
 	public FrontController(NewsService newsService,
-						   UserService userService,
-						   CommentService commentService) {
+						   CommentService commentService,
+						   TagService tagService) {
 		this.newsService = newsService;
-		this.userService = userService;
 		this.commentService = commentService;
+		this.tagService = tagService;
 	}
 
 	
@@ -50,7 +48,7 @@ public class FrontController {
 			String localeParameter = (String) request.getSession().getAttribute("localization");
 			Locale locale = localeParameter == null ? LocaleContextHolder.getLocale() : new Locale(localeParameter);
 
-			List<NewsDTO> news = newsService.getNewses("5", locale);
+			List<NewsDataForNewsListBean> news = newsService.getNews("5", locale);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
@@ -64,7 +62,7 @@ public class FrontController {
 	public String goToNewsList(@SessionAttribute("locale") Locale locale,
 							   Model model) {
 		try {
-			List<NewsDTO> news = newsService.getNewses(locale);
+			List<NewsDataForNewsListBean> news = newsService.getNews(locale);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
@@ -74,8 +72,39 @@ public class FrontController {
 		}
 	}
 
+	@GetMapping("/getSearchResult")
+	public String getFoundNewsByValue(@RequestParam("value") String value,
+									  @SessionAttribute("locale") Locale locale,
+									  Model model){
+		try{
+			List<NewsDataForNewsListBean> news =  newsService.getFoundNewsByValue(value, locale);
+			model.addAttribute("news", news);
+			model.addAttribute("action", "newsList");
+			return "baseLayout/baseLayout";
+		}
+		catch (ServiceException e){
+			e.printStackTrace();
+		return "redirect:/news/errorPage";
+		}
+	}
+
+	@GetMapping("/goToAddNewsPage")
+	public String showAddNewsPage(Model model) {
+		try {
+			NewsDataToAddBean news = new NewsDataToAddBean();
+			List<TagBean> tagsList = tagService.getAllTags();
+			model.addAttribute("tags", tagsList);
+			model.addAttribute("news", news);
+			model.addAttribute("action", "addNewsPage");
+			return "baseLayout/baseLayout";
+		}
+		catch (ServiceException e){
+			return "redirect:/news/errorPage";
+		}
+	}
+
 	@PostMapping("/doAddNews")
-	public String addNews(@ModelAttribute("news") NewsDTO news,
+	public String addNews(@ModelAttribute("news") NewsDataToAddBean news,
 						  @RequestParam("image") MultipartFile image) {
 		try {
 			newsService.addNews(news, image);
@@ -87,13 +116,15 @@ public class FrontController {
 	}
 
 	@GetMapping("/goToViewNews")
-	public String showNews(@RequestParam("id") String id,
+	public String showNews(@RequestParam("id") String newsId,
 						   @SessionAttribute("locale") Locale locale,
 						   Model model) {
 		try {
-			NewsDTO news = newsService.findById(id, locale);
-			List<CommentDTO> comments = commentService.getCommentsFromNewsById(id, locale);
-			
+			NewsInfoBean news = newsService.findById(newsId, locale);
+			List<CommentInfoBean> comments = commentService.getCommentsFromNewsById(newsId, locale);
+			List<TagBean> tags = tagService.getTagsForNewsById(newsId);
+
+			model.addAttribute("tags", tags);
 			model.addAttribute("comments", comments);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "viewNews");
@@ -101,6 +132,7 @@ public class FrontController {
 			return "baseLayout/baseLayout";
 		} 
 		catch (ServiceException e) {
+			e.printStackTrace();
 			return "redirect:/news/errorPage";
 		}
 	}
@@ -109,7 +141,7 @@ public class FrontController {
 	public String showEditNewsPage(@RequestParam("id") String id,
 								   Model model) {
 		try {
-			NewsDTO news = newsService.findById(id);
+			NewsInfoBean news = newsService.findById(id);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "editNews");
 			return "baseLayout/baseLayout";
@@ -120,7 +152,7 @@ public class FrontController {
 	}
 
 	@PostMapping("/doEditNews")
-	public String doEditNews(@ModelAttribute("news") NewsDTO news,
+	public String doEditNews(@ModelAttribute("news") NewsInfoBean news,
 							 @RequestParam("image") MultipartFile image) {
 		try {
 			newsService.editNews(news, image);
@@ -129,14 +161,6 @@ public class FrontController {
 		catch (ServiceException e) {
 			return "redirect:/news/errorPage";
 		}
-	}
-
-	@GetMapping("/goToAddNewsPage")
-	public String showAddNewsPage(Model model) {
-		NewsDTO news = new NewsDTO();
-		model.addAttribute("news", news);
-		model.addAttribute("action", "addNewsPage");
-		return "baseLayout/baseLayout";
 	}
 
 	@RequestMapping("/doDeleteNews")
@@ -191,7 +215,7 @@ public class FrontController {
 	@PostMapping("/doAddComment")
 	public String addComment(@RequestParam("text") String text,
 							 @RequestParam("newsId") String newsId,
-							 @SessionAttribute("user") UserDTO user) {
+							 @SessionAttribute("user") UserInfoBean user) {
 		try {
 			commentService.saveComment(text, user.getId(), newsId);
 			return "redirect:/news/goToViewNews?id=" + newsId;
@@ -218,9 +242,9 @@ public class FrontController {
 								 @RequestParam("newsId") String newsId,
 								 Model model) {
 		try {
-			CommentDTO commentDTO = commentService.getCommentById(commentId);
-			model.addAttribute("text", commentDTO.getText());
-			model.addAttribute("commentId", commentDTO.getId());
+			CommentDataForEditBean comment = commentService.getCommentById(commentId);
+			model.addAttribute("text", comment.getText());
+			model.addAttribute("commentId", comment.getId());
 			return "forward:/news/goToViewNews?id=" + newsId;
 		}
 		catch(ServiceException e) {

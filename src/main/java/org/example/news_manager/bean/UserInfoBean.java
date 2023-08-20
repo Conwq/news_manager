@@ -1,9 +1,8 @@
-package org.example.news_manager.dto;
+package org.example.news_manager.bean;
 
-import java.io.Serializable;
 import java.util.Locale;
 
-public class UserDTO implements Serializable{
+public class UserInfoBean {
 	private int id;
 	private String email;
 	private String login;
@@ -11,7 +10,7 @@ public class UserDTO implements Serializable{
 	private Locale locale;
 	private Role role;
 	
-	public UserDTO() {
+	public UserInfoBean() {
 	}
 	
 	public int getId() {
@@ -64,11 +63,5 @@ public class UserDTO implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	@Override
-	public String toString() {
-		return getClass().getName() + " [id=" + id + ", email=" + email + ", login=" + login + ", password=" + password + ", locale="
-				+ locale + ", role=" + role + "]";
 	}
 }

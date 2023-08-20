@@ -3,14 +3,7 @@ package org.example.news_manager.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
@@ -30,11 +23,11 @@ public class CommentEntity implements Serializable {
 	@Generated(GenerationTime.ALWAYS)
 	private String publicationDate;
 	
-	@ManyToOne
+	@ManyToOne (fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
 	private UserEntity userEntity;
 	
-	@ManyToOne
+	@ManyToOne (fetch = FetchType.LAZY)
 	@JoinColumn(name = "news_id", referencedColumnName = "news_id")
 	private NewsEntity newsEntity;
 	

@@ -1,14 +1,14 @@
 package org.example.news_manager.service.impl;
 
+import org.example.news_manager.bean.CommentDataForEditBean;
+import org.example.news_manager.bean.CommentInfoBean;
 import org.example.news_manager.dao.CommentDAO;
 import org.example.news_manager.dao.exception.DAOException;
-import org.example.news_manager.dto.CommentDTO;
 import org.example.news_manager.entity.CommentEntity;
 import org.example.news_manager.service.CommentService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.example.news_manager.service.util.converter.DateConverter;
-import org.example.news_manager.service.util.mapper.Mapper;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,13 +18,13 @@ import java.util.Locale;
 
 @Service
 public class CommentServiceImpl implements CommentService {
-	private final Mapper<CommentDTO, CommentEntity> mapper;
 	private final CommentDAO commentDAO;
 	private final DateConverter dateConverter;
-	
-	public CommentServiceImpl(CommentDAO commentDAO, @Qualifier("commentMap") Mapper<CommentDTO, CommentEntity> mapper, DateConverter dateConverter) {
+
+	@Autowired
+	public CommentServiceImpl(CommentDAO commentDAO,
+							  DateConverter dateConverter) {
 		this.commentDAO = commentDAO;
-		this.mapper = mapper;
 		this.dateConverter = dateConverter;
 	}
 	
@@ -45,20 +45,22 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	@Transactional
-	public List<CommentDTO> getCommentsFromNewsById(String newsId, Locale locale) throws ServiceException {
+	public List<CommentInfoBean> getCommentsFromNewsById(String newsId, Locale locale) throws ServiceException {
 		try {
 			int id = Integer.parseInt(newsId);
 			List<CommentEntity> commentsEntity = commentDAO.getCommentsFromNewsById(id);
-			
-			List<CommentDTO> commentsDTO = new ArrayList<>();
+			List<CommentInfoBean> comments = new ArrayList<>();
 			
 			for(CommentEntity comment: commentsEntity) {
-				CommentDTO commentDTO = mapper.mapToDTO(comment);
-				dateConverter.getFormatDateByComment(commentDTO, locale);
-				commentsDTO.add(commentDTO);
+				CommentInfoBean commentInfo = new CommentInfoBean();
+				commentInfo.setId(comment.getId());
+				commentInfo.setText(comment.getText());
+				commentInfo.setUsername(comment.getUserEntity().getLogin());
+				String formatPublicationDate = dateConverter.getFormatDateByComment(comment.getPublicationDate(), locale);
+				commentInfo.setPublicationDate(formatPublicationDate);
+				comments.add(commentInfo);
 			}
-			
-			return commentsDTO;
+			return comments;
 		}
 		catch(DAOException | IllegalArgumentException e) {
 			throw new ServiceException(e);
@@ -79,11 +81,14 @@ public class CommentServiceImpl implements CommentService {
 	
 	@Override
 	@Transactional
-	public CommentDTO getCommentById(String commentId) throws ServiceException{
+	public CommentDataForEditBean getCommentById(String commentId) throws ServiceException{
 		try {
 			int id = Integer.parseInt(commentId);
 			CommentEntity commentEntity = commentDAO.getCommentById(id);
-			return mapper.mapToDTO(commentEntity);
+			CommentDataForEditBean comment = new CommentDataForEditBean();
+			comment.setId(commentEntity.getId());
+			comment.setText(commentEntity.getText());
+			return comment;
 		}
 		catch(DAOException e) {
 			throw new ServiceException(e);

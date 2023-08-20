@@ -1,7 +1,7 @@
 package org.example.news_manager.controller;
 
-import org.example.news_manager.dto.UserDTO;
-import org.example.news_manager.dto.UserDTOForRegistration;
+import org.example.news_manager.bean.UserRegistrationDataBean;
+import org.example.news_manager.bean.UserInfoBean;
 import org.example.news_manager.service.UserService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +27,14 @@ public class UserController {
 
 	@GetMapping("/goToRegistrationPage")
 	public String showRegistrationPage(Model model) {
-		UserDTOForRegistration user = new UserDTOForRegistration();
+		UserRegistrationDataBean user = new UserRegistrationDataBean();
 		model.addAttribute("user", user);
 		model.addAttribute("action", "registrationPage");
 		return "baseLayout/baseLayout";
 	}
 
 	@PostMapping("/doRegistrationUser")
-	public String doRegistration(@ModelAttribute("user") @Valid UserDTOForRegistration user,
+	public String doRegistration(@ModelAttribute("user") @Valid UserRegistrationDataBean user,
 								 BindingResult bindingResult,
 								 Model model) {
 		try {
@@ -55,14 +55,14 @@ public class UserController {
 						   @RequestParam("password") String password,
 						   HttpServletRequest request) {
 		try {
-			UserDTO userDTO = userService.signIn(login, password);
-			Locale locale = userDTO.getLocale();
+			UserInfoBean userInfoBean = userService.signIn(login, password);
+			Locale locale = userInfoBean.getLocale();
 			HttpSession session = request.getSession(true);
 			session.setAttribute("active", "true");
-			session.setAttribute("role", userDTO.getRoleName());
+			session.setAttribute("role", userInfoBean.getRole().getRoleName());
 			session.setAttribute("locale", locale);
 			session.setAttribute("localization", locale.getLanguage());
-			session.setAttribute("user", userDTO);
+			session.setAttribute("user", userInfoBean);
 			return "redirect:/news/goToNewsList";
 		}
 		catch (ServiceException e) {

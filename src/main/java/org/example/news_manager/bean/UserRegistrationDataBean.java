@@ -1,10 +1,11 @@
-package org.example.news_manager.dto;
+package org.example.news_manager.bean;
 
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class UserDTOForRegistration {
+
+public class UserRegistrationDataBean {
 	@NotBlank(message = "- The 'login' field cannot be empty")
 	private String login;
 	@NotBlank(message = "- The 'email' field cannot be empty")
@@ -16,7 +17,7 @@ public class UserDTOForRegistration {
 	private String confirmPassword;
 	private int localeId;
 	
-	public UserDTOForRegistration(){
+	public UserRegistrationDataBean(){
 		
 	}
 

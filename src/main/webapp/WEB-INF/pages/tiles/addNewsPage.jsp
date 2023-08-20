@@ -1,5 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"
-         isELIgnored="false" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -26,9 +25,14 @@
 
         <label for="content">${content_text}</label>
         <form:textarea id="content" path="content"/>
-        
+
         <label for="image">${image_text}</label>
         <input type="file" id="image" name="image" accept="image/*"/>
+
+        <label for="tags">Select tags for news:</label>
+        <form:select path="tags" id="tags" multiple="true">
+            <form:options items="${tags}" itemValue="id" itemLabel="name"/>
+        </form:select>
 
         <div class="buttons-create-news-page-form">
             <button class="create-button" type="submit">${create_button}</button>

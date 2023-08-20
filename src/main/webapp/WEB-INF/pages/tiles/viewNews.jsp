@@ -16,6 +16,21 @@
 
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/viewNews.css"/>" />
+<style>
+    .tag-list {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .tag-list li {
+        display: inline-block;
+        margin-right: 5px;
+        background-color: #f2f2f2;
+        padding: 3px 8px;
+        border-radius: 3px;
+    }
+</style>
 
 <div class="news-details">
 	<span class="publication-date">${publication_text}: ${news.publicationDate}</span> <br>
@@ -28,6 +43,15 @@
      <div class="image">
         <img src="<c:url value="${news.imagePath}"/>" alt="${image_news}">
     </div>
+
+    <c:if test="${not empty tags}">
+        <ul class="tag-list">
+            Tags:
+            <c:forEach items="${tags}" var="tag">
+                <li>${tag.name}</li>
+            </c:forEach>
+        </ul>
+    </c:if>
 
     <c:if test="${role eq 'admin'}">
         <div class="action-buttons">

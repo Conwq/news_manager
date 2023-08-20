@@ -17,7 +17,48 @@
 <c:set value="${requestScope.news}" var="news"/>
 <c:set value="${sessionScope.active}" var="active"/>
 
-<link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/newsList.css"/>"/>
+<style>
+    .news-item {
+        margin-bottom: 15px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+        word-wrap: break-word;
+        position: relative;
+    }
+
+    .published-date {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 12px;
+        color: #888;
+    }
+
+    .btn-style {
+        background-color: #333;
+        color: #fff;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: -5px;
+        margin-right: 5px;
+    }
+
+    .tag-list {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .tag-list li {
+        display: inline-block;
+        margin-right: 5px;
+        background-color: #f2f2f2;
+        padding: 3px 8px;
+        border-radius: 3px;
+    }
+</style>
 
 <c:choose>
     <c:when test="${empty news}">
@@ -33,6 +74,15 @@
                     <h3>${news.title}</h3>
                     <p class="published-date">${published_text} ${news.publicationDate}</p>
                     <p>${news.brief}</p>
+
+                    <c:if test="${not empty news.tags}">
+                        <ul class="tag-list">
+                            Tags:
+                            <c:forEach items="${news.tags}" var="tag">
+                                <li>${tag}</li>
+                            </c:forEach>
+                        </ul>
+                    </c:if>
 
                     <c:if test="${active eq 'true'}">
                         <a href="${pageContext.request.contextPath}/news/goToViewNews?id=${news.id}">

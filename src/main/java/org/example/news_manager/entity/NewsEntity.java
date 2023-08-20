@@ -35,11 +35,25 @@ public class NewsEntity implements Serializable {
 	@OneToMany(mappedBy = "newsEntity")
 	private List<CommentEntity> comments;
 
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "news_tags",
+			joinColumns = @JoinColumn(name = "news_id"),
+			inverseJoinColumns = @JoinColumn(name = "tag_id"))
+	private List<TagEntity> tags;
+
 	public NewsEntity(){
 	}
 
 	public int getId() {
 		return id;
+	}
+
+	public List<TagEntity> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<TagEntity> tags) {
+		this.tags = tags;
 	}
 
 	public void setId(int id) {
