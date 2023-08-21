@@ -11,7 +11,7 @@ public class DispatcherServletInitializer extends AbstractAnnotationConfigDispat
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return new Class[]{NewsManagerConfig.class};
+		return new Class[]{NewsManagerConfig.class, NewsManagerConfig.class};
 	}
 
 	@Override

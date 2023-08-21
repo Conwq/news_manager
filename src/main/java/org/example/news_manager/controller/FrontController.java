@@ -83,8 +83,7 @@ public class FrontController {
 			return "baseLayout/baseLayout";
 		}
 		catch (ServiceException e){
-			e.printStackTrace();
-		return "redirect:/news/errorPage";
+			return "redirect:/news/errorPage";
 		}
 	}
 
@@ -132,7 +131,6 @@ public class FrontController {
 			return "baseLayout/baseLayout";
 		} 
 		catch (ServiceException e) {
-			e.printStackTrace();
 			return "redirect:/news/errorPage";
 		}
 	}

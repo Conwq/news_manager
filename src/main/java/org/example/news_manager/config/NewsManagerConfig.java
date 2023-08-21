@@ -1,6 +1,7 @@
 package org.example.news_manager.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,12 +24,13 @@ import java.util.Properties;
 @EnableWebMvc
 @ComponentScan(basePackages = "org.example.news_manager")
 @EnableTransactionManagement
-@PropertySource("classpath:hibernate.properties")
+@PropertySource("classpath:db.properties")
 public class NewsManagerConfig implements WebMvcConfigurer {
-	private final Environment environment;
+	private final Environment env;
 
-	public NewsManagerConfig(Environment environment){
-		this.environment = environment;
+	@Autowired
+	public NewsManagerConfig(Environment env){
+		this.env = env;
 	}
 
 	@Bean
@@ -42,13 +44,13 @@ public class NewsManagerConfig implements WebMvcConfigurer {
 	@Bean
 	public ComboPooledDataSource dataSource() throws PropertyVetoException {
 		ComboPooledDataSource dataSource = new ComboPooledDataSource();
-		dataSource.setDriverClass(environment.getRequiredProperty("hibernate.driver_class"));
-		dataSource.setJdbcUrl(environment.getRequiredProperty("hibernate.jdbc_url"));
-		dataSource.setUser(environment.getRequiredProperty("hibernate.user"));
-		dataSource.setPassword(environment.getRequiredProperty("hibernate.password"));
-		dataSource.setMinPoolSize(5);
-		dataSource.setMaxPoolSize(10);
-		dataSource.setMaxIdleTime(30000);
+		dataSource.setDriverClass(env.getRequiredProperty("mysql.driver_class"));
+		dataSource.setJdbcUrl(env.getRequiredProperty("mysql.jdbc_url"));
+		dataSource.setUser(env.getRequiredProperty("mysql.user"));
+		dataSource.setPassword(env.getRequiredProperty("mysql.password"));
+		dataSource.setMinPoolSize(Integer.parseInt(env.getRequiredProperty("c3p0.connection_pool.min_pool_size")));
+		dataSource.setMaxPoolSize(Integer.parseInt(env.getRequiredProperty("c3p0.connection_pool.max_pool_size")));
+		dataSource.setMaxIdleTime(Integer.parseInt(env.getRequiredProperty("c3p0.connection_pool.max_idle_time")));
 		return dataSource;
 	}
 
@@ -58,8 +60,8 @@ public class NewsManagerConfig implements WebMvcConfigurer {
 		sessionFactory.setDataSource(dataSource());
 		sessionFactory.setPackagesToScan("org.example.news_manager.entity");
 		Properties hibernateProperties = new Properties();
-		hibernateProperties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
-		hibernateProperties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+		hibernateProperties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
+		hibernateProperties.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
 		sessionFactory.setHibernateProperties(hibernateProperties);
 		return sessionFactory;
 	}
