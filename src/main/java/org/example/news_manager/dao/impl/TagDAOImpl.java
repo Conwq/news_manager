@@ -47,7 +47,7 @@ public class TagDAOImpl implements TagDAO {
 	public List<TagEntity> getTagsForNewsById(int newsId) throws DAOException {
 		try{
 			Session session = sessionFactory.getCurrentSession();
-			Query query = session.createQuery("SELECT t FROM TagEntity AS t JOIN t.news AS n WHERE n.id = :newsId",
+			Query query = session.createQuery("SELECT t FROM TagEntity AS t JOIN FETCH t.news AS n WHERE n.id = :newsId",
 					TagEntity.class);
 			query.setParameter("newsId", newsId);
 			return query.getResultList();
