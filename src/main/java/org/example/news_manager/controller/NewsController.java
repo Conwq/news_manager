@@ -20,15 +20,15 @@ import java.util.Locale;
 
 @Controller
 @RequestMapping("/news")
-public class FrontController {
+public class NewsController {
 	private final NewsService newsService;
 	private final CommentService commentService;
 	private final TagService tagService;
 
 	@Autowired
-	public FrontController(NewsService newsService,
-						   CommentService commentService,
-						   TagService tagService) {
+	public NewsController(NewsService newsService,
+						  CommentService commentService,
+						  TagService tagService) {
 		this.newsService = newsService;
 		this.commentService = commentService;
 		this.tagService = tagService;

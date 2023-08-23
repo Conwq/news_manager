@@ -16,7 +16,7 @@ public class UserEntity implements Serializable{
 	@Column(name = "email")
 	private String email;
 
-	@Column(name = "login")
+	@Column(name = "username")
 	private String login;
 
 	@Column(name = "password")
@@ -32,8 +32,11 @@ public class UserEntity implements Serializable{
 	@JoinColumn(name = "locale_id", referencedColumnName = "locale_id")
 	private LocaleEntity localeEntity;
 	
-	@OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
 	private List<CommentEntity> comments;
+
+	@OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
+	private List<AuthorityEntity> authorities;
 	
 	public UserEntity() {
 	}
@@ -44,6 +47,14 @@ public class UserEntity implements Serializable{
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public List<AuthorityEntity> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(List<AuthorityEntity> authorities) {
+		this.authorities = authorities;
 	}
 
 	public String getEmail() {
@@ -110,6 +121,6 @@ public class UserEntity implements Serializable{
 	@Override
 	public String toString() {
 		return getClass().getName() + " [id=" + id + ", email=" + email + ", login=" + login + ", password=" + password + ", localeEntity="
-				+ localeEntity + ", role=" + roleEntity + "]";
+				+ localeEntity + "]";
 	}
 }

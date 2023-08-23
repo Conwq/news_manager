@@ -63,4 +63,12 @@ public class UserDAOImpl implements UserDAO{
 			throw new DAOException(e);
 		}
 	}
+
+	@Override
+	public UserEntity findUserByUsername(String login){
+		Session session = sessionFactory.getCurrentSession();
+		Query<UserEntity> query = session.createQuery("FROM UserEntity WHERE login = :loginUser", UserEntity.class);
+		query.setParameter("loginUser", login);
+		return query.getSingleResult();
+	}
 }

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 import java.util.Properties;
 
@@ -42,7 +43,7 @@ public class NewsManagerConfig implements WebMvcConfigurer {
 	}
 
 	@Bean
-	public ComboPooledDataSource dataSource() throws PropertyVetoException {
+	public DataSource dataSource() throws PropertyVetoException {
 		ComboPooledDataSource dataSource = new ComboPooledDataSource();
 		dataSource.setDriverClass(env.getRequiredProperty("mysql.driver_class"));
 		dataSource.setJdbcUrl(env.getRequiredProperty("mysql.jdbc_url"));
