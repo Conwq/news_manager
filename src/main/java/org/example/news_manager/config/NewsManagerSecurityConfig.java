@@ -32,6 +32,31 @@ public class NewsManagerSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		super.configure(http);
+		http.authorizeRequests()
+				.antMatchers("/news/goToBasePage", "/user/goToRegistrationPage", "/error")
+				.permitAll()
+				.antMatchers("/news").authenticated()
+//				.anyRequest().authenticated() Почему то некорректно отображается, а вот с матчером выше - все работает
+				.and()
+				.formLogin()
+				.loginPage("/news/goToBasePage")
+				.loginProcessingUrl("/process-authorisation")
+//				.permitAll()
+				.defaultSuccessUrl("/news/goToNewsList", true)
+				.failureUrl("/news?error")
+				.and()
+				.logout().logoutSuccessUrl("/news/goToBasePage")
+				.and()
+				.csrf().disable();
+
+//		http.csrf().disable()
+//				.authorizeRequests().antMatchers("/news/goToBasePage", "/error").permitAll()
+//				.anyRequest().authenticated()
+//				.and()
+//				.formLogin()
+//				.defaultSuccessUrl("/news/goToNewsList", true)
+//				.failureUrl("/news?error")
+//				.and()
+//				.logout().logoutSuccessUrl("/news/goToBasePage");
 	}
 }

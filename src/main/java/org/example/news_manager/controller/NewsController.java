@@ -41,7 +41,7 @@ public class NewsController {
 	 *********** 
 	 ***********/
 	
-	@GetMapping
+	@GetMapping("/goToBasePage")
 	public String goToBasePage(HttpServletRequest request,
 							   Model model) {
 		try {
@@ -59,10 +59,11 @@ public class NewsController {
 	}
 
 	@GetMapping("/goToNewsList")
-	public String goToNewsList(@SessionAttribute("locale") Locale locale,
+	public String goToNewsList(
+//								@SessionAttribute("locale") Locale locale,
 							   Model model) {
 		try {
-			List<NewsDataForNewsListBean> news = newsService.getNews(locale);
+			List<NewsDataForNewsListBean> news = newsService.getNews(new Locale("ru", "RU"));
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
