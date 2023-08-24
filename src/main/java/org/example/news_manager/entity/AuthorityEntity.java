@@ -2,21 +2,32 @@ package org.example.news_manager.entity;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "authorities")
 public class AuthorityEntity {
 
 	@Id
+	@Column(name = "authority_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
 	@Column(name = "authority")
 	private String authority;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
-	private UserEntity userEntity;
+	@OneToMany(mappedBy = "authority")
+	private List<UserEntity> userEntity;
 
 	public AuthorityEntity(){
+	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getAuthority() {
@@ -27,11 +38,11 @@ public class AuthorityEntity {
 		this.authority = authority;
 	}
 
-	public UserEntity getUserEntity() {
+	public List<UserEntity> getUserEntity() {
 		return userEntity;
 	}
 
-	public void setUserEntity(UserEntity userEntity) {
+	public void setUserEntity(List<UserEntity> userEntity) {
 		this.userEntity = userEntity;
 	}
 }

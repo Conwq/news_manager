@@ -35,8 +35,9 @@ public class UserEntity implements Serializable{
 	@OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
 	private List<CommentEntity> comments;
 
-	@OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
-	private List<AuthorityEntity> authorities;
+	@ManyToOne
+	@JoinColumn(name = "authority_id", referencedColumnName = "authority_id")
+	private AuthorityEntity authority;
 	
 	public UserEntity() {
 	}
@@ -49,12 +50,12 @@ public class UserEntity implements Serializable{
 		this.id = id;
 	}
 
-	public List<AuthorityEntity> getAuthorities() {
-		return authorities;
+	public AuthorityEntity getAuthority() {
+		return authority;
 	}
 
-	public void setAuthorities(List<AuthorityEntity> authorities) {
-		this.authorities = authorities;
+	public void setAuthority(AuthorityEntity authority) {
+		this.authority = authority;
 	}
 
 	public String getEmail() {
