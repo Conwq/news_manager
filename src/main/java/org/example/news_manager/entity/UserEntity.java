@@ -27,7 +27,7 @@ public class UserEntity implements Serializable{
 	@JoinColumn(name = "role_id", referencedColumnName = "role_id")
 	private RoleEntity roleEntity;
 	
-	@ManyToOne (fetch = FetchType.LAZY,
+	@ManyToOne (fetch = FetchType.EAGER,
 			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinColumn(name = "locale_id", referencedColumnName = "locale_id")
 	private LocaleEntity localeEntity;

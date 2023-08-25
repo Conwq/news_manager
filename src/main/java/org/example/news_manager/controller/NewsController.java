@@ -13,13 +13,17 @@ import org.example.news_manager.bean.NewsDataForNewsListBean;
 import org.example.news_manager.bean.NewsDataToAddBean;
 import org.example.news_manager.bean.NewsInfoBean;
 import org.example.news_manager.bean.TagBean;
+import org.example.news_manager.entity.UserEntity;
 import org.example.news_manager.service.CommentService;
 import org.example.news_manager.service.NewsService;
 import org.example.news_manager.service.TagService;
+import org.example.news_manager.service.UserDetailsImpl;
 import org.example.news_manager.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -73,16 +77,16 @@ public class NewsController {
 	@GetMapping("/goToNewsList")
 	public String goToNewsList(
 //								@SessionAttribute("locale") Locale locale,
-								@AuthenticationPrincipal UserDetails user,
+								@AuthenticationPrincipal UserDetailsImpl user,
+								HttpServletRequest request, 
 							   Model model) {
 		try {
-			if(user != null) {
-				System.out.println(user.getUsername());
-				System.out.println(user.getPassword());
-			}
 			
-//			List<NewsDataForNewsListBean> news = newsService.getNews(locale);
-			List<NewsDataForNewsListBean> news = newsService.getNews(new Locale("en", "US"));
+			Locale locale = user.getLocale();
+			List<NewsDataForNewsListBean> news = newsService.getNews(locale);
+			
+			request.getSession().setAttribute("locale", locale);
+			request.getSession().setAttribute("localization", locale.getLanguage());
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";

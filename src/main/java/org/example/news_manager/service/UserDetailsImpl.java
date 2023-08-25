@@ -15,6 +15,13 @@ public class UserDetailsImpl implements UserDetails {
 	public UserDetailsImpl(UserEntity userEntity){
 		this.userEntity = userEntity;
 	}
+	
+	public Locale getLocale() {
+		String language = userEntity.getLocaleEntity().getLanguage();
+		String country = userEntity.getLocaleEntity().getCountry();
+		Locale locale = new Locale(language, country);
+		return locale;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
