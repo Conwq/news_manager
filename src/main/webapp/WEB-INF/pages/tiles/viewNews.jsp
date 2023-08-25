@@ -2,6 +2,7 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <fmt:setLocale value="${sessionScope.localization}"/>
 <fmt:setBundle basename="locales.locale" var="loc"/>
@@ -12,10 +13,11 @@
 <fmt:message bundle="${loc}" key="locale.button.edit_news" var="edit_button"/>
 <fmt:message bundle="${loc}" key="locale.view_news.text.image_news" var="image_news"/>
 
-<c:set value="${sessionScope.role}" var="role"/>
-
+<c:set value="${pageContext.request.contextPath }" var="contextPath"/>
+<c:set value="${pageContext.request.userPrincipal}" var="principal"/>
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/viewNews.css"/>" />
+
 <style>
     .tag-list {
         list-style-type: none;
@@ -52,18 +54,19 @@
             </c:forEach>
         </ul>
     </c:if>
-
-    <c:if test="${role eq 'admin'}">
-        <div class="action-buttons">
-            <a href="${pageContext.request.contextPath}/news/goToEditNews?id=${news.id}">
+    
+    <security:authorize access="hasRole('ROLE_ADMIN') and principal != null">
+    	<div class="action-buttons">
+            <a href="${contextPath}/news/goToEditNews?id=${news.id}">
                 <button class="edit">${edit_button}</button>
             </a>
             
-            <form action="${pageContext.request.contextPath}/news/doDeleteNews?id=${news.id}" method="post">
+            <form action="${contextPath}/news/doDeleteNews?id=${news.id}" method="post">
            		<button type="submit" class="delete">${delete_button}</button>
             </form>
         </div>
-    </c:if>
+    </security:authorize>
+
     <a href="javascript:history.back()" class="back-button">${back_button}</a>
 </div>
 

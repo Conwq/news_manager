@@ -57,4 +57,10 @@ public class NewsInfoBean {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
+
+	@Override
+	public String toString() {
+		return "NewsInfoBean [id=" + id + ", title=" + title + ", brief=" + brief + ", content=" + content
+				+ ", publicationDate=" + publicationDate + ", imagePath=" + imagePath + "]";
+	}
 }

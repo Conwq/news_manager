@@ -74,7 +74,8 @@ public class NewsDAOImpl implements NewsDAO{
 	public void editNews(NewsEntity newsEntity) throws DAOException {
 		try {
 			Session session = sessionFactory.getCurrentSession();
-			session.update(newsEntity);
+//			session.update(newsEntity);
+			session.merge(newsEntity);
 		}
 		catch (Exception e){
 			throw new DAOException(e);

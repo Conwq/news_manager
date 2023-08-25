@@ -17,6 +17,7 @@
 <fmt:message bundle="${loc}" key="locale.registration_page.text.us" var="us_text"/>
 <fmt:message bundle="${loc}" key="locale.button.back" var="back_button"/>
 
+<c:set value="${pageContext.request.contextPath }" var="contextPath"/>
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/registrationPage.css"/>"/>
 
@@ -32,7 +33,7 @@
 
 <div id="registrationForm">
     <h2>${registration_form_text}</h2>
-    <form:form modelAttribute="user" action="${pageContext.request.contextPath}/user/doRegistrationUser" method="post">
+    <form:form modelAttribute="user" action="${contextPath}/user/doRegistrationUser" method="post">
         <form:errors path="*" element="div" cssClass="error-block"/>
         <label for="login">${login_text}</label>
         <form:input path="login" id="login"/>

@@ -23,8 +23,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Transactional
 	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 		UserEntity userEntity = userDAO.findUserByUsername(s);
-		UserDetailsImpl u = new UserDetailsImpl(userEntity);
-		System.out.println(u.getAuthorities());
 		if (userEntity == null){
 			throw new UsernameNotFoundException("User not found");
 		}

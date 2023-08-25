@@ -30,13 +30,13 @@ public class CommentServiceImpl implements CommentService {
 	
 	@Override
 	@Transactional
-	public void saveComment(String text, int userId, String newsId) throws ServiceException{
+	public void saveComment(String text, String username, String newsId) throws ServiceException{
 		try {
 			int id = Integer.parseInt(newsId);
 			CommentEntity commentEntity = new CommentEntity();
 			commentEntity.setText(text);
 			
-			commentDAO.saveComment(commentEntity, userId, id);
+			commentDAO.saveComment(commentEntity, username, id);
 		}
 		catch(DAOException | IllegalArgumentException e) {
 			throw new ServiceException(e);

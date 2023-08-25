@@ -35,7 +35,7 @@ public class UserEntity implements Serializable{
 	@OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
 	private List<CommentEntity> comments;
 
-	@ManyToOne
+	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn(name = "authority_id", referencedColumnName = "authority_id")
 	private AuthorityEntity authority;
 	
@@ -122,6 +122,6 @@ public class UserEntity implements Serializable{
 	@Override
 	public String toString() {
 		return getClass().getName() + " [id=" + id + ", email=" + email + ", login=" + login + ", password=" + password + ", localeEntity="
-				+ localeEntity + "]";
+				+ "]";
 	}
 }

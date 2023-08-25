@@ -2,6 +2,7 @@
          pageEncoding="utf-8" isELIgnored="false" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <fmt:setLocale value="${sessionScope.localization}"/>
 <fmt:setBundle basename="locales.locale" var="loc"/>
@@ -11,7 +12,8 @@
 <fmt:message bundle="${loc}" key="locale.header.text.news_manager" var="news_manager_text"/>
 <fmt:message bundle="${loc}" key="locale.footer.text.reserved" var="fot"/>
 
-<c:set value="${sessionScope.active}" var="active"/>
+<c:set value="${pageContext.request.contextPath}" var="contextPath"/>
+<c:set value="${pageContext.request.userPrincipal}" var="principal"/>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,12 +31,12 @@
 
     <main>
         <div id="newsManagementMenu">
-            <c:if test="${not (active eq 'true')}">
+            <c:if test="${principal == null}">
                 <h2>${welcome_text}</h2>
-                <a href="${pageContext.request.contextPath}/user/goToRegistrationPage">${registration_text}</a>
+                <a href="${contextPath}/user/goToRegistrationPage">${registration_text}</a>
             </c:if>
 
-            <c:if test="${active eq 'true'}">
+            <c:if test="${principal != null}">
                 <c:import url="/WEB-INF/pages/tiles/newsManagerMenu.jsp" charEncoding="utf-8"/>
             </c:if>
         </div>

@@ -1,22 +1,34 @@
 package org.example.news_manager.controller;
 
-import org.example.news_manager.bean.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.example.news_manager.bean.CommentDataForEditBean;
+import org.example.news_manager.bean.CommentInfoBean;
+import org.example.news_manager.bean.NewsDataForNewsListBean;
+import org.example.news_manager.bean.NewsDataToAddBean;
+import org.example.news_manager.bean.NewsInfoBean;
+import org.example.news_manager.bean.TagBean;
 import org.example.news_manager.service.CommentService;
 import org.example.news_manager.service.NewsService;
 import org.example.news_manager.service.TagService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/news")
@@ -61,9 +73,16 @@ public class NewsController {
 	@GetMapping("/goToNewsList")
 	public String goToNewsList(
 //								@SessionAttribute("locale") Locale locale,
+								@AuthenticationPrincipal UserDetails user,
 							   Model model) {
 		try {
-			List<NewsDataForNewsListBean> news = newsService.getNews(new Locale("ru", "RU"));
+			if(user != null) {
+				System.out.println(user.getUsername());
+				System.out.println(user.getPassword());
+			}
+			
+//			List<NewsDataForNewsListBean> news = newsService.getNews(locale);
+			List<NewsDataForNewsListBean> news = newsService.getNews(new Locale("en", "US"));
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
@@ -75,10 +94,11 @@ public class NewsController {
 
 	@GetMapping("/getSearchResult")
 	public String getFoundNewsByValue(@RequestParam("value") String value,
-									  @SessionAttribute("locale") Locale locale,
+//									  @SessionAttribute("locale") Locale locale,
 									  Model model){
 		try{
-			List<NewsDataForNewsListBean> news =  newsService.getFoundNewsByValue(value, locale);
+//			List<NewsDataForNewsListBean> news = newsService.getNews(locale);
+			List<NewsDataForNewsListBean> news = newsService.getNews(new Locale("en", "US"));
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
@@ -117,13 +137,17 @@ public class NewsController {
 
 	@GetMapping("/goToViewNews")
 	public String showNews(@RequestParam("id") String newsId,
-						   @SessionAttribute("locale") Locale locale,
+//						   @SessionAttribute("locale") Locale locale,
 						   Model model) {
 		try {
-			NewsInfoBean news = newsService.findById(newsId, locale);
-			List<CommentInfoBean> comments = commentService.getCommentsFromNewsById(newsId, locale);
+			NewsInfoBean news = newsService.findById(newsId, new Locale("en", "US"));
+//			NewsInfoBean news = newsService.findById(newsId, locale);
+			
+			List<CommentInfoBean> comments = commentService.getCommentsFromNewsById(newsId, new Locale("en", "US"));
+//			List<CommentInfoBean> comments = commentService.getCommentsFromNewsById(newsId, locale);
+			
 			List<TagBean> tags = tagService.getTagsForNewsById(newsId);
-
+			
 			model.addAttribute("tags", tags);
 			model.addAttribute("comments", comments);
 			model.addAttribute("news", news);
@@ -198,7 +222,8 @@ public class NewsController {
 			if (uri.getQuery() != null) {
 				path += "?" + uri.getQuery();
 			}
-			return path;
+			return path.replaceAll("/java-course-project-spring", "");
+//			return path;
 		}
 		catch (URISyntaxException e){
 			throw new RuntimeException(e);
@@ -214,9 +239,9 @@ public class NewsController {
 	@PostMapping("/doAddComment")
 	public String addComment(@RequestParam("text") String text,
 							 @RequestParam("newsId") String newsId,
-							 @SessionAttribute("user") UserInfoBean user) {
+							 @RequestParam("username") String username) {
 		try {
-			commentService.saveComment(text, user.getId(), newsId);
+			commentService.saveComment(text, username, newsId);
 			return "redirect:/news/goToViewNews?id=" + newsId;
 		}
 		catch(ServiceException e) {

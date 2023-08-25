@@ -2,6 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page isELIgnored="false" pageEncoding="UTF-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <fmt:setLocale value="${sessionScope.localization}"/>
 <fmt:setBundle basename="locales.locale" var="loc"/>
@@ -13,9 +14,10 @@
 <fmt:message bundle="${loc}" key="locale.button.edit_news" var="edit_button"/>
 <fmt:message bundle="${loc}" key="locale.button.delete_news" var="delete_button"/>
 
-<c:set value="${sessionScope.role}" var="role"/>
 <c:set value="${requestScope.news}" var="news"/>
-<c:set value="${sessionScope.active}" var="active"/>
+
+<c:set value="${pageContext.request.contextPath }" var="contextPath"/>
+<c:set value="${pageContext.request.userPrincipal}" var="principal"/>
 
 <style>
     .news-item {
@@ -68,7 +70,7 @@
     <c:otherwise>
         <h2>${latest_news_text}</h2>
         <hr>
-        <form action="${pageContext.request.contextPath}/news/doDeleteSomeNews" id="selectedNews" method="post">
+        <form action="${contextPath}/news/doDeleteSomeNews" id="selectedNews" method="post">
             <c:forEach items="${news}" var="news">
                 <div class="news-item">
                     <h3>${news.title}</h3>
@@ -84,23 +86,23 @@
                         </ul>
                     </c:if>
 
-                    <c:if test="${active eq 'true'}">
-                        <a href="${pageContext.request.contextPath}/news/goToViewNews?id=${news.id}">
+                    <c:if test="${principal != null}">
+                        <a href="${contextPath}/news/goToViewNews?id=${news.id}">
                             <button type="button" class="btn-style">${view_news_button}</button>
                         </a>&nbsp;
                     </c:if>
-
-                    <c:if test="${role eq 'admin'}">
-                        <a href="${pageContext.request.contextPath}/news/goToEditNews?id=${news.id}">
+                    
+                    <security:authorize access="hasRole('ROLE_ADMIN') and #principal != null">
+                    	<a href="${contextPath}/news/goToEditNews?id=${news.id}">
                             <button type="button" class="btn-style">${edit_button}</button>
                         </a>&nbsp;
-                        <a href="${pageContext.request.contextPath}/news/doDeleteNews?id=${news.id}">
+                        <a href="${contextPath}/news/doDeleteNews?id=${news.id}">
                             <button type="button" class="btn-style">${delete_button}</button>
                         </a>&nbsp;
                         <label>
                             <input formaction="selected" type="checkbox" name="news" value="${news.id}"/>
                         </label>&nbsp;
-                    </c:if>
+                    </security:authorize>
                 </div>
             </c:forEach>
         </form>

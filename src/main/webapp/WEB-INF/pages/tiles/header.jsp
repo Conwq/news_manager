@@ -14,20 +14,21 @@
 <fmt:message bundle="${loc}" key="locale.header.text_form.enter_password" var="password_text"/>
 <fmt:message bundle="${loc}" key="locale.header.text_form.enter_username" var="username_text"/>
 
-<c:set value="${pageContext.request.userPrincipal}" var="authic"/>
+<c:set value="${pageContext.request.contextPath}" var="contextPath"/>
+<c:set value="${pageContext.request.userPrincipal}" var="principal"/>
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/header.css"/>"/>
 
 <h1>${news_manager_text}</h1>
 
-<c:if test="${authic != null}">
-    <form id="signOutButton" action="${pageContext.request.contextPath}/user/doSignOut" method="post">
+<c:if test="${principal != null}">
+    <form id="signOutButton" action="${contextPath}/user/doSignOut" method="post">
         <button type="submit">${sign_out_button}</button>
     </form>
 </c:if>
 
-<c:if test="${authic == null}">
-    <form id="loginForm" action="/process-authorisation" method="post">
+<c:if test="${principal == null}">
+    <form id="loginForm" action="${contextPath}/process-authorisation" method="post">
         <label>
             <input type="text" name="username" placeholder="${username_text}">
         </label>
@@ -35,22 +36,18 @@
             <input type="text" name="password" placeholder="${password_text}">
         </label>
         <c:if test="${param.error != null}">
-<<<<<<< HEAD
             <b style="color:white">Неверный логин или пароль</b>
-=======
-            <b style="color:red">Неверный логин или пароль</b>
->>>>>>> 7bbe957d3738cb0d126e8af69089876943cf2a63
         </c:if>
         <button type="submit">${sign_in_button}</button>
     </form>
 </c:if>
 
 <div id="languageButtons">
-    <form action="${pageContext.request.contextPath}/news/changeLocale" method="get">
+    <form action="${contextPath}/news/changeLocale" method="get">
         <input type="hidden" name="localization" value="en">
         <button type="submit">${en_button}</button>
     </form>
-    <form action="${pageContext.request.contextPath}/news/changeLocale" method="get">
+    <form action="${contextPath}/news/changeLocale" method="get">
         <input type="hidden" name="localization" value="ru"/>
         <button type="submit">${ru_button}</button>
     </form>

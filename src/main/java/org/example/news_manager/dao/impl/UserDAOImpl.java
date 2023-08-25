@@ -2,6 +2,7 @@ package org.example.news_manager.dao.impl;
 
 import org.example.news_manager.dao.UserDAO;
 import org.example.news_manager.dao.exception.DAOException;
+import org.example.news_manager.entity.AuthorityEntity;
 import org.example.news_manager.entity.LocaleEntity;
 import org.example.news_manager.entity.RoleEntity;
 import org.example.news_manager.entity.UserEntity;
@@ -50,12 +51,12 @@ public class UserDAOImpl implements UserDAO{
 			Session session = sessionFactory.getCurrentSession();
 
 			LocaleEntity localeEntity = session.get(LocaleEntity.class, localeId);
-			RoleEntity roleEntity = session.get(RoleEntity.class, 1);
+			AuthorityEntity authorityEntity = session.get(AuthorityEntity.class, 1);
 			userEntity.setLocaleEntity(localeEntity);
-			userEntity.setRoleEntity(roleEntity);
+			userEntity.setAuthority(authorityEntity);
 
 			localeEntity.getUsersEntity().add(userEntity);
-			roleEntity.getUsersEntity().add(userEntity);
+			authorityEntity.getUserEntity().add(userEntity);
 
 			session.save(userEntity);
 		}

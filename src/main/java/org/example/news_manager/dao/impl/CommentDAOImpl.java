@@ -21,10 +21,14 @@ public class CommentDAOImpl implements CommentDAO{
 	}
 	
 	@Override
-	public void saveComment(CommentEntity commentEntity, int userId, int newsId) throws DAOException{
+	public void saveComment(CommentEntity commentEntity, String username, int newsId) throws DAOException{
 		try {
 			Session session = sessionFactory.getCurrentSession();
-			UserEntity user = session.get(UserEntity.class, userId);
+			
+			Query query = session.createQuery("FROM UserEntity WHERE login LIKE (:username)", UserEntity.class);
+			query.setParameter("username", username);
+			UserEntity user = (UserEntity) query.getSingleResult();
+			
 			NewsEntity news = session.get(NewsEntity.class, newsId);
 			commentEntity.setNewsEntity(news);
 			commentEntity.setUserEntity(user);
@@ -53,8 +57,9 @@ public class CommentDAOImpl implements CommentDAO{
 	@Override
 	public void deleteCommentById(int commentId) throws DAOException{
 		try {
+			System.out.println(commentId);
 			Session session = sessionFactory.getCurrentSession();
-			Query query = session.createQuery("DELETE FROM CommentEntity WHERE id = :id", CommentEntity.class);
+			Query query = session.createQuery("DELETE FROM CommentEntity WHERE id = :id");
 			query.setParameter("id", commentId);
 			query.executeUpdate();
 		}

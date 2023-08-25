@@ -40,4 +40,12 @@ public class CommentInfoBean {
 	public void setPublicationDate(String publicationDate) {
 		this.publicationDate = publicationDate;
 	}
+
+	@Override
+	public String toString() {
+		return "CommentInfoBean [id=" + id + ", text=" + text + ", username=" + username + ", publicationDate="
+				+ publicationDate + "]";
+	}
+	
+	
 }

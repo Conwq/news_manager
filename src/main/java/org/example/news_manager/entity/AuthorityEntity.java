@@ -2,11 +2,13 @@ package org.example.news_manager.entity;
 
 
 import javax.persistence.*;
+
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "authorities")
-public class AuthorityEntity {
+public class AuthorityEntity implements Serializable {
 
 	@Id
 	@Column(name = "authority_id")
@@ -16,7 +18,7 @@ public class AuthorityEntity {
 	@Column(name = "authority")
 	private String authority;
 
-	@OneToMany(mappedBy = "authority")
+	@OneToMany(mappedBy = "authority", fetch = FetchType.LAZY)
 	private List<UserEntity> userEntity;
 
 	public AuthorityEntity(){

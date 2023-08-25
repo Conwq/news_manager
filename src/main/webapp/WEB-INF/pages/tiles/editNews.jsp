@@ -15,11 +15,13 @@
 <fmt:message bundle="${loc}" key="locale.edit_news.text.title" var="title_text"/>
 <fmt:message bundle="${loc}" key="locale.button.back" var="back_button"/>
 
+<c:set value="${pageContext.request.contextPath}" var="contextPath"/>
+
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/styles/editNews.css"/>"/>
 
 <div class="edit-news-form">
     <h2>${edit_text}</h2>
-    <form:form action="${pageContext.request.contextPath}/news/doEditNews" method="post" modelAttribute="news"
+    <form:form action="${contextPath}/news/doEditNews" method="post" modelAttribute="news"
                enctype="multipart/form-data">
         <form:hidden path="id" value="${news.id}"/>
         <form:hidden path="publicationDate" value="${news.publicationDate}"/>
