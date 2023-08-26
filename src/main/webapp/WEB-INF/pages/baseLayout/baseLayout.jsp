@@ -1,16 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
          pageEncoding="utf-8" isELIgnored="false" %>
-<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<fmt:setLocale value="${sessionScope.localization}"/>
-<fmt:setBundle basename="locales.locale" var="loc"/>
-
-<fmt:message bundle="${loc}" key="locale.manager_menu.text.welcome_in_news_manager" var="welcome_text"/>
-<fmt:message bundle="${loc}" key="locale.manager_menu.text.registration" var="registration_text"/>
-<fmt:message bundle="${loc}" key="locale.header.text.news_manager" var="news_manager_text"/>
-<fmt:message bundle="${loc}" key="locale.footer.text.reserved" var="fot"/>
+<spring:message code="locale.manager_menu.text.welcome_in_news_manager" var="welcome_text"/>
+<spring:message code="locale.manager_menu.text.registration" var="registration_text"/>
+<spring:message code="locale.header.text.news_manager" var="news_manager_text"/>
+<spring:message code="locale.footer.text.reserved" var="fot"/>
 
 <c:set value="${pageContext.request.contextPath}" var="contextPath"/>
 <c:set value="${pageContext.request.userPrincipal}" var="principal"/>

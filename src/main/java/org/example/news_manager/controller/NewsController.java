@@ -1,38 +1,23 @@
 package org.example.news_manager.controller;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.example.news_manager.bean.CommentDataForEditBean;
-import org.example.news_manager.bean.CommentInfoBean;
-import org.example.news_manager.bean.NewsDataForNewsListBean;
-import org.example.news_manager.bean.NewsDataToAddBean;
-import org.example.news_manager.bean.NewsInfoBean;
-import org.example.news_manager.bean.TagBean;
-import org.example.news_manager.entity.UserEntity;
+import org.example.news_manager.bean.*;
 import org.example.news_manager.service.CommentService;
 import org.example.news_manager.service.NewsService;
 import org.example.news_manager.service.TagService;
 import org.example.news_manager.service.UserDetailsImpl;
 import org.example.news_manager.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/news")
@@ -58,11 +43,9 @@ public class NewsController {
 	 ***********/
 	
 	@GetMapping("/goToBasePage")
-	public String goToBasePage(HttpServletRequest request,
+	public String goToBasePage(Locale locale,
 							   Model model) {
 		try {
-			String localeParameter = (String) request.getSession().getAttribute("localization");
-			Locale locale = localeParameter == null ? LocaleContextHolder.getLocale() : new Locale(localeParameter);
 
 			List<NewsDataForNewsListBean> news = newsService.getNews("5", locale);
 			model.addAttribute("news", news);
@@ -75,13 +58,10 @@ public class NewsController {
 	}
 
 	@GetMapping("/goToNewsList")
-	public String goToNewsList(
-//								@SessionAttribute("locale") Locale locale,
-								@AuthenticationPrincipal UserDetailsImpl user,
-							 	Model model) {
+	public String goToNewsList(Locale locale,
+							   Model model) {
 		try {
-//			List<NewsDataForNewsListBean> news = newsService.getNews(locale);
-			List<NewsDataForNewsListBean> news = newsService.getNews(new Locale("en", "US"));
+			List<NewsDataForNewsListBean> news = newsService.getNews(locale);
 
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
@@ -94,11 +74,10 @@ public class NewsController {
 
 	@GetMapping("/getSearchResult")
 	public String getFoundNewsByValue(@RequestParam("value") String value,
-//									  @SessionAttribute("locale") Locale locale,
+									  Locale locale,
 									  Model model){
 		try{
-//			List<NewsDataForNewsListBean> news = newsService.getFoundNewsByValue(value, locale);
-			List<NewsDataForNewsListBean> news = newsService.getFoundNewsByValue(value, new Locale("en", "US"));
+			List<NewsDataForNewsListBean> news = newsService.getFoundNewsByValue(value, locale);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
@@ -137,15 +116,11 @@ public class NewsController {
 
 	@GetMapping("/goToViewNews")
 	public String showNews(@RequestParam("id") String newsId,
-//						   @SessionAttribute("locale") Locale locale,
+						   Locale locale,
 						   Model model) {
 		try {
-			NewsInfoBean news = newsService.findById(newsId, new Locale("en", "US"));
-//			NewsInfoBean news = newsService.findById(newsId, locale);
-			
-			List<CommentInfoBean> comments = commentService.getCommentsFromNewsById(newsId, new Locale("en", "US"));
-//			List<CommentInfoBean> comments = commentService.getCommentsFromNewsById(newsId, locale);
-			
+			NewsInfoBean news = newsService.findById(newsId, locale);
+			List<CommentInfoBean> comments = commentService.getCommentsFromNewsById(newsId, locale);
 			List<TagBean> tags = tagService.getTagsForNewsById(newsId);
 			
 			model.addAttribute("tags", tags);
@@ -210,14 +185,13 @@ public class NewsController {
 
 	@GetMapping("/changeLocale")
 	public String changeLocale(HttpServletRequest request) {
-		request.getSession().setAttribute("localization", request.getParameter("localization"));
-		request.getSession().setAttribute("locale", new Locale(request.getParameter("localization")));
-		return "redirect:" + getRequestURL(request);
+		String referer = request.getHeader("referer");
+		return "redirect:" + getRequestURL(referer);
 	}
 
-	private String getRequestURL(HttpServletRequest request){
+	private String getRequestURL(String referer){
 		try {
-			URI uri = new URI(request.getHeader("referer"));
+			URI uri = new URI(referer);
 			String path = uri.getPath();
 			if (uri.getQuery() != null) {
 				path += "?" + uri.getQuery();
@@ -228,7 +202,7 @@ public class NewsController {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/***********
 	 ***********
 	 **COMMENTS*

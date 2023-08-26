@@ -1,16 +1,14 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 <%@ page isELIgnored="false" pageEncoding="UTF-8" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<fmt:setLocale value="${sessionScope.localization}"/>
-<fmt:setBundle basename="locales.locale" var="loc"/>
-
-<fmt:message bundle="${loc}" key="locale.comment.button.delete" var="delete"/>
-<fmt:message bundle="${loc}" key="locale.comment.button.edit" var="edit"/>
-<fmt:message bundle="${loc}" key="locale.comment.button.enter_commit" var="enterCommit"/>
-<fmt:message bundle="${loc}" key="locale.comment.button.submit" var="submit"/>
-<fmt:message bundle="${loc}" key="locale.comment.text.no_comment" var="no_comment"/>
+<spring:message code="locale.comment.button.delete" var="delete"/>
+<spring:message code="locale.comment.button.edit" var="edit"/>
+<spring:message code="locale.comment.button.enter_commit" var="enterCommit"/>
+<spring:message code="locale.comment.button.submit" var="submit"/>
+<spring:message code="locale.comment.text.no_comment" var="no_comment"/>
+<spring:message code="locale.comment.text.write_comment" var="write_comment"/>
 
 <c:set value="${pageContext.request.contextPath}" var="contextPath"/>
 <c:set value="${pageContext.request.userPrincipal}" var="principal"/>
@@ -31,7 +29,8 @@
        		<div class="content">${comment.text}</div>
        		
        		<security:authorize access="(hasRole('ROLE_ADMIN')) or (#comment.username eq #principal.name)">
-       			<form action="${contextPath}/news/doDeleteComment?commentId=${comment.id}" method="post">
+       			<form action="${contextPath}/news/doDeleteComment" method="post">
+					<input type="hidden" value="${comment.id}" name="commentId"/>
        				<input type="hidden" value="${news.id}" name="newsId"/>
     				<button class="delete_button" type="submit">${delete}</button>
        			</form>
@@ -69,7 +68,7 @@
 				<input type="hidden" value="${principal.name}" name="username"/>
 
 				<label for="new-comment">${enterCommit}</label>
-				<textarea id="new-comment" name="text" placeholder="Write your comment here...."></textarea>
+				<textarea id="new-comment" name="text" placeholder="${write_comment}"></textarea>
 
 				<button class="submit-button" type="submit">${submit}</button>
 			</form>

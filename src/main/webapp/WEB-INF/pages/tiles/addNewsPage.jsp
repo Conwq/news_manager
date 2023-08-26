@@ -1,17 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<fmt:setLocale value="${sessionScope.localization}"/>
-<fmt:setBundle basename="locales.locale" var="loc"/>
-
-<fmt:message bundle="${loc}" key="locale.add_news.text.enter_title" var="title_text"/>
-<fmt:message bundle="${loc}" key="locale.add_news.text.enter_brief" var="brief_text"/>
-<fmt:message bundle="${loc}" key="locale.add_news.text.enter_content" var="content_text"/>
-<fmt:message bundle="${loc}" key="locale.add_news.button.create" var="create_button"/>
-<fmt:message bundle="${loc}" key="locale.button.back" var="back_button"/>
-<fmt:message bundle="${loc}" key="locale.add_news.text.image" var="image_text"/>
+<spring:message code="locale.add_news.text.enter_title" var="title_text"/>
+<spring:message code="locale.add_news.text.enter_brief" var="brief_text"/>
+<spring:message code="locale.add_news.text.enter_content" var="content_text"/>
+<spring:message code="locale.add_news.button.create" var="create_button"/>
+<spring:message code="locale.button.back" var="back_button"/>
+<spring:message code="locale.add_news.text.image" var="image_text"/>
+<spring:message code="locale.add_news.text.select_tags" var="select_tags"/>
 
 <c:set value="${pageContext.request.contextPath}" var="contextPath"/>
 
@@ -31,7 +29,7 @@
         <label for="image">${image_text}</label>
         <input type="file" id="image" name="image" accept="image/*"/>
 
-        <label for="tags">Select tags for news:</label>
+        <label for="tags">${select_tags}</label>
         <form:select path="tags" id="tags" multiple="true">
             <form:options items="${tags}" itemValue="id" itemLabel="name"/>
         </form:select>

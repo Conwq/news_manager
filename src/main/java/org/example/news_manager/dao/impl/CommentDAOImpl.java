@@ -57,7 +57,6 @@ public class CommentDAOImpl implements CommentDAO{
 	@Override
 	public void deleteCommentById(int commentId) throws DAOException{
 		try {
-			System.out.println(commentId);
 			Session session = sessionFactory.getCurrentSession();
 			Query query = session.createQuery("DELETE FROM CommentEntity WHERE id = :id");
 			query.setParameter("id", commentId);

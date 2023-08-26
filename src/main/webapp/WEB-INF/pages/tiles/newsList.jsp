@@ -1,21 +1,17 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page isELIgnored="false" pageEncoding="UTF-8" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<fmt:setLocale value="${sessionScope.localization}"/>
-<fmt:setBundle basename="locales.locale" var="loc"/>
-
-<fmt:message bundle="${loc}" key="locale.news_list.button.view_news" var="view_news_button"/>
-<fmt:message bundle="${loc}" key="locale.news_list.text.latest_news" var="latest_news_text"/>
-<fmt:message bundle="${loc}" key="locale.news_list.text.no_news" var="no_news_text"/>
-<fmt:message bundle="${loc}" key="locale.news_list.text.published_on" var="published_text"/>
-<fmt:message bundle="${loc}" key="locale.button.edit_news" var="edit_button"/>
-<fmt:message bundle="${loc}" key="locale.button.delete_news" var="delete_button"/>
+<spring:message code="locale.news_list.button.view_news" var="view_news_button"/>
+<spring:message code="locale.news_list.text.latest_news" var="latest_news_text"/>
+<spring:message code="locale.news_list.text.no_news" var="no_news_text"/>
+<spring:message code="locale.news_list.text.published_on" var="published_text"/>
+<spring:message code="locale.button.edit_news" var="edit_button"/>
+<spring:message code="locale.button.delete_news" var="delete_button"/>
 
 <c:set value="${requestScope.news}" var="news"/>
-
 <c:set value="${pageContext.request.contextPath }" var="contextPath"/>
 <c:set value="${pageContext.request.userPrincipal}" var="principal"/>
 

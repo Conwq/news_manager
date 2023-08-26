@@ -11,16 +11,19 @@ import java.util.Locale;
 
 public class UserDetailsImpl implements UserDetails {
 	private final UserEntity userEntity;
+	private Locale locale;
 
 	public UserDetailsImpl(UserEntity userEntity){
 		this.userEntity = userEntity;
+		locale = new Locale(userEntity.getLocaleEntity().getLanguage(), userEntity.getLocaleEntity().getCountry());
 	}
 	
 	public Locale getLocale() {
-		String language = userEntity.getLocaleEntity().getLanguage();
-		String country = userEntity.getLocaleEntity().getCountry();
-		Locale locale = new Locale(language, country);
 		return locale;
+	}
+
+	public void setLocale(Locale locale){
+		this.locale = locale;
 	}
 
 	@Override

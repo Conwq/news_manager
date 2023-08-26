@@ -1,17 +1,14 @@
 <%@ page isELIgnored="false" pageEncoding="UTF-8" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="spring" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
-<fmt:setLocale value="${sessionScope.localization}"/>
-<fmt:setBundle basename="locales.locale" var="loc"/>
-
-<fmt:message bundle="${loc}" key="locale.view_news.text.publication_date" var="publication_text"/>
-<fmt:message bundle="${loc}" key="locale.button.back" var="back_button"/>
-<fmt:message bundle="${loc}" key="locale.button.delete_news" var="delete_button"/>
-<fmt:message bundle="${loc}" key="locale.button.edit_news" var="edit_button"/>
-<fmt:message bundle="${loc}" key="locale.view_news.text.image_news" var="image_news"/>
+<spring:message code="locale.view_news.text.publication_date" var="publication_text"/>
+<spring:message code="locale.button.back" var="back_button"/>
+<spring:message code="locale.button.delete_news" var="delete_button"/>
+<spring:message code="locale.button.edit_news" var="edit_button"/>
+<spring:message code="locale.view_news.text.image_news" var="image_news"/>
 
 <c:set value="${pageContext.request.contextPath }" var="contextPath"/>
 <c:set value="${pageContext.request.userPrincipal}" var="principal"/>
