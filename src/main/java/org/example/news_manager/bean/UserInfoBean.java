@@ -8,8 +8,7 @@ public class UserInfoBean {
 	private String login;
 	private String password;
 	private Locale locale;
-	private Role role;
-	
+
 	public UserInfoBean() {
 	}
 	
@@ -43,18 +42,6 @@ public class UserInfoBean {
 	
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-	
-	public String getRoleName() {
-		return role.getRoleName();
 	}
 	
 	public String getPassword() {

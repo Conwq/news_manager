@@ -78,15 +78,11 @@ public class NewsController {
 	public String goToNewsList(
 //								@SessionAttribute("locale") Locale locale,
 								@AuthenticationPrincipal UserDetailsImpl user,
-								HttpServletRequest request, 
-							   Model model) {
+							 	Model model) {
 		try {
-			
-			Locale locale = user.getLocale();
-			List<NewsDataForNewsListBean> news = newsService.getNews(locale);
-			
-			request.getSession().setAttribute("locale", locale);
-			request.getSession().setAttribute("localization", locale.getLanguage());
+//			List<NewsDataForNewsListBean> news = newsService.getNews(locale);
+			List<NewsDataForNewsListBean> news = newsService.getNews(new Locale("en", "US"));
+
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
@@ -101,8 +97,8 @@ public class NewsController {
 //									  @SessionAttribute("locale") Locale locale,
 									  Model model){
 		try{
-//			List<NewsDataForNewsListBean> news = newsService.getNews(locale);
-			List<NewsDataForNewsListBean> news = newsService.getNews(new Locale("en", "US"));
+//			List<NewsDataForNewsListBean> news = newsService.getFoundNewsByValue(value, locale);
+			List<NewsDataForNewsListBean> news = newsService.getFoundNewsByValue(value, new Locale("en", "US"));
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
 			return "baseLayout/baseLayout";
@@ -226,8 +222,7 @@ public class NewsController {
 			if (uri.getQuery() != null) {
 				path += "?" + uri.getQuery();
 			}
-			return path.replaceAll("/java-course-project-spring", "");
-//			return path;
+			return path;
 		}
 		catch (URISyntaxException e){
 			throw new RuntimeException(e);

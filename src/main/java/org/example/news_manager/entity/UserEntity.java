@@ -21,11 +21,6 @@ public class UserEntity implements Serializable{
 
 	@Column(name = "password")
 	private String password;
-
-	@ManyToOne (fetch = FetchType.LAZY, 
-			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-	@JoinColumn(name = "role_id", referencedColumnName = "role_id")
-	private RoleEntity roleEntity;
 	
 	@ManyToOne (fetch = FetchType.EAGER,
 			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -82,14 +77,6 @@ public class UserEntity implements Serializable{
 		this.password = password;
 	}
 
-	public RoleEntity getRoleEntity() {
-		return roleEntity;
-	}
-
-	public void setRoleEntity(RoleEntity role) {
-		this.roleEntity = role;
-	}
-	
 	public LocaleEntity getLocaleEntity() {
 		return localeEntity;
 	}
@@ -111,17 +98,24 @@ public class UserEntity implements Serializable{
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		UserEntity that = (UserEntity) o;
-		return id == that.id && Objects.equals(email, that.email) && Objects.equals(login, that.login) && Objects.equals(password, that.password) && Objects.equals(roleEntity, that.roleEntity) && Objects.equals(localeEntity, that.localeEntity);
+		return id == that.id && Objects.equals(email, that.email) && Objects.equals(login, that.login) && Objects.equals(password, that.password) && Objects.equals(localeEntity, that.localeEntity) && Objects.equals(comments, that.comments) && Objects.equals(authority, that.authority);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, email, login, password, roleEntity, localeEntity);
+		return Objects.hash(id, email, login, password, localeEntity, comments, authority);
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getName() + " [id=" + id + ", email=" + email + ", login=" + login + ", password=" + password + ", localeEntity="
-				+ "]";
+		return getClass().getName() + "{" +
+				"id=" + id +
+				", email='" + email + '\'' +
+				", login='" + login + '\'' +
+				", password='" + password + '\'' +
+				", localeEntity=" + localeEntity +
+				", comments=" + comments +
+				", authority=" + authority +
+				'}';
 	}
 }

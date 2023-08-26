@@ -4,7 +4,6 @@ import org.example.news_manager.dao.UserDAO;
 import org.example.news_manager.dao.exception.DAOException;
 import org.example.news_manager.entity.AuthorityEntity;
 import org.example.news_manager.entity.LocaleEntity;
-import org.example.news_manager.entity.RoleEntity;
 import org.example.news_manager.entity.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

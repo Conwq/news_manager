@@ -59,7 +59,6 @@ public class UserController {
 			Locale locale = userInfoBean.getLocale();
 			HttpSession session = request.getSession(true);
 			session.setAttribute("active", "true");
-			session.setAttribute("role", userInfoBean.getRole().getRoleName());
 			session.setAttribute("locale", locale);
 			session.setAttribute("localization", locale.getLanguage());
 			session.setAttribute("user", userInfoBean);

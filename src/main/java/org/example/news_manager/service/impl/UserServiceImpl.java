@@ -1,6 +1,5 @@
 package org.example.news_manager.service.impl;
 
-import org.example.news_manager.bean.Role;
 import org.example.news_manager.bean.UserInfoBean;
 import org.example.news_manager.bean.UserRegistrationDataBean;
 import org.example.news_manager.dao.UserDAO;
@@ -39,9 +38,6 @@ public class UserServiceImpl implements UserService{
 			String country = userEntity.getLocaleEntity().getCountry();
 			String language = userEntity.getLocaleEntity().getLanguage();
 			userBean.setLocale(new Locale(language, country));
-
-			String roleName = userEntity.getRoleEntity().getRoleName().toUpperCase();
-			userBean.setRole(Role.valueOf(roleName));
 
 			return userBean;
 		}
