@@ -4,10 +4,8 @@ import org.example.news_manager.bean.*;
 import org.example.news_manager.service.CommentService;
 import org.example.news_manager.service.NewsService;
 import org.example.news_manager.service.TagService;
-import org.example.news_manager.service.UserDetailsImpl;
 import org.example.news_manager.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +44,6 @@ public class NewsController {
 	public String goToBasePage(Locale locale,
 							   Model model) {
 		try {
-
 			List<NewsDataForNewsListBean> news = newsService.getNews("5", locale);
 			model.addAttribute("news", news);
 			model.addAttribute("action", "newsList");
@@ -184,7 +181,7 @@ public class NewsController {
 	}
 
 	@GetMapping("/changeLocale")
-	public String changeLocale(HttpServletRequest request) {
+	public String changeLocale(HttpServletRequest request, Locale locale) {
 		String referer = request.getHeader("referer");
 		return "redirect:" + getRequestURL(referer);
 	}

@@ -1,4 +1,4 @@
-package org.example.news_manager.service;
+package org.example.news_manager.bean;
 
 import org.example.news_manager.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,15 +9,21 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
-public class UserDetailsImpl implements UserDetails {
+public class UserDetailsImplBean implements UserDetails {
 	private final UserEntity userEntity;
 	private Locale locale;
 
-	public UserDetailsImpl(UserEntity userEntity){
+	public UserDetailsImplBean(UserEntity userEntity){
 		this.userEntity = userEntity;
-		locale = new Locale(userEntity.getLocaleEntity().getLanguage(), userEntity.getLocaleEntity().getCountry());
+		this.locale = localeUserInit(userEntity);
 	}
-	
+
+	public Locale localeUserInit(UserEntity userEntity){
+		String language = userEntity.getLocaleEntity().getLanguage();
+		String country = userEntity.getLocaleEntity().getCountry();
+		return new Locale(language, country);
+	}
+
 	public Locale getLocale() {
 		return locale;
 	}

@@ -2,7 +2,7 @@ package org.example.news_manager.service.impl;
 
 import org.example.news_manager.dao.UserDAO;
 import org.example.news_manager.entity.UserEntity;
-import org.example.news_manager.service.UserDetailsImpl;
+import org.example.news_manager.bean.UserDetailsImplBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,6 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if (userEntity == null){
 			throw new UsernameNotFoundException("User not found");
 		}
-		return new UserDetailsImpl(userEntity);
+		UserDetailsImplBean user = new UserDetailsImplBean(userEntity);
+		return user;
 	}
 }

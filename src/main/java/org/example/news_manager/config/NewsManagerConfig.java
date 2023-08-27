@@ -6,12 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -41,7 +39,6 @@ public class NewsManagerConfig implements WebMvcConfigurer {
 		this.env = env;
 	}
 
-	//2 бина для Локализации
 	@Bean
 	public LocaleChangeInterceptor localeChangeInterceptor(){
 		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
@@ -57,7 +54,7 @@ public class NewsManagerConfig implements WebMvcConfigurer {
 	@Bean
 	public SessionLocaleResolver localeResolver(){
 		SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-		sessionLocaleResolver.setDefaultLocale(LocaleContextHolder.getLocale());
+		sessionLocaleResolver.setDefaultLocale(new Locale("en"));
 		return sessionLocaleResolver;
 	}
 

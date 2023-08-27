@@ -19,9 +19,9 @@
 <h1>${news_manager_text}</h1>
 
 <c:if test="${principal != null}">
-    <form id="signOutButton" action="${contextPath}/user/doSignOut" method="post">
-        <button type="submit">${sign_out_button}</button>
-    </form>
+    <a href="${contextPath}/logout">
+        <button>${sign_out_button}</button>
+    </a>
 </c:if>
 
 <c:if test="${principal == null}">

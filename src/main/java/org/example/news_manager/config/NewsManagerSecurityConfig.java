@@ -1,5 +1,6 @@
 package org.example.news_manager.config;
 
+import org.example.news_manager.config.listeners.AuthenticationSuccessEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +15,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class NewsManagerSecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserDetailsService userDetailsService;
+	private final AuthenticationSuccessEventListener eventListener;
 
 	@Autowired
-	public NewsManagerSecurityConfig (UserDetailsService userDetailsService){
+	public NewsManagerSecurityConfig (UserDetailsService userDetailsService,
+									  AuthenticationSuccessEventListener eventListener){
 		this.userDetailsService = userDetailsService;
+		this.eventListener = eventListener;
 	}
 
 	@Bean
@@ -42,10 +46,10 @@ public class NewsManagerSecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/news/goToBasePage")
 				.loginProcessingUrl("/process-authorisation")
 //				.permitAll()
-				.defaultSuccessUrl("/news/goToNewsList", true)
+				.successHandler(eventListener)
 				.failureUrl("/news?error")
 				.and()
-				.logout().logoutSuccessUrl("/news/goToBasePage")
+				.logout().logoutUrl("/logout").logoutSuccessUrl("/news/goToBasePage")
 				.and()
 				.csrf().disable();
 
