@@ -9,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Locale;
 
 @Component
 public class AuthenticationSuccessEventListener implements AuthenticationSuccessHandler {
@@ -19,17 +18,8 @@ public class AuthenticationSuccessEventListener implements AuthenticationSuccess
 										HttpServletResponse httpServletResponse,
 										Authentication authentication) throws IOException, ServletException {
 		if (authentication != null && authentication.getPrincipal() instanceof UserDetailsImplBean user) {
-			String formHtml = "<html><body>"
-					+ "<form id=\"redirectForm\" method=\"post\" action=\"/user/authentication\">"
-					+ 	"<input type=\"hidden\" name=\"localization\" value=\"" + user.getLocale().getLanguage() + "\">"
-					+ "</form>"
-					+ "<script>"
-					+ 	"document.getElementById('redirectForm').submit();"
-					+ "</script>"
-					+ "</body></html>";
-
-			httpServletResponse.setContentType("text/html;charset=UTF-8");
-			httpServletResponse.getWriter().write(formHtml);
+			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() +
+					"/user/authentication?localization=" + user.getLocale().getLanguage());
 		}
 	}
 }

@@ -49,7 +49,7 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/authentication")
+	@GetMapping("/authentication")
 	public String goToNewsList(){
 		return "redirect:/news/goToNewsList";
 	}
