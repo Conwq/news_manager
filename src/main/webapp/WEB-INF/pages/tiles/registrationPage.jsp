@@ -47,8 +47,8 @@
 
         <label for="localeName">${country_text}</label>
         <form:select path="localeId" id="localeName" name="localeName">
-            <option value=1>${rs_text}</option>
-            <option value=2>${us_text}</option>
+            <form:option value="1" >${rs_text}</form:option>
+            <form:option value="2">${us_text}</form:option>
         </form:select>
         <br>
 

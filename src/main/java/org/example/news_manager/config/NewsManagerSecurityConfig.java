@@ -40,7 +40,6 @@ public class NewsManagerSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/news/admin/**").hasRole("ADMIN")
 				.antMatchers("/news/goToBasePage", "/user/**", "/error").permitAll()
 				.antMatchers("/news/**").authenticated()
-//				.anyRequest().authenticated()
 
 				.and()
 				.exceptionHandling().accessDeniedPage("/user/access-denied")
