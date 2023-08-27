@@ -84,7 +84,7 @@ public class NewsController {
 		}
 	}
 
-	@GetMapping("/goToAddNewsPage")
+	@GetMapping("/admin/goToAddNewsPage")
 	public String showAddNewsPage(Model model) {
 		try {
 			NewsDataToAddBean news = new NewsDataToAddBean();
@@ -99,7 +99,7 @@ public class NewsController {
 		}
 	}
 
-	@PostMapping("/doAddNews")
+	@PostMapping("/admin/doAddNews")
 	public String addNews(@ModelAttribute("news") NewsDataToAddBean news,
 						  @RequestParam("image") MultipartFile image) {
 		try {
@@ -132,7 +132,7 @@ public class NewsController {
 		}
 	}
 
-	@GetMapping("/goToEditNews")
+	@GetMapping("/admin/goToEditNews")
 	public String showEditNewsPage(@RequestParam("id") String id,
 								   Model model) {
 		try {
@@ -146,7 +146,7 @@ public class NewsController {
 		}
 	}
 
-	@PostMapping("/doEditNews")
+	@PostMapping("/admin/doEditNews")
 	public String doEditNews(@ModelAttribute("news") NewsInfoBean news,
 							 @RequestParam("image") MultipartFile image) {
 		try {
@@ -158,7 +158,7 @@ public class NewsController {
 		}
 	}
 
-	@RequestMapping("/doDeleteNews")
+	@RequestMapping("/admin/doDeleteNews")
 	public String doDeleteNews(@RequestParam("id") String id) {
 		try {
 			newsService.deleteNewsById(id);
@@ -169,7 +169,7 @@ public class NewsController {
 		}
 	}
 
-	@RequestMapping("/doDeleteSomeNews")
+	@RequestMapping("/admin/doDeleteSomeNews")
 	public String deleteNewsList(@RequestParam("news") String[] news) {
 		try {
 			newsService.deleteNewsList(news);

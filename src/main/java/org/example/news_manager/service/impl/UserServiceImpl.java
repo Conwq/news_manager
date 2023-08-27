@@ -22,29 +22,6 @@ public class UserServiceImpl implements UserService{
 	public UserServiceImpl(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
-	
-	@Override
-	@Transactional
-	public UserInfoBean signIn(String login, String password) throws ServiceException {
-		try {
-			UserEntity userEntity = userDAO.signIn(login, password);
-
-			UserInfoBean userBean = new UserInfoBean();
-			userBean.setId(userEntity.getId());
-			userBean.setEmail(userEntity.getEmail());
-			userBean.setLogin(userEntity.getLogin());
-			userBean.setPassword(userEntity.getPassword());
-
-			String country = userEntity.getLocaleEntity().getCountry();
-			String language = userEntity.getLocaleEntity().getLanguage();
-			userBean.setLocale(new Locale(language, country));
-
-			return userBean;
-		}
-		catch(DAOException e) {
-			throw new ServiceException(e);
-		}
-	}
 
 	@Override
 	@Transactional

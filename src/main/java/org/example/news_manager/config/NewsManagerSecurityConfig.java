@@ -37,30 +37,27 @@ public class NewsManagerSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/news/goToBasePage", "/user/goToRegistrationPage", "/error")
-				.permitAll()
-				.antMatchers("/news").authenticated()
-//				.anyRequest().authenticated() Почему то некорректно отображается, а вот с матчером выше - все работает
+				.antMatchers("/news/admin/**").hasRole("ADMIN")
+				.antMatchers("/news/goToBasePage", "/user/**", "/error").permitAll()
+				.antMatchers("/news/**").authenticated()
+//				.anyRequest().authenticated()
+
+				.and()
+				.exceptionHandling().accessDeniedPage("/user/access-denied")
+
 				.and()
 				.formLogin()
 				.loginPage("/news/goToBasePage")
 				.loginProcessingUrl("/process-authorisation")
-//				.permitAll()
 				.successHandler(eventListener)
 				.failureUrl("/news?error")
+
 				.and()
-				.logout().logoutUrl("/logout").logoutSuccessUrl("/news/goToBasePage")
+				.logout()
+				.logoutUrl("/logout")
+				.logoutSuccessUrl("/news/goToBasePage")
+
 				.and()
 				.csrf().disable();
-
-//		http.csrf().disable()
-//				.authorizeRequests().antMatchers("/news/goToBasePage", "/error").permitAll()
-//				.anyRequest().authenticated()
-//				.and()
-//				.formLogin()
-//				.defaultSuccessUrl("/news/goToNewsList", true)
-//				.failureUrl("/news?error")
-//				.and()
-//				.logout().logoutSuccessUrl("/news/goToBasePage");
 	}
 }

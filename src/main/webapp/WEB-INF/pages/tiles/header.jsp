@@ -32,9 +32,6 @@
         <label>
             <input type="text" name="password" placeholder="${password_text}">
         </label>
-        <c:if test="${param.error != null}">
-            <b style="color:white">Неверный логин или пароль</b>
-        </c:if>
         <button type="submit">${sign_in_button}</button>
     </form>
 </c:if>

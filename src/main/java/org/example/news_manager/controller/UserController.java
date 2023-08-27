@@ -53,4 +53,9 @@ public class UserController {
 	public String goToNewsList(){
 		return "redirect:/news/goToNewsList";
 	}
+
+	@GetMapping("/access-denied")
+	public String getAccessDeniedPage(){
+		return "accessDenied";
+	}
 }

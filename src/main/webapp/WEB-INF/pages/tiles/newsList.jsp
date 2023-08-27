@@ -66,7 +66,7 @@
     <c:otherwise>
         <h2>${latest_news_text}</h2>
         <hr>
-        <form action="${contextPath}/news/doDeleteSomeNews" id="selectedNews" method="post">
+        <form action="${contextPath}/news/admin/doDeleteSomeNews" id="selectedNews" method="post">
             <c:forEach items="${news}" var="news">
                 <div class="news-item">
                     <h3>${news.title}</h3>
@@ -89,10 +89,10 @@
                     </c:if>
                     
                     <security:authorize access="hasRole('ROLE_ADMIN') and #principal != null">
-                    	<a href="${contextPath}/news/goToEditNews?id=${news.id}">
+                    	<a href="${contextPath}/news/admin/goToEditNews?id=${news.id}">
                             <button type="button" class="btn-style">${edit_button}</button>
                         </a>&nbsp;
-                        <a href="${contextPath}/news/doDeleteNews?id=${news.id}">
+                        <a href="${contextPath}/news/admin/doDeleteNews?id=${news.id}">
                             <button type="button" class="btn-style">${delete_button}</button>
                         </a>&nbsp;
                         <label>

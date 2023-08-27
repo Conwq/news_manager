@@ -54,11 +54,11 @@
     
     <security:authorize access="hasRole('ROLE_ADMIN') and principal != null">
     	<div class="action-buttons">
-            <a href="${contextPath}/news/goToEditNews?id=${news.id}">
+            <a href="${contextPath}/news/admin/goToEditNews?id=${news.id}">
                 <button class="edit">${edit_button}</button>
             </a>
             
-            <form action="${contextPath}/news/doDeleteNews?id=${news.id}" method="post">
+            <form action="${contextPath}/news/admin/doDeleteNews?id=${news.id}" method="post">
            		<button type="submit" class="delete">${delete_button}</button>
             </form>
         </div>

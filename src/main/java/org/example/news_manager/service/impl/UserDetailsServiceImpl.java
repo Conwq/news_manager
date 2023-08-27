@@ -1,8 +1,8 @@
 package org.example.news_manager.service.impl;
 
+import org.example.news_manager.bean.UserDetailsImplBean;
 import org.example.news_manager.dao.UserDAO;
 import org.example.news_manager.entity.UserEntity;
-import org.example.news_manager.bean.UserDetailsImplBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +15,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private final UserDAO userDAO;
 
 	@Autowired
-	public UserDetailsServiceImpl(UserDAO userDAO){
+	public UserDetailsServiceImpl(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
 
@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Transactional
 	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 		UserEntity userEntity = userDAO.findUserByUsername(s);
-		if (userEntity == null){
+		if (userEntity == null) {
 			throw new UsernameNotFoundException("User not found");
 		}
 		UserDetailsImplBean user = new UserDetailsImplBean(userEntity);

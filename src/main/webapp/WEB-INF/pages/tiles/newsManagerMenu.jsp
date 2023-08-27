@@ -23,7 +23,7 @@
 
 <security:authorize access="hasRole('ROLE_ADMIN')">
     <c:if test="${action eq 'newsList'}">
-	    <a href="${contextPath}/news/goToAddNewsPage">
+	    <a href="${contextPath}/news/admin/goToAddNewsPage">
 	        <button id="addNewsButton" type="button">${add_news_button}</button>
 	    </a>
 	    
