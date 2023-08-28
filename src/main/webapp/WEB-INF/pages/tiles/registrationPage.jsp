@@ -32,15 +32,18 @@
     <h2>${registration_form_text}</h2>
     <form:form modelAttribute="user" action="${contextPath}/user/doRegistrationUser" method="post">
         <form:errors path="*" element="div" cssClass="error-block"/>
+
         <label for="login">${login_text}</label>
         <form:input path="login" id="login"/>
         <br>
+
         <label for="email">${email_text}</label>
         <form:input path="email" id="email"/>
         <br>
         <label for="password">${password_text}</label>
         <form:input path="password" id="password"/>
         <br>
+
         <label for="confirmPassword">${conf_password_text}</label>
         <form:input path="confirmPassword" id="confirmPassword"/>
         <br>

@@ -10,6 +10,7 @@
 <spring:message code="locale.header.text.news_manager" var="news_manager_text"/>
 <spring:message code="locale.header.text_form.enter_password" var="password_text"/>
 <spring:message code="locale.header.text_form.enter_username" var="username_text"/>
+<spring:message code="locale.header.text.error_message" var="error_message"/>
 
 <c:set value="${pageContext.request.contextPath}" var="contextPath"/>
 <c:set value="${pageContext.request.userPrincipal}" var="principal"/>
@@ -32,7 +33,12 @@
         <label>
             <input type="text" name="password" placeholder="${password_text}">
         </label>
+
         <button type="submit">${sign_in_button}</button>
+        <br>
+        <c:if test="${param.error != null}">
+            <div style="color:red">${error_message}</div>
+        </c:if>
     </form>
 </c:if>
 

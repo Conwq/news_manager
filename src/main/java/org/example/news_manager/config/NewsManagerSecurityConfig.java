@@ -42,14 +42,15 @@ public class NewsManagerSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/news/**").authenticated()
 
 				.and()
-				.exceptionHandling().accessDeniedPage("/user/access-denied")
+				.exceptionHandling()
+				.accessDeniedPage("/user/access-denied")
 
 				.and()
 				.formLogin()
 				.loginPage("/news/goToBasePage")
 				.loginProcessingUrl("/process-authorisation")
 				.successHandler(eventListener)
-				.failureUrl("/news?error")
+				.failureUrl("/news/goToBasePage?error")
 
 				.and()
 				.logout()
