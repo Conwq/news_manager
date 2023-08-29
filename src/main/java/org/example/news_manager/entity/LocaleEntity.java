@@ -73,7 +73,11 @@ public class LocaleEntity implements Serializable{
 
 	@Override
 	public String toString() {
-		return "LocaleEntity [id=" + id + ", country=" + country + ", language=" + language + ", usersEntity="
-				+ usersEntity + "]";
+		return getClass().getSimpleName() + "{" +
+				"id=" + id +
+				", country='" + country + '\'' +
+				", language='" + language + '\'' +
+				", usersEntity=" + usersEntity +
+				'}';
 	}
 }

@@ -108,7 +108,7 @@ public class UserEntity implements Serializable{
 
 	@Override
 	public String toString() {
-		return getClass().getName() + "{" +
+		return getClass().getSimpleName() + "{" +
 				"id=" + id +
 				", email='" + email + '\'' +
 				", login='" + login + '\'' +

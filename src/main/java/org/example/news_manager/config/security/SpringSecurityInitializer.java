@@ -1,4 +1,4 @@
-package org.example.news_manager.config;
+package org.example.news_manager.config.security;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.Objects;
 
 public class UserDetailsImplBean implements UserDetails {
 	private final UserEntity userEntity;
@@ -65,5 +66,26 @@ public class UserDetailsImplBean implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		UserDetailsImplBean that = (UserDetailsImplBean) o;
+		return Objects.equals(userEntity, that.userEntity) && Objects.equals(locale, that.locale);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(userEntity, locale);
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{" +
+				"userEntity=" + userEntity +
+				", locale=" + locale +
+				'}';
 	}
 }

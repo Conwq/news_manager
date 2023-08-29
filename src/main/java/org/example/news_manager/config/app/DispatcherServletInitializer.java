@@ -1,4 +1,4 @@
-package org.example.news_manager.config;
+package org.example.news_manager.config.app;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

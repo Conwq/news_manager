@@ -1,4 +1,4 @@
-package org.example.news_manager.config;
+package org.example.news_manager.config.app;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,7 @@
 package org.example.news_manager.bean;
 
+import java.util.Objects;
+
 public class CommentInfoBean {
 	private int id;
 	private String text;
@@ -42,10 +44,25 @@ public class CommentInfoBean {
 	}
 
 	@Override
-	public String toString() {
-		return "CommentInfoBean [id=" + id + ", text=" + text + ", username=" + username + ", publicationDate="
-				+ publicationDate + "]";
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CommentInfoBean that = (CommentInfoBean) o;
+		return id == that.id && Objects.equals(text, that.text) && Objects.equals(username, that.username) && Objects.equals(publicationDate, that.publicationDate);
 	}
-	
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, text, username, publicationDate);
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{" +
+				"id=" + id +
+				", text='" + text + '\'' +
+				", username='" + username + '\'' +
+				", publicationDate='" + publicationDate + '\'' +
+				'}';
+	}
 }

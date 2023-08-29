@@ -3,6 +3,7 @@ package org.example.news_manager.bean;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 
 public class UserRegistrationDataBean {
@@ -59,5 +60,29 @@ public class UserRegistrationDataBean {
 
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		UserRegistrationDataBean that = (UserRegistrationDataBean) o;
+		return localeId == that.localeId && Objects.equals(login, that.login) && Objects.equals(email, that.email) && Objects.equals(password, that.password) && Objects.equals(confirmPassword, that.confirmPassword);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(login, email, password, confirmPassword, localeId);
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{" +
+				"login='" + login + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", confirmPassword='" + confirmPassword + '\'' +
+				", localeId=" + localeId +
+				'}';
 	}
 }

@@ -75,31 +75,26 @@ public class CommentEntity implements Serializable {
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hash(id, newsEntity, publicationDate, text, userEntity);
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CommentEntity that = (CommentEntity) o;
+		return id == that.id && Objects.equals(text, that.text) && Objects.equals(publicationDate, that.publicationDate) && Objects.equals(userEntity, that.userEntity) && Objects.equals(newsEntity, that.newsEntity);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CommentEntity other = (CommentEntity) obj;
-		return id == other.id && Objects.equals(newsEntity, other.newsEntity)
-				&& Objects.equals(publicationDate, other.publicationDate) && Objects.equals(text, other.text)
-				&& Objects.equals(userEntity, other.userEntity);
+	public int hashCode() {
+		return Objects.hash(id, text, publicationDate, userEntity, newsEntity);
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getName() + 
-				" [id=" + id + 
-				", text=" + text + 
-				", publicationDate=" + publicationDate + 
-				", userEntity=" + userEntity + 
-				", newsEntity=" + newsEntity + "]";
+		return getClass().getSimpleName() + "{" +
+				"id=" + id +
+				", text='" + text + '\'' +
+				", publicationDate='" + publicationDate + '\'' +
+				", userEntity=" + userEntity +
+				", newsEntity=" + newsEntity +
+				'}';
 	}
 }

@@ -1,4 +1,4 @@
-package org.example.news_manager.config;
+package org.example.news_manager.config.security;
 
 import org.example.news_manager.config.listeners.AuthenticationSuccessEventListener;
 import org.springframework.beans.factory.annotation.Autowired;

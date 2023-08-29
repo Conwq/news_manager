@@ -1,6 +1,7 @@
 package org.example.news_manager.bean;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class UserInfoBean {
 	private int id;
@@ -50,5 +51,29 @@ public class UserInfoBean {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		UserInfoBean that = (UserInfoBean) o;
+		return id == that.id && Objects.equals(email, that.email) && Objects.equals(login, that.login) && Objects.equals(password, that.password) && Objects.equals(locale, that.locale);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, email, login, password, locale);
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{" +
+				"id=" + id +
+				", email='" + email + '\'' +
+				", login='" + login + '\'' +
+				", password='" + password + '\'' +
+				", locale=" + locale +
+				'}';
 	}
 }

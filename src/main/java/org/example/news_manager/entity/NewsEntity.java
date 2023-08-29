@@ -113,22 +113,25 @@ public class NewsEntity implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		NewsEntity that = (NewsEntity) o;
-		return id == that.id && Objects.equals(title, that.title) && Objects.equals(brief, that.brief) && Objects.equals(content, that.content) && Objects.equals(publicationDate, that.publicationDate);
+		return id == that.id && Objects.equals(title, that.title) && Objects.equals(brief, that.brief) && Objects.equals(content, that.content) && Objects.equals(publicationDate, that.publicationDate) && Objects.equals(imagePath, that.imagePath) && Objects.equals(comments, that.comments) && Objects.equals(tags, that.tags);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, title, brief, content, publicationDate);
+		return Objects.hash(id, title, brief, content, publicationDate, imagePath, comments, tags);
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getName() +" {" +
+		return getClass().getSimpleName() + "{" +
 				"id=" + id +
 				", title='" + title + '\'' +
 				", brief='" + brief + '\'' +
 				", content='" + content + '\'' +
 				", publicationDate='" + publicationDate + '\'' +
+				", imagePath='" + imagePath + '\'' +
+				", comments=" + comments +
+				", tags=" + tags +
 				'}';
 	}
 }
