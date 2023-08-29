@@ -2,9 +2,9 @@ package org.example.news_manager.dao.impl;
 
 import org.example.news_manager.dao.CommentDAO;
 import org.example.news_manager.dao.exception.DAOException;
-import org.example.news_manager.entity.CommentEntity;
-import org.example.news_manager.entity.NewsEntity;
-import org.example.news_manager.entity.UserEntity;
+import org.example.news_manager.models.entity.CommentEntity;
+import org.example.news_manager.models.entity.NewsEntity;
+import org.example.news_manager.models.entity.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;

@@ -2,9 +2,9 @@ package org.example.news_manager.dao.impl;
 
 import org.example.news_manager.dao.UserDAO;
 import org.example.news_manager.dao.exception.DAOException;
-import org.example.news_manager.entity.AuthorityEntity;
-import org.example.news_manager.entity.LocaleEntity;
-import org.example.news_manager.entity.UserEntity;
+import org.example.news_manager.models.entity.AuthorityEntity;
+import org.example.news_manager.models.entity.LocaleEntity;
+import org.example.news_manager.models.entity.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;

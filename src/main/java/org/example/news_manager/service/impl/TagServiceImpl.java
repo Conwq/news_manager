@@ -1,9 +1,9 @@
 package org.example.news_manager.service.impl;
 
-import org.example.news_manager.bean.TagBean;
+import org.example.news_manager.models.bean.TagBean;
 import org.example.news_manager.dao.TagDAO;
 import org.example.news_manager.dao.exception.DAOException;
-import org.example.news_manager.entity.TagEntity;
+import org.example.news_manager.models.entity.TagEntity;
 import org.example.news_manager.service.TagService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;

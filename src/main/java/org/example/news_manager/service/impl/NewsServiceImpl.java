@@ -1,13 +1,13 @@
 package org.example.news_manager.service.impl;
 
-import org.example.news_manager.bean.NewsDataForNewsListBean;
-import org.example.news_manager.bean.NewsDataToAddBean;
-import org.example.news_manager.bean.NewsInfoBean;
+import org.example.news_manager.models.bean.NewsDataForNewsListBean;
+import org.example.news_manager.models.bean.NewsDataToAddBean;
+import org.example.news_manager.models.bean.NewsInfoBean;
 import org.example.news_manager.dao.NewsDAO;
 import org.example.news_manager.dao.TagDAO;
 import org.example.news_manager.dao.exception.DAOException;
-import org.example.news_manager.entity.NewsEntity;
-import org.example.news_manager.entity.TagEntity;
+import org.example.news_manager.models.entity.NewsEntity;
+import org.example.news_manager.models.entity.TagEntity;
 import org.example.news_manager.service.NewsService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.example.news_manager.service.util.converter.DateConverter;

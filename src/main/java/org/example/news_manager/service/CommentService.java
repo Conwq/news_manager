@@ -1,7 +1,7 @@
 package org.example.news_manager.service;
 
-import org.example.news_manager.bean.CommentDataForEditBean;
-import org.example.news_manager.bean.CommentInfoBean;
+import org.example.news_manager.models.bean.CommentDataForEditBean;
+import org.example.news_manager.models.bean.CommentInfoBean;
 import org.example.news_manager.service.exception.ServiceException;
 
 import java.util.List;

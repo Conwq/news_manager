@@ -1,6 +1,6 @@
 package org.example.news_manager.controller;
 
-import org.example.news_manager.bean.UserRegistrationDataBean;
+import org.example.news_manager.models.bean.UserRegistrationDataBean;
 import org.example.news_manager.service.UserService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;

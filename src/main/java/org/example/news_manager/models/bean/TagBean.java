@@ -1,13 +1,12 @@
-package org.example.news_manager.bean;
+package org.example.news_manager.models.bean;
 
 import java.util.Objects;
 
-public class CommentDataForEditBean {
+public class TagBean {
 	private int id;
-	private String text;
+	private String name;
 
-	public CommentDataForEditBean() {
-	}
+	public TagBean(){}
 
 	public int getId() {
 		return id;
@@ -17,32 +16,32 @@ public class CommentDataForEditBean {
 		this.id = id;
 	}
 
-	public String getText() {
-		return text;
+	public String getName() {
+		return name;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		CommentDataForEditBean that = (CommentDataForEditBean) o;
-		return id == that.id && Objects.equals(text, that.text);
+		TagBean tagBean = (TagBean) o;
+		return id == tagBean.id && Objects.equals(name, tagBean.name);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, text);
+		return Objects.hash(id, name);
 	}
 
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + "{" +
 				"id=" + id +
-				", text='" + text + '\'' +
+				", name='" + name + '\'' +
 				'}';
 	}
 }

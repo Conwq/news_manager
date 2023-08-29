@@ -2,11 +2,9 @@ package org.example.news_manager.dao.impl;
 
 import org.example.news_manager.dao.NewsDAO;
 import org.example.news_manager.dao.exception.DAOException;
-import org.example.news_manager.entity.NewsEntity;
-import org.hibernate.HibernateException;
+import org.example.news_manager.models.entity.NewsEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.StaleStateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

@@ -1,10 +1,10 @@
 package org.example.news_manager.service.impl;
 
-import org.example.news_manager.bean.CommentDataForEditBean;
-import org.example.news_manager.bean.CommentInfoBean;
+import org.example.news_manager.models.bean.CommentDataForEditBean;
+import org.example.news_manager.models.bean.CommentInfoBean;
 import org.example.news_manager.dao.CommentDAO;
 import org.example.news_manager.dao.exception.DAOException;
-import org.example.news_manager.entity.CommentEntity;
+import org.example.news_manager.models.entity.CommentEntity;
 import org.example.news_manager.service.CommentService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.example.news_manager.service.util.converter.DateConverter;

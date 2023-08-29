@@ -1,7 +1,7 @@
 package org.example.news_manager.dao;
 
 import org.example.news_manager.dao.exception.DAOException;
-import org.example.news_manager.entity.CommentEntity;
+import org.example.news_manager.models.entity.CommentEntity;
 
 import java.util.List;
 

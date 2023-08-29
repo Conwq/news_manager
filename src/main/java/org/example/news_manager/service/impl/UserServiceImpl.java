@@ -1,18 +1,15 @@
 package org.example.news_manager.service.impl;
 
-import org.example.news_manager.bean.UserInfoBean;
-import org.example.news_manager.bean.UserRegistrationDataBean;
+import org.example.news_manager.models.bean.UserRegistrationDataBean;
 import org.example.news_manager.dao.UserDAO;
 import org.example.news_manager.dao.exception.DAOException;
-import org.example.news_manager.entity.UserEntity;
+import org.example.news_manager.models.entity.UserEntity;
 import org.example.news_manager.service.UserService;
 import org.example.news_manager.service.exception.ServiceException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Locale;
 
 @Service
 public class UserServiceImpl implements UserService{

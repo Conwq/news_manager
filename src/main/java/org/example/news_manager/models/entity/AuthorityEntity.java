@@ -1,4 +1,4 @@
-package org.example.news_manager.entity;
+package org.example.news_manager.models.entity;
 
 
 import javax.persistence.*;

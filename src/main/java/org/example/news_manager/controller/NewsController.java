@@ -1,6 +1,6 @@
 package org.example.news_manager.controller;
 
-import org.example.news_manager.bean.*;
+import org.example.news_manager.models.bean.*;
 import org.example.news_manager.service.CommentService;
 import org.example.news_manager.service.NewsService;
 import org.example.news_manager.service.TagService;

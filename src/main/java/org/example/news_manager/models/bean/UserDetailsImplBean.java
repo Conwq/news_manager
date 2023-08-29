@@ -1,6 +1,6 @@
-package org.example.news_manager.bean;
+package org.example.news_manager.models.bean;
 
-import org.example.news_manager.entity.UserEntity;
+import org.example.news_manager.models.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

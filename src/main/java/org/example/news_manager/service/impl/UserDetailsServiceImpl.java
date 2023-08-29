@@ -1,8 +1,8 @@
 package org.example.news_manager.service.impl;
 
-import org.example.news_manager.bean.UserDetailsImplBean;
+import org.example.news_manager.models.bean.UserDetailsImplBean;
 import org.example.news_manager.dao.UserDAO;
-import org.example.news_manager.entity.UserEntity;
+import org.example.news_manager.models.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

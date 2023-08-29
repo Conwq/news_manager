@@ -2,7 +2,7 @@ package org.example.news_manager.dao.impl;
 
 import org.example.news_manager.dao.TagDAO;
 import org.example.news_manager.dao.exception.DAOException;
-import org.example.news_manager.entity.TagEntity;
+import org.example.news_manager.models.entity.TagEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

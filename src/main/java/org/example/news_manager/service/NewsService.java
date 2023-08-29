@@ -1,8 +1,8 @@
 package org.example.news_manager.service;
 
-import org.example.news_manager.bean.NewsInfoBean;
-import org.example.news_manager.bean.NewsDataForNewsListBean;
-import org.example.news_manager.bean.NewsDataToAddBean;
+import org.example.news_manager.models.bean.NewsInfoBean;
+import org.example.news_manager.models.bean.NewsDataForNewsListBean;
+import org.example.news_manager.models.bean.NewsDataToAddBean;
 import org.example.news_manager.service.exception.ServiceException;
 import org.springframework.web.multipart.MultipartFile;
 
