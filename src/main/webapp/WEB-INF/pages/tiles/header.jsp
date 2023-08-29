@@ -33,7 +33,9 @@
         <label>
             <input type="text" name="password" placeholder="${password_text}">
         </label>
-        <button type="submit">${sign_in_button}</button> <br>
+
+        <button type="submit">${sign_in_button}</button>
+        <br>
 
         <c:if test="${param.error != null}">
             <div style="color:red">${error_message}</div>

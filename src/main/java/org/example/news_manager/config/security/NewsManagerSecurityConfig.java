@@ -42,7 +42,8 @@ public class NewsManagerSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/news/**").authenticated()
 
 				.and()
-				.exceptionHandling().accessDeniedPage("/user/access-denied")
+				.exceptionHandling()
+				.accessDeniedPage("/user/access-denied")
 
 				.and()
 				.formLogin()
