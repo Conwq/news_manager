@@ -38,7 +38,7 @@ public class NewsManagerSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/news/admin/**").hasRole("ADMIN")
-				.antMatchers("/news/goToBasePage", "/user/**", "/error").permitAll()
+				.antMatchers("/news/goToBasePage", "/user/**", "/error", "/news/changeLocale").permitAll()
 				.antMatchers("/news/**").authenticated()
 
 				.and()
@@ -49,7 +49,7 @@ public class NewsManagerSecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/news/goToBasePage")
 				.loginProcessingUrl("/process-authorisation")
 				.successHandler(eventListener)
-				.failureUrl("/news?error")
+				.failureUrl("/news/goToBasePage?error")
 
 				.and()
 				.logout()

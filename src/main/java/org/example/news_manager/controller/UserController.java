@@ -18,10 +18,14 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 public class UserController {
 	private final UserService userService;
+	//private final MessageSource messageSource;
 
 	@Autowired
-	public UserController(UserService userService){
+	public UserController(UserService userService
+						//MessageSource messageSource
+	){
 		this.userService = userService;
+		//this.messageSource = messageSource;
 	}
 
 	@GetMapping("/goToRegistrationPage")
