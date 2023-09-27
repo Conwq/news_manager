@@ -13,7 +13,6 @@ import org.example.newsmanager.service.CommentService;
 import org.example.newsmanager.service.exception.ServiceException;
 import org.example.newsmanager.service.util.mapper.Mapper;
 import org.example.newsmanager.service.util.mapper.extend.CommentMapper;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,10 +52,6 @@ class CommentServiceImplTest {
 		}};
 	}
 
-	@AfterEach
-	void tearDown() {
-	}
-
 	@Test
 	public void shouldGetCommentById() throws DAOException, ServiceException {
 		UserEntity userEntity = new UserEntity();
@@ -77,13 +72,21 @@ class CommentServiceImplTest {
 	public void shouldThrowExceptionWithNonExistId() throws DAOException {
 		final int commentId = 131;
 
-		Mockito.when(commentDAO.getCommentById(commentId))
-				.thenReturn(Optional.empty());
+		Mockito.when(commentDAO.getCommentById(commentId)).thenReturn(Optional.empty());
 
 		AssertionsForClassTypes.assertThatThrownBy(() -> {
-					commentService.getCommentById(String.valueOf(commentId));
-				}).isInstanceOf(ServiceException.class)
-				.hasMessage("Comment with id `" + commentId + "` not found.");
+			commentService.getCommentById(String.valueOf(commentId));
+		}).isInstanceOf(ServiceException.class).hasMessage("Comment with id `" + commentId + "` not found.");
+	}
+
+	@Test
+	public void shouldReturnDAOExceptionWhenAccessingDAOForGetCommentById() throws DAOException {
+		Mockito.when(commentDAO.getCommentById(Mockito.any(Integer.class))).thenThrow(DAOException.class);
+		AssertionsForClassTypes.assertThatThrownBy(() -> {
+			commentService.getCommentById("1");
+		}).isInstanceOf(ServiceException.class);
+
+		Mockito.verify(mapper, Mockito.times(0)).mapToDto(null, null);
 	}
 
 	@Test
@@ -96,24 +99,31 @@ class CommentServiceImplTest {
 	}
 
 	@Test
+	public void shouldReturnDAOExceptionWhenAccessingDAOForDeleteComment() throws DAOException {
+		Mockito.when(commentDAO.getCommentById(1)).thenThrow(DAOException.class);
+		AssertionsForClassTypes.assertThatThrownBy(() -> {
+			commentService.deleteCommentById("1");
+		}).isInstanceOf(ServiceException.class);
+		Mockito.verify(commentDAO, Mockito.times(0))
+				.deleteCommentById(1);
+	}
+
+	@Test
 	public void shouldThrowExceptionWhenDeletingNonExistentId() throws DAOException {
 		Mockito.when(commentDAO.getCommentById(100)).thenReturn(Optional.empty());
 
 		AssertionsForClassTypes.assertThatThrownBy(() -> {
-					commentService.deleteCommentById("100");
-				}).isInstanceOf(ServiceException.class)
-				.hasMessage("Comment with id `100` not found.");
+			commentService.deleteCommentById("100");
+		}).isInstanceOf(ServiceException.class).hasMessage("Comment with id `100` not found.");
 	}
 
 	@Test
 	public void shouldReturnAllCommentsByNewsId() throws DAOException, ServiceException {
 		final int newsId = 1;
 
-		Mockito.when(commentDAO.getAllCommentsByNewsId(newsId))
-				.thenReturn(commentEntities);
+		Mockito.when(commentDAO.getAllCommentsByNewsId(newsId)).thenReturn(commentEntities);
 
-		Mockito.when(mapper.mapListToDto(commentEntities, null))
-				.thenReturn(commentResponses);
+		Mockito.when(mapper.mapListToDto(commentEntities, null)).thenReturn(commentResponses);
 
 		List<CommentResponse> expected = commentService.getAllCommentsByNewsId(String.valueOf(newsId), null);
 
@@ -124,15 +134,23 @@ class CommentServiceImplTest {
 	}
 
 	@Test
-	public void shouldSaveBook() throws DAOException, ServiceException {
+	public void shouldReturnDAOExceptionWhenAccessingDAOForGetAllCommentsByNewsId() throws DAOException {
+		Mockito.when(commentDAO.getAllCommentsByNewsId(Mockito.any(Integer.class))).thenThrow(DAOException.class);
+		AssertionsForClassTypes.assertThatThrownBy(() -> {
+			commentService.getAllCommentsByNewsId("1", null);
+		}).isInstanceOf(ServiceException.class);
+
+		Mockito.verify(mapper, Mockito.times(0)).mapListToDto(null, null);
+	}
+
+	@Test
+	public void shouldSaveComment() throws DAOException, ServiceException {
 		final String text = "Comment text.";
 		final String username = "user813711";
 		final String newsId = "1";
 
-		NewsEntity news = new NewsEntity(1, "Title", "Brief", "Content", Instant.now().toString(),
-				null, new ArrayList<>(), null);
-		UserEntity user = new UserEntity(11, "user@mail.com", username, "1",
-				null, new ArrayList<>(), null);
+		NewsEntity news = new NewsEntity(1, "Title", "Brief", "Content", Instant.now().toString(), null, new ArrayList<>(), null);
+		UserEntity user = new UserEntity(11, "user@mail.com", username, "1", null, new ArrayList<>(), null);
 
 		Mockito.when(newsDAO.findById(1)).thenReturn(Optional.of(news));
 		Mockito.when(userDAO.findUserByUsername(username)).thenReturn(Optional.of(user));
@@ -153,14 +171,13 @@ class CommentServiceImplTest {
 		for (int i = 0; i < texts.length; i++) {
 			int index = i;
 			AssertionsForClassTypes.assertThatThrownBy(() -> {
-						commentService.saveComment(texts[index], usernames[index], newsIds[index]);
-					}).isInstanceOf(ServiceException.class)
-					.hasMessage("Data cannot be empty.");
+				commentService.saveComment(texts[index], usernames[index], newsIds[index]);
+			}).isInstanceOf(ServiceException.class).hasMessage("Data cannot be empty.");
 		}
 	}
 
 	@Test
-	public void shouldThrowExceptionIfReturnOptionalEmpty() throws DAOException {
+	public void shouldThrowExceptionIfReturnOptionalNewsOrUserEmpty() throws DAOException {
 		final String text = "Text for comment.";
 		final String username = "Not_exist_user";
 		final int newsId = 1121;
@@ -188,6 +205,14 @@ class CommentServiceImplTest {
 	}
 
 	@Test
+	public void shouldReturnDAOExceptionWhenAccessingDAOForSaveComment() throws DAOException {
+		Mockito.when(newsDAO.findById(Mockito.any(Integer.class))).thenThrow(DAOException.class);
+		AssertionsForClassTypes.assertThatThrownBy(() -> {
+			commentService.saveComment("1", "1", "1");
+		}).isInstanceOf(ServiceException.class);
+	}
+
+	@Test
 	public void shouldEditComment() throws DAOException, ServiceException {
 		final int commentId = 1;
 		final String text = "Text for comment";
@@ -205,8 +230,17 @@ class CommentServiceImplTest {
 
 		Mockito.when(commentDAO.getCommentById(commentId)).thenReturn(Optional.empty());
 		AssertionsForClassTypes.assertThatThrownBy(() -> {
-					commentService.editCommentById(String.valueOf(commentId), null);
-				}).isInstanceOf(ServiceException.class)
-				.hasMessage("Comment with id `" + commentId + "` not found.");
+			commentService.editCommentById(String.valueOf(commentId), null);
+		}).isInstanceOf(ServiceException.class).hasMessage("Comment with id `" + commentId + "` not found.");
+	}
+
+	@Test
+	public void shouldReturnDAOExceptionWhenAccessingDAOForEditCommentById() throws DAOException {
+		Mockito.when(commentDAO.getCommentById(Mockito.any(Integer.class))).thenThrow(DAOException.class);
+		AssertionsForClassTypes.assertThatThrownBy(() -> {
+			commentService.editCommentById("1", "1");
+		}).isInstanceOf(ServiceException.class);
+
+		Mockito.verify(commentDAO, Mockito.times(0)).editCommentById(1, null);
 	}
 }
