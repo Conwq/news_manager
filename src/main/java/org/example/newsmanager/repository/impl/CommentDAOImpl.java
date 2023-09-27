@@ -12,6 +12,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,9 +24,10 @@ public class CommentDAOImpl implements CommentDAO{
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			
-			Query query = session.createQuery("FROM UserEntity WHERE login LIKE (:username)", UserEntity.class);
+			Query<UserEntity> query = session.createQuery("FROM UserEntity WHERE login LIKE (:username)",
+					UserEntity.class);
 			query.setParameter("username", username);
-			UserEntity user = (UserEntity) query.getSingleResult();
+			UserEntity user = query.getSingleResult();
 			
 			NewsEntity news = session.get(NewsEntity.class, newsId);
 			commentEntity.setNewsEntity(news);
@@ -66,10 +68,10 @@ public class CommentDAOImpl implements CommentDAO{
 	}
 	
 	@Override
-	public CommentEntity getCommentById(int commentId) throws DAOException{
+	public Optional<CommentEntity> getCommentById(int commentId) throws DAOException{
 		try {
 			Session session = sessionFactory.getCurrentSession();
-			return session.get(CommentEntity.class, commentId);
+			return Optional.ofNullable(session.get(CommentEntity.class, commentId));
 		}
 		catch (Exception e){
 			throw new DAOException(e);

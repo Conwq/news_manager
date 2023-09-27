@@ -1,11 +1,15 @@
 package org.example.newsmanager.models.bean;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
-public class CommentInfoBean {
+@AllArgsConstructor
+public class CommentResponse {
 	private int id;
 	private String text;
 	private String username;

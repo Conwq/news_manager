@@ -36,7 +36,7 @@ public class NewsServiceImpl implements NewsService {
 	@Transactional(readOnly = true)
 	public List<NewsDataForNewsListBean> getNews(Locale locale) throws ServiceException{
 		try {
-			return getBeanConvertedNewsListInLocaleFormat(newsDAO.getNews(), locale);
+			return convertNewsListToUserLocale(newsDAO.getNews(), locale);
 		}
 		catch(DAOException e) {
 			throw new ServiceException(e);
@@ -49,7 +49,7 @@ public class NewsServiceImpl implements NewsService {
 		try {
 			int countNews = Integer.parseInt(count);
 			List<NewsEntity> news = newsDAO.getNews(countNews);
-			return getBeanConvertedNewsListInLocaleFormat(news, locale);
+			return convertNewsListToUserLocale(news, locale);
 		}
 		catch(IllegalFormatException | DAOException e) {
 			throw new ServiceException(e);
@@ -61,14 +61,14 @@ public class NewsServiceImpl implements NewsService {
 	public List<NewsDataForNewsListBean> getFoundNewsByValue(String value, Locale locale) throws ServiceException{
 		try{
 			List<NewsEntity> newsEntities = newsDAO.getFoundNewsByValue(value);
-			return getBeanConvertedNewsListInLocaleFormat(newsEntities, locale);
+			return convertNewsListToUserLocale(newsEntities, locale);
 		}
 		catch (DAOException e){
 			throw new ServiceException(e);
 		}
 	}
 
-	private List<NewsDataForNewsListBean> getBeanConvertedNewsListInLocaleFormat(List<NewsEntity> newsEntities, Locale locale){
+	private List<NewsDataForNewsListBean> convertNewsListToUserLocale(List<NewsEntity> newsEntities, Locale locale){
 		List<NewsDataForNewsListBean> newsList = new ArrayList<>(newsEntities.size());
 		for (NewsEntity entity: newsEntities){
 			NewsDataForNewsListBean news = new NewsDataForNewsListBean();

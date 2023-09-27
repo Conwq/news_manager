@@ -87,7 +87,7 @@ public class NewsManagerConfig implements WebMvcConfigurer {
 	public LocalSessionFactoryBean sessionFactory() throws PropertyVetoException {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource());
-		sessionFactory.setPackagesToScan("org.example.news_manager.models.entity");
+		sessionFactory.setPackagesToScan("org.example.newsmanager.models.entity");
 		Properties hibernateProperties = new Properties();
 		hibernateProperties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
 		hibernateProperties.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));

@@ -108,7 +108,7 @@ public class NewsController {
 						   Model model) {
 		try {
 			NewsInfoBean news = newsService.findById(newsId, locale);
-			List<CommentInfoBean> comments = commentService.getCommentsFromNewsById(newsId, locale);
+			List<CommentResponse> comments = commentService.getCommentsFromNewsById(newsId, locale);
 			List<TagBean> tags = tagService.getTagsForNewsById(newsId);
 			
 			model.addAttribute("tags", tags);
@@ -227,7 +227,7 @@ public class NewsController {
 								 @RequestParam("newsId") String newsId,
 								 Model model) {
 		try {
-			CommentDataForEditBean comment = commentService.getCommentById(commentId);
+			CommentResponse comment = commentService.getCommentById(commentId);
 			model.addAttribute("text", comment.getText());
 			model.addAttribute("commentId", comment.getId());
 			return "forward:/news/goToViewNews?id=" + newsId;
