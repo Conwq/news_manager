@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Generated;
@@ -12,7 +14,9 @@ import org.hibernate.annotations.GenerationTime;
 @Entity
 @Table(name = "comments")
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class CommentEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

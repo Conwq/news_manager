@@ -19,10 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.IllegalFormatException;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -93,7 +90,8 @@ public class NewsServiceImpl implements NewsService {
 	public NewsInfoBean findById(String id, Locale locale) throws ServiceException{
 		try {
 			int newsId = Integer.parseInt(id);
-			NewsEntity newsEntity = newsDAO.findById(newsId);
+			Optional<NewsEntity> optionalNews = newsDAO.findById(newsId);
+			NewsEntity newsEntity = optionalNews.get();
 
 			NewsInfoBean newsInfoBean = new NewsInfoBean();
 			newsInfoBean.setId(newsEntity.getId());
@@ -117,7 +115,8 @@ public class NewsServiceImpl implements NewsService {
 	public NewsInfoBean findById(String id) throws ServiceException{
 		try {
 			int newsId = Integer.parseInt(id);
-			NewsEntity newsEntity = newsDAO.findById(newsId);
+			Optional<NewsEntity> optionalNews = newsDAO.findById(newsId);
+			NewsEntity newsEntity = optionalNews.get();
 
 			NewsInfoBean newsInfoBean = new NewsInfoBean();
 			newsInfoBean.setId(newsEntity.getId());

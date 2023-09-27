@@ -3,7 +3,6 @@ package org.example.newsmanager.repository.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.newsmanager.models.entity.CommentEntity;
 import org.example.newsmanager.models.entity.NewsEntity;
-import org.example.newsmanager.models.entity.UserEntity;
 import org.example.newsmanager.repository.CommentDAO;
 import org.example.newsmanager.repository.exception.DAOException;
 import org.hibernate.Session;
@@ -20,21 +19,9 @@ public class CommentDAOImpl implements CommentDAO{
 	private final SessionFactory sessionFactory;
 
 	@Override
-	public void saveComment(CommentEntity commentEntity, String username, int newsId) throws DAOException{
+	public void saveComment(CommentEntity commentEntity) throws DAOException{
 		try {
 			Session session = sessionFactory.getCurrentSession();
-			
-			Query<UserEntity> query = session.createQuery("FROM UserEntity WHERE login LIKE (:username)",
-					UserEntity.class);
-			query.setParameter("username", username);
-			UserEntity user = query.getSingleResult();
-			
-			NewsEntity news = session.get(NewsEntity.class, newsId);
-			commentEntity.setNewsEntity(news);
-			commentEntity.setUserEntity(user);
-			user.getComments().add(commentEntity);
-			news.getComments().add(commentEntity);
-
 			session.save(commentEntity);
 		}
 		catch (Exception e){
@@ -43,7 +30,7 @@ public class CommentDAOImpl implements CommentDAO{
 	}
 	
 	@Override
-	public List<CommentEntity> getCommentsFromNewsById(int newsId) throws DAOException{
+	public List<CommentEntity> getAllCommentsByNewsId(int newsId) throws DAOException{
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			NewsEntity newsEntity = session.get(NewsEntity.class, newsId);

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Locale;
 
 @Component
@@ -15,7 +16,7 @@ public class CommentMapper extends Mapper<CommentEntity, CommentResponse> {
 	private final DateConverter dateConverter;
 
 	@Autowired
-	public CommentMapper(DateConverter dateConverter){
+	public CommentMapper(DateConverter dateConverter) {
 		this.dateConverter = dateConverter;
 	}
 
@@ -26,12 +27,18 @@ public class CommentMapper extends Mapper<CommentEntity, CommentResponse> {
 				.text(comment.getText())
 				.username(comment.getUserEntity().getLogin())
 				.build();
-
-		if (locale != null){
+		if (locale != null) {
 			String formatPublicationDate = dateConverter.getFormatDateByComment(comment.getPublicationDate(), locale);
 			commentResponse.setPublicationDate(formatPublicationDate);
 		}
 		return commentResponse;
+	}
+
+	@Override
+	public List<CommentResponse> mapListToDto(List<CommentEntity> commentsList, Locale locale) {
+		return commentsList.stream()
+				.map(comment -> mapToDto(comment, locale))
+				.toList();
 	}
 
 	@Override

@@ -108,7 +108,7 @@ public class NewsController {
 						   Model model) {
 		try {
 			NewsInfoBean news = newsService.findById(newsId, locale);
-			List<CommentResponse> comments = commentService.getCommentsFromNewsById(newsId, locale);
+			List<CommentResponse> comments = commentService.getAllCommentsByNewsId(newsId, locale);
 			List<TagBean> tags = tagService.getTagsForNewsById(newsId);
 			
 			model.addAttribute("tags", tags);

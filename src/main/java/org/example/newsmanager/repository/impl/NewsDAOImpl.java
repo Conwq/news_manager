@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -55,10 +56,10 @@ public class NewsDAOImpl implements NewsDAO{
 	}
 
 	@Override
-	public NewsEntity findById(int id) throws DAOException {
+	public Optional<NewsEntity> findById(int id) throws DAOException {
 		try{
 			Session session = sessionFactory.getCurrentSession();
-			return session.get(NewsEntity.class, id);
+			return Optional.of(session.get(NewsEntity.class, id));
 		}
 		catch (Exception e){
 			throw new DAOException(e);

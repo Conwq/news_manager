@@ -1,5 +1,6 @@
 package org.example.newsmanager.models.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Generated;
@@ -13,6 +14,7 @@ import java.util.List;
 @Table(name = "news")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class NewsEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

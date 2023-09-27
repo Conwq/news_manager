@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -18,10 +20,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-		UserEntity userEntity = userDAO.findUserByUsername(s);
-		if (userEntity == null) {
+		Optional<UserEntity> userEntity = userDAO.findUserByUsername(s);
+		if (userEntity.isEmpty()) {
 			throw new UsernameNotFoundException("User not found");
 		}
-		return new UserDetailsImplBean(userEntity);
+		return new UserDetailsImplBean(userEntity.get());
 	}
 }

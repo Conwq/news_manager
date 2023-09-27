@@ -11,6 +11,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class UserDAOImpl implements UserDAO {
@@ -36,10 +38,10 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public UserEntity findUserByUsername(String login) {
+	public Optional<UserEntity> findUserByUsername(String login) {
 		Session session = sessionFactory.getCurrentSession();
 		Query<UserEntity> query = session.createQuery("FROM UserEntity WHERE login = :loginUser", UserEntity.class);
 		query.setParameter("loginUser", login);
-		return query.getSingleResult();
+		return Optional.of(query.getSingleResult());
 	}
 }

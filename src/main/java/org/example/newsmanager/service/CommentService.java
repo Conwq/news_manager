@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public interface CommentService {
 	void saveComment(String text, String username, String newsId) throws ServiceException;
-	List<CommentResponse> getCommentsFromNewsById(String newsId, Locale locale) throws ServiceException;
+	List<CommentResponse> getAllCommentsByNewsId(String newsId, Locale locale) throws ServiceException;
 	void deleteCommentById(String commentId) throws ServiceException;
 	CommentResponse getCommentById(String commentId) throws ServiceException;
 	void editCommentById(String commentId, String text) throws ServiceException;
